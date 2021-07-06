@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{82B4E9C9-94B3-4629-B740-77562227D4A2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCTool", "MFCTool\MFCTool.vcxproj", "{DAD206BD-030E-410E-86F8-68A62F055836}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00.Headers", "00.Headers", "{E274ADE8-AF4E-4033-B0FC-EFA3D81BC5A7}"
+	ProjectSection(SolutionItems) = preProject
+		Headers\Define.h = Headers\Define.h
+		Headers\Enum.h = Headers\Enum.h
+		Headers\Extern.h = Headers\Extern.h
+		Headers\Function.h = Headers\Function.h
+		Headers\Headers.h = Headers\Headers.h
+		Headers\Struct.h = Headers\Struct.h
+		Headers\Typedef.h = Headers\Typedef.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Debug|x64.ActiveCfg = Debug|x64
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Debug|x64.Build.0 = Debug|x64
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Debug|x86.ActiveCfg = Debug|Win32
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Debug|x86.Build.0 = Debug|Win32
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Release|x64.ActiveCfg = Release|x64
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Release|x64.Build.0 = Release|x64
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Release|x86.ActiveCfg = Release|Win32
+		{82B4E9C9-94B3-4629-B740-77562227D4A2}.Release|x86.Build.0 = Release|Win32
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Debug|x64.ActiveCfg = Debug|x64
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Debug|x64.Build.0 = Debug|x64
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Debug|x86.ActiveCfg = Debug|Win32
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Debug|x86.Build.0 = Debug|Win32
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Release|x64.ActiveCfg = Release|x64
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Release|x64.Build.0 = Release|x64
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Release|x86.ActiveCfg = Release|Win32
+		{DAD206BD-030E-410E-86F8-68A62F055836}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

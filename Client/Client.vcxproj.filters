@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{f73eba55-82f1-41f6-85ef-4247efcbb74f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp">
+      <UniqueIdentifier>{b36116c6-bc88-4e69-af4f-1fcd27e04060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject">
+      <UniqueIdentifier>{906504cf-95ea-4c1a-86c2-2043e4f103c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Graphic_Device">
+      <UniqueIdentifier>{e2ec07a9-e5c8-497c-8a76-30fec772e17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene">
+      <UniqueIdentifier>{cc28ea39-33b8-4be9-b9d4-3f923c8790ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\Manager">
+      <UniqueIdentifier>{91d0214f-76a8-470f-b353-31d34f099666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\Stage">
+      <UniqueIdentifier>{cc673da7-6c2c-431a-ab2b-d0b69c800f5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Texture">
+      <UniqueIdentifier>{cf0024f2-9b27-474b-9937-45a630bccf5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Texture\Multi_Texture">
+      <UniqueIdentifier>{c0f9376a-2151-422a-8947-9a19497da556}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Texture\Single_Texture">
+      <UniqueIdentifier>{435eb598-6157-43a3-ba38-9f995b470261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Texture\Manager">
+      <UniqueIdentifier>{015934c8-3b57-473b-b280-7f31cc95432a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\02.Bullet">
+      <UniqueIdentifier>{204ba84e-e842-44c6-94f0-301459b622f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{b72d7a30-0a24-450f-8862-02b647e8cb22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\04.Scroll_Manager">
+      <UniqueIdentifier>{594fb44a-0e03-4f21-8668-10bc563f456f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Frame_Manager">
+      <UniqueIdentifier>{f17e57a3-6031-4aa5-9732-32f4ab3e117f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\GameObject_Manager">
+      <UniqueIdentifier>{34161b6d-cc71-4e57-8578-4a6b69b4e50a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Key_Manager">
+      <UniqueIdentifier>{7b4ac29a-1376-4609-b7cf-6fa1b985afbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Time_Manager">
+      <UniqueIdentifier>{85ec249f-5578-4ca5-a586-137451067360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Prefap_Manager">
+      <UniqueIdentifier>{e3b5f6e6-efdb-4af9-be7d-60244cd7f07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\03.Effect">
+      <UniqueIdentifier>{60094de7-be03-4021-8e68-d9fe64e5421f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Spawn_Manager">
+      <UniqueIdentifier>{766184fd-da3c-4489-8702-537b9da99368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\04.BackGround">
+      <UniqueIdentifier>{eb6530c4-ebd3-4ed8-ac58-d516ac0d3ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui">
+      <UniqueIdentifier>{e30d83e8-7bb3-4808-89ed-8a68f7ef528f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\06.Mouse">
+      <UniqueIdentifier>{bf8426a7-03e2-483b-b42d-5fae784391e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\02.Bullet\00.Normal">
+      <UniqueIdentifier>{02a821e4-9d05-46b0-ba86-6abbe4bd0eb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\02.Bullet\01.Rocket">
+      <UniqueIdentifier>{4f115926-bb19-429e-b73d-6710a1d07c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\07.Burner">
+      <UniqueIdentifier>{ffbabd6a-48b7-485a-b86f-1cad4395a54f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Player">
+      <UniqueIdentifier>{1632b8a1-b4de-4f02-beb2-6a5908e08ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\01.Enemy">
+      <UniqueIdentifier>{e10e44fc-c482-4bdb-ad87-b2a7984911ec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="MainApp.h">
+      <Filter>00.MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>01.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01.GameObject\00.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic_Device.h">
+      <Filter>02.Graphic_Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>05.Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Multi_Texture.h">
+      <Filter>05.Texture\Multi_Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Single_Texture.h">
+      <Filter>05.Texture\Single_Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture_Manager.h">
+      <Filter>05.Texture\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>03.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Manager.h">
+      <Filter>03.Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>03.Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Scroll_Manager.h">
+      <Filter>Manager\04.Scroll_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame_Manager.h">
+      <Filter>Manager\Frame_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject_Manager.h">
+      <Filter>Manager\GameObject_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Key_Manager.h">
+      <Filter>Manager\Key_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Time_Manager.h">
+      <Filter>Manager\Time_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab_Manager.h">
+      <Filter>Manager\Prefap_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>01.GameObject\02.Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>01.GameObject\03.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawn_Manager.h">
+      <Filter>Manager\Spawn_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>01.GameObject\04.BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.h">
+      <Filter>01.GameObject\05.Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>01.GameObject\06.Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="Normal.h">
+      <Filter>01.GameObject\02.Bullet\00.Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Rocket.h">
+      <Filter>01.GameObject\02.Bullet\01.Rocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Burner.h">
+      <Filter>01.GameObject\07.Burner</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet.h">
+      <Filter>01.GameObject\01.Enemy</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="MainApp.cpp">
+      <Filter>00.MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>01.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01.GameObject\00.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic_Device.cpp">
+      <Filter>02.Graphic_Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>05.Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Multi_Texture.cpp">
+      <Filter>05.Texture\Multi_Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Single_Texture.cpp">
+      <Filter>05.Texture\Single_Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture_Manager.cpp">
+      <Filter>05.Texture\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>03.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Manager.cpp">
+      <Filter>03.Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>03.Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Scroll_Manager.cpp">
+      <Filter>Manager\04.Scroll_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame_Manager.cpp">
+      <Filter>Manager\Frame_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject_Manager.cpp">
+      <Filter>Manager\GameObject_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Key_Manager.cpp">
+      <Filter>Manager\Key_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Time_Manager.cpp">
+      <Filter>Manager\Time_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab_Manager.cpp">
+      <Filter>Manager\Prefap_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>01.GameObject\02.Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>01.GameObject\03.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawn_Manager.cpp">
+      <Filter>Manager\Spawn_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>01.GameObject\04.BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui.cpp">
+      <Filter>01.GameObject\05.Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>01.GameObject\06.Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="Normal.cpp">
+      <Filter>01.GameObject\02.Bullet\00.Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Rocket.cpp">
+      <Filter>01.GameObject\02.Bullet\01.Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Burner.cpp">
+      <Filter>01.GameObject\07.Burner</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet.cpp">
+      <Filter>01.GameObject\01.Enemy</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>99.Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>99.Default</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
