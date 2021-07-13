@@ -138,7 +138,7 @@ void CMFCToolView::OnInitialUpdate()
 	CScrollView::OnInitialUpdate();
 	SIZE; 
 	//CSize tsize; 
-	SetScrollSizes(MM_TEXT, CSize(TILECX * TILEX,(TILECY >> 1) * TILEY));
+	SetScrollSizes(MM_TEXT, CSize(Map_Width,Map_Height));
 	//GetScrollPos()
 	g_hWND = m_hWnd; 
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd()); 

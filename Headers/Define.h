@@ -1,12 +1,9 @@
 #pragma once
-//// 0000 0001
-//#define È°	0x01
-//// 0000 0010
-//#define ºÀ	0x02
-//// 0000 0100
-//#define °Ë	0x04
+
 #define OBJ_DEAD 1 
 #define OBJ_NOEVENT 0 
+
+
 #ifdef _AFX
 #define ERR_MSG(msg)		AfxMessageBox(msg)
 #else 

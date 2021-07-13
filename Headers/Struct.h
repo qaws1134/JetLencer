@@ -37,8 +37,6 @@ typedef struct tagInfo
 
 }INFO;
 
-
-
 typedef struct tagOBJECTINFO
 {
 
@@ -158,7 +156,6 @@ typedef struct tagMultiPlaceInfo
 }MULTIPLACE;
 
 
-
 typedef struct tagFrame
 {
 	float fStartFrame;
@@ -167,6 +164,20 @@ typedef struct tagFrame
 
 	wstring wstrObjKey;
 	wstring wstrStateKey;
-	
-
 }FRAME;
+
+typedef struct tagColor
+{
+	int iAlpha;
+	int iRed;
+	int iGreen;
+	int iBlue;
+	
+}MATCOLOR;
+
+
+typedef struct tagCombat
+{
+	int iHp;
+	int iAtk;
+}COMBAT;

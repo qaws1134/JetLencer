@@ -19,9 +19,9 @@ public :
 public :
 	static CGameObject* Create();
 public :
-	_vec3 Get_MousePos() {return m_vMouse; }
+	_vec3 Get_MousePos();
 	virtual void State_Change() override;
-
+	virtual void WriteMatrix();
 private:
 	_vec3 m_vMouse;
 

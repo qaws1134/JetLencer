@@ -1,70 +1,64 @@
-c:\users\qaws1\desktop\mfctool\client\debug\client.pch
-c:\users\qaws1\desktop\mfctool\client\debug\vc140.pdb
-c:\users\qaws1\desktop\mfctool\client\debug\vc140.idb
-c:\users\qaws1\desktop\mfctool\client\debug\stdafx.obj
-c:\users\qaws1\desktop\mfctool\client\debug\frame_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\gameobject.obj
-c:\users\qaws1\desktop\mfctool\client\debug\gameobject_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\graphic_device.obj
-c:\users\qaws1\desktop\mfctool\client\debug\gui.obj
-c:\users\qaws1\desktop\mfctool\client\debug\key_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\mainapp.obj
-c:\users\qaws1\desktop\mfctool\client\debug\multi_texture.obj
-c:\users\qaws1\desktop\mfctool\client\debug\player.obj
-c:\users\qaws1\desktop\mfctool\client\debug\prefab_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\scene.obj
-c:\users\qaws1\desktop\mfctool\client\debug\scene_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\scroll_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\single_texture.obj
-c:\users\qaws1\desktop\mfctool\client\debug\spawn_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\stage.obj
-c:\users\qaws1\desktop\mfctool\client\debug\terrain.obj
-c:\users\qaws1\desktop\mfctool\client\debug\texture.obj
-c:\users\qaws1\desktop\mfctool\client\debug\texture_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\time_manager.obj
-c:\users\qaws1\desktop\mfctool\client\debug\background.obj
-c:\users\qaws1\desktop\mfctool\client\debug\bullet.obj
-c:\users\qaws1\desktop\mfctool\client\debug\client.obj
-c:\users\qaws1\desktop\mfctool\client\debug\effect.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.pch
 c:\users\qaws1\desktop\jetlancer project\client\debug\vc140.pdb
 c:\users\qaws1\desktop\jetlancer project\client\debug\vc140.idb
 c:\users\qaws1\desktop\jetlancer project\client\debug\stdafx.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\bullet.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\gameobject.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\mainapp.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\prefab_manager.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\spawn_manager.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\mouse.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\gameobject_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\graphic_device.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\gui.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\key_manager.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\mainapp.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\mouse.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\multi_texture.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\normal.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\prefab_manager.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\rocket.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\scene.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\scene_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\scroll_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\single_texture.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\spawn_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\stage.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\texture.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\texture_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\time_manager.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\background.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\bullet.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\frame_manager.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\gameobject.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\player.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\effect.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\gui.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\background.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\normal.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\rocket.obj
-c:\users\qaws1\desktop\mfctool\debug\client.ilk
-c:\users\qaws1\desktop\mfctool\debug\client.exe
-c:\users\qaws1\desktop\mfctool\debug\client.pdb
+c:\users\qaws1\desktop\jetlancer project\client\debug\burner.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\beam.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\bottle.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\gundrone.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_normal.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_rocket.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_rush.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_sniper.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_bulletsplash.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_homming.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_enemy.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\collision_manager.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\colrect.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\colsphere.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\collider.obj
 c:\users\qaws1\desktop\jetlancer project\debug\client.ilk
 c:\users\qaws1\desktop\jetlancer project\debug\client.exe
 c:\users\qaws1\desktop\jetlancer project\debug\client.pdb
-c:\users\qaws1\desktop\mfctool\client\debug\client.res
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.res
+c:\users\qaws1\desktop\jetlancer project\client\debug\burner.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\colrect.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\colsphere.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\jet_normal.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\mainapp.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\normal.obj.enc
 c:\users\qaws1\desktop\jetlancer project\client\debug\player.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\rocket.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\spawn_manager.obj.enc
+c:\users\qaws1\desktop\jetlancer project\client\debug\stage.obj.enc
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.tlog\cl.command.1.tlog
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.tlog\cl.read.1.tlog
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.tlog\cl.write.1.tlog

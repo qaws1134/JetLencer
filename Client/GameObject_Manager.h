@@ -1,5 +1,6 @@
 #pragma once
 class CGameObject; 
+class CCollider;
 class CGameObject_Manager
 {
 	DECLARE_SINGLETON(CGameObject_Manager)
@@ -17,5 +18,9 @@ public :
 private:
 	list<CGameObject*> m_listGameObject[OBJID::END]; 
 	list<CGameObject*> m_listGameObjectRender[RENDERID::END];
+	list<CCollider*> m_listGameObjectCollider[COLLIDER::END];
+
+
+	bool m_bColRender;
 };
 

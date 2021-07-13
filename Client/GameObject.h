@@ -1,4 +1,5 @@
 #pragma once
+class CCollider;
 class CGameObject abstract
 {
 public:
@@ -24,23 +25,31 @@ public :
 	void				Set_Angle(float _fAngle) { m_fAngle = _fAngle; }
 	void				Set_Speed(_vec3 _vSpeed) { m_vVelocity = _vSpeed; }
 	void				Set_CenterPos(_vec3 vPos);
+	void				Set_Dir(const _vec3& vDir) { m_tInfo.vDir = vDir; }
 
 	void				Set_Prefab(const OBJECTINFO* _pPrefab) { m_pObjectInfo = _pPrefab; }
 	void				Set_Placement(const PLACEMENT* _pPlacement) { m_pPlacement = _pPlacement; }
 	void				Set_Animation(const ANIMATION* _pAnimation) { m_pAnimation = _pAnimation; }
+	void				Set_RenderId(RENDERID::ID _eRenderId) { m_eRenderId = _eRenderId; }
+	void				Set_Dead(bool bDead) { m_bDead = bDead; }
+	void				Set_DeadEffect(bool bDeadEffect) { m_bDeadEffect = bDeadEffect; }
+	void				Set_Color(MATCOLOR _tColor) { m_tColor = _tColor; }
 
 public:
 	const INFO&			Get_ObjInfo()const { return m_tInfo; }
 		  FRAME&		Get_Frame() { return m_tFrame; }
 	const RENDERID::ID&	Get_RenderId() const { return m_eRenderId; }
+	CCollider*			Get_ColVec(int i) {vector<CCollider*>::iterator iter =  m_vecCollider.begin(); return iter[i];}
 
-public :
+	int					GetColSize() { return m_vecCollider.size(); }
 	_vec3				Get_Velocity() { return m_vVelocity; }
 	float				Get_Angle() { return m_fAngle; }
+	CGameObject*		Get_Target() { return m_pTarget; }
+
+
 public :
 	virtual void		State_Change()PURE;
 	virtual void		WriteMatrix();
-	virtual void		Angle_Change();
 	void				TargetAngle_Check();
 
 protected:
@@ -59,17 +68,26 @@ protected:
 	CGameObject*		m_pTarget;
 	INFO				m_tInfo; 
 	bool				m_bDead;
-	float				m_fAngle = 0.f;
-	float				m_fSpeed;
+
+	float				m_fAngle;
+	float				m_fAngle_per_Frame;
+	float				m_fAngleOffset;
 	float				m_fAngleSpeed; 
 
+	float				m_fSpeed;
+	float				m_fMaxSpeed;
 
+	_vec3				m_vTarget_Dir;
 	_vec3				m_vVelocity;
 	float				m_fAccel;
 
 	_vec3				m_vGravity;
 	float				m_fRegistPower;
 
+	vector<CCollider*>  m_vecCollider;
+	MATCOLOR			m_tColor;
 
+	bool				m_bDeadEffect;
+	bool				m_bCenter;
 };
 

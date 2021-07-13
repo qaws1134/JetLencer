@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+
 class CStage final :
 	public CScene
 {
@@ -15,6 +16,10 @@ public:
 	virtual void Release_Scene() override;
 public:
 	static CScene* Create(); 
+
+	CGameObject* m_pOject1;
+	CGameObject* m_pOject2;
+
 
 };
 

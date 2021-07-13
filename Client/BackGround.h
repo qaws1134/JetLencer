@@ -16,6 +16,9 @@ public:
 	virtual void Render_GameObject() override;
 	virtual void Release_GameObject() override;
 	virtual void State_Change() override;		//gui 와 함께 red로 바꿔주기 위해서
+
+	virtual void WriteMatrix();
+
 protected:
 
 	// CGameObject을(를) 통해 상속됨

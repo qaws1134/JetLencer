@@ -289,7 +289,7 @@ void CObjectTool::OnBnClickedAdd()
 	{
 		cstrName = L"";
 
-		m_IdleListBox.GetText(iCrashAniIndex, cstrName);
+		m_CrashListBox.GetText(iCrashAniIndex, cstrName);
 		int i = 0;
 		// "->" 문자 삭제
 		for (; i < cstrName.GetLength(); ++i)
@@ -934,6 +934,7 @@ BOOL CObjectTool::OnInitDialog()
 	m_ComboOBJID.AddString(L"4Enemy_Bullet");
 	m_ComboOBJID.AddString(L"5Effect");
 	m_ComboOBJID.AddString(L"6Ui");
+	m_ComboOBJID.AddString(L"7Drone");
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.

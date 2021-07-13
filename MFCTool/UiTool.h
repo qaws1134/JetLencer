@@ -126,4 +126,5 @@ public:
 	afx_msg void OnBnClickedButtonClear();
 	afx_msg void OnBnClickedButtonMultiDelete();
 	afx_msg void OnLbnSelchangeListMultiReultSel();
+	afx_msg void OnBnClickedButtonUpdate();
 };

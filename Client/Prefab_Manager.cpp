@@ -16,11 +16,13 @@ CPrefab_Manager::~CPrefab_Manager()
 		Safe_Delete(rPair.second);
 	}
 	m_mapAnimationPrefab.clear();
+
 	for (auto & rPair : m_mapObjectPrefab)
 	{
 		Safe_Delete(rPair.second);
 	}
 	m_mapObjectPrefab.clear();
+
 	for (auto & rPair : m_mapPlacementPrefab)
 	{
 		Safe_Delete(rPair.second);
@@ -37,6 +39,11 @@ HRESULT CPrefab_Manager::Ready_Prefab_Manager()
 		return E_FAIL;
 	if (FAILED(LoadMultiPlacementPrefab(L"../Data/EffectPlace.dat")))
 		return E_FAIL;
+	if (FAILED(LoadPlacementPrefab(L"../Data/BackgroundStage1.dat")))
+		return E_FAIL;
+
+
+
 	return S_OK;
 }
 
@@ -304,9 +311,9 @@ HRESULT CPrefab_Manager::LoadMultiPlacementPrefab(const wstring & _path)
 		return E_FAIL;
 	}
 
-	for (auto& rPair : m_mapMultPlaceiPrefab)
-		Safe_Delete(rPair.second);
-	m_mapMultPlaceiPrefab.clear();
+	//for (auto& rPair : m_mapMultPlaceiPrefab)
+	//	Safe_Delete(rPair.second);
+	//m_mapMultPlaceiPrefab.clear();
 
 
 	DWORD dwbyte = 0;

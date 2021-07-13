@@ -40,29 +40,8 @@
     <Filter Include="Manager">
       <UniqueIdentifier>{b72d7a30-0a24-450f-8862-02b647e8cb22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Manager\04.Scroll_Manager">
-      <UniqueIdentifier>{594fb44a-0e03-4f21-8668-10bc563f456f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\Frame_Manager">
-      <UniqueIdentifier>{f17e57a3-6031-4aa5-9732-32f4ab3e117f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\GameObject_Manager">
-      <UniqueIdentifier>{34161b6d-cc71-4e57-8578-4a6b69b4e50a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\Key_Manager">
-      <UniqueIdentifier>{7b4ac29a-1376-4609-b7cf-6fa1b985afbd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\Time_Manager">
-      <UniqueIdentifier>{85ec249f-5578-4ca5-a586-137451067360}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\Prefap_Manager">
-      <UniqueIdentifier>{e3b5f6e6-efdb-4af9-be7d-60244cd7f07e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.GameObject\03.Effect">
       <UniqueIdentifier>{60094de7-be03-4021-8e68-d9fe64e5421f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Manager\Spawn_Manager">
-      <UniqueIdentifier>{766184fd-da3c-4489-8702-537b9da99368}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.GameObject\04.BackGround">
       <UniqueIdentifier>{eb6530c4-ebd3-4ed8-ac58-d516ac0d3ad2}</UniqueIdentifier>
@@ -82,11 +61,77 @@
     <Filter Include="01.GameObject\07.Burner">
       <UniqueIdentifier>{ffbabd6a-48b7-485a-b86f-1cad4395a54f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.GameObject\00.Player">
+    <Filter Include="01.GameObject\02.Bullet\02.Bottle">
+      <UniqueIdentifier>{d6716f09-225e-45bf-bb9b-5566c23f772e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\02.Bullet\03.Beam">
+      <UniqueIdentifier>{5e8ef073-bbf9-4f9a-add7-dd0a240e4075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\02.Bullet\04.Gundrone">
+      <UniqueIdentifier>{4a61ae2d-30c6-4c8a-ae5e-80e0a6b64c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet">
+      <UniqueIdentifier>{cf0f60a4-b04d-4136-8570-7e203b16864b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\00.Player">
       <UniqueIdentifier>{1632b8a1-b4de-4f02-beb2-6a5908e08ed6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.GameObject\01.Enemy">
-      <UniqueIdentifier>{e10e44fc-c482-4bdb-ad87-b2a7984911ec}</UniqueIdentifier>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy">
+      <UniqueIdentifier>{ac324810-e3b8-4069-897a-fdadd6b6cc11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\05.Jet_Homming">
+      <UniqueIdentifier>{03d429af-b895-435f-86d3-1161c55b8d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\00.Jet_Normal">
+      <UniqueIdentifier>{a84ed9ed-ef82-42b0-b167-5cca8124fc12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\01.Jet_Rocket">
+      <UniqueIdentifier>{e08a44fc-b82a-4bbc-95ca-a91d886d73ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\02.Jet_Rush">
+      <UniqueIdentifier>{8f055ad4-3861-4160-b668-6397a89d481b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\03.Jet_BulletSplash">
+      <UniqueIdentifier>{da61cfe1-2002-439d-9cbc-64370eae579f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\04.Jet_Sniper">
+      <UniqueIdentifier>{8384691e-cd19-4ecc-82e4-77aed40d1e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\00.GameObject_Manager">
+      <UniqueIdentifier>{34161b6d-cc71-4e57-8578-4a6b69b4e50a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\01.Frame_Manager">
+      <UniqueIdentifier>{f17e57a3-6031-4aa5-9732-32f4ab3e117f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\02.Key_Manager">
+      <UniqueIdentifier>{7b4ac29a-1376-4609-b7cf-6fa1b985afbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\03.ColiiderManager">
+      <UniqueIdentifier>{8f8e714d-6c80-4bf0-88a4-de555cdb2fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\04.Prefap_Manager">
+      <UniqueIdentifier>{e3b5f6e6-efdb-4af9-be7d-60244cd7f07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\05.Spawn_Manager">
+      <UniqueIdentifier>{766184fd-da3c-4489-8702-537b9da99368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\06.Scroll_Manager">
+      <UniqueIdentifier>{594fb44a-0e03-4f21-8668-10bc563f456f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\07.Time_Manager">
+      <UniqueIdentifier>{85ec249f-5578-4ca5-a586-137451067360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\01.Collider">
+      <UniqueIdentifier>{a37a6e3b-dc04-44b0-9ff1-dab087b431fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\01.Collider\00.Sphere">
+      <UniqueIdentifier>{94dd8e7d-50d0-4c6d-9a3d-60c3bc961903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\01.Collider\01.Rect">
+      <UniqueIdentifier>{a186216d-1183-4162-9bc5-b39ea16c0f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\08.Particle">
+      <UniqueIdentifier>{d2110e93-8680-4156-b3e7-7c554fc456a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +154,7 @@
       <Filter>01.GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>01.GameObject\00.Player</Filter>
+      <Filter>01.GameObject\00.Jet\00.Player</Filter>
     </ClInclude>
     <ClInclude Include="Graphic_Device.h">
       <Filter>02.Graphic_Device</Filter>
@@ -136,22 +181,22 @@
       <Filter>03.Scene\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Scroll_Manager.h">
-      <Filter>Manager\04.Scroll_Manager</Filter>
+      <Filter>Manager\06.Scroll_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Frame_Manager.h">
-      <Filter>Manager\Frame_Manager</Filter>
+      <Filter>Manager\01.Frame_Manager</Filter>
     </ClInclude>
     <ClInclude Include="GameObject_Manager.h">
-      <Filter>Manager\GameObject_Manager</Filter>
+      <Filter>Manager\00.GameObject_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Key_Manager.h">
-      <Filter>Manager\Key_Manager</Filter>
+      <Filter>Manager\02.Key_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Time_Manager.h">
-      <Filter>Manager\Time_Manager</Filter>
+      <Filter>Manager\07.Time_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Prefab_Manager.h">
-      <Filter>Manager\Prefap_Manager</Filter>
+      <Filter>Manager\04.Prefap_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>01.GameObject\02.Bullet</Filter>
@@ -160,7 +205,7 @@
       <Filter>01.GameObject\03.Effect</Filter>
     </ClInclude>
     <ClInclude Include="Spawn_Manager.h">
-      <Filter>Manager\Spawn_Manager</Filter>
+      <Filter>Manager\05.Spawn_Manager</Filter>
     </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>01.GameObject\04.BackGround</Filter>
@@ -180,8 +225,53 @@
     <ClInclude Include="Burner.h">
       <Filter>01.GameObject\07.Burner</Filter>
     </ClInclude>
+    <ClInclude Include="Bottle.h">
+      <Filter>01.GameObject\02.Bullet\02.Bottle</Filter>
+    </ClInclude>
+    <ClInclude Include="Beam.h">
+      <Filter>01.GameObject\02.Bullet\03.Beam</Filter>
+    </ClInclude>
+    <ClInclude Include="Gundrone.h">
+      <Filter>01.GameObject\02.Bullet\04.Gundrone</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Normal.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\00.Jet_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Rocket.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\01.Jet_Rocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Rush.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\02.Jet_Rush</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_BulletSplash.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\03.Jet_BulletSplash</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Homming.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\05.Jet_Homming</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Sniper.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\04.Jet_Sniper</Filter>
+    </ClInclude>
     <ClInclude Include="Jet.h">
-      <Filter>01.GameObject\01.Enemy</Filter>
+      <Filter>01.GameObject\00.Jet</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Enemy.h">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>01.GameObject\01.Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision_Manager.h">
+      <Filter>Manager\03.ColiiderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ColSphere.h">
+      <Filter>01.GameObject\01.Collider\00.Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="ColRect.h">
+      <Filter>01.GameObject\01.Collider\01.Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>01.GameObject\08.Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +288,7 @@
       <Filter>01.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>01.GameObject\00.Player</Filter>
+      <Filter>01.GameObject\00.Jet\00.Player</Filter>
     </ClCompile>
     <ClCompile Include="Graphic_Device.cpp">
       <Filter>02.Graphic_Device</Filter>
@@ -225,22 +315,22 @@
       <Filter>03.Scene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Scroll_Manager.cpp">
-      <Filter>Manager\04.Scroll_Manager</Filter>
+      <Filter>Manager\06.Scroll_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Frame_Manager.cpp">
-      <Filter>Manager\Frame_Manager</Filter>
+      <Filter>Manager\01.Frame_Manager</Filter>
     </ClCompile>
     <ClCompile Include="GameObject_Manager.cpp">
-      <Filter>Manager\GameObject_Manager</Filter>
+      <Filter>Manager\00.GameObject_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Key_Manager.cpp">
-      <Filter>Manager\Key_Manager</Filter>
+      <Filter>Manager\02.Key_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Time_Manager.cpp">
-      <Filter>Manager\Time_Manager</Filter>
+      <Filter>Manager\07.Time_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Prefab_Manager.cpp">
-      <Filter>Manager\Prefap_Manager</Filter>
+      <Filter>Manager\04.Prefap_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>01.GameObject\02.Bullet</Filter>
@@ -249,7 +339,7 @@
       <Filter>01.GameObject\03.Effect</Filter>
     </ClCompile>
     <ClCompile Include="Spawn_Manager.cpp">
-      <Filter>Manager\Spawn_Manager</Filter>
+      <Filter>Manager\05.Spawn_Manager</Filter>
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>01.GameObject\04.BackGround</Filter>
@@ -269,8 +359,53 @@
     <ClCompile Include="Burner.cpp">
       <Filter>01.GameObject\07.Burner</Filter>
     </ClCompile>
+    <ClCompile Include="Bottle.cpp">
+      <Filter>01.GameObject\02.Bullet\02.Bottle</Filter>
+    </ClCompile>
+    <ClCompile Include="Beam.cpp">
+      <Filter>01.GameObject\02.Bullet\03.Beam</Filter>
+    </ClCompile>
+    <ClCompile Include="Gundrone.cpp">
+      <Filter>01.GameObject\02.Bullet\04.Gundrone</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Normal.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\00.Jet_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Rocket.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\01.Jet_Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Rush.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\02.Jet_Rush</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_BulletSplash.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\03.Jet_BulletSplash</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Homming.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\05.Jet_Homming</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Sniper.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\04.Jet_Sniper</Filter>
+    </ClCompile>
     <ClCompile Include="Jet.cpp">
-      <Filter>01.GameObject\01.Enemy</Filter>
+      <Filter>01.GameObject\00.Jet</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Enemy.cpp">
+      <Filter>01.GameObject\00.Jet\01.Jet_Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>01.GameObject\01.Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision_Manager.cpp">
+      <Filter>Manager\03.ColiiderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ColSphere.cpp">
+      <Filter>01.GameObject\01.Collider\00.Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="ColRect.cpp">
+      <Filter>01.GameObject\01.Collider\01.Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>01.GameObject\08.Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

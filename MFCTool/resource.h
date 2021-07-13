@@ -57,6 +57,7 @@
 #define IDC_BUTTON4                     1018
 #define IDC_GROUP                       1018
 #define IDC_GROUP_SG                    1018
+#define IDC_BUTTON21_PLACE3             1018
 #define IDC_BUTTON5                     1019
 #define IDC_LIST4_PLACE3                1019
 #define IDC_START_IMAGE                 1020

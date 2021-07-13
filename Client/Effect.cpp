@@ -7,6 +7,7 @@ CEffect::CEffect()
 	, m_fSize(0.f)
 	, m_fReduce(0.f)
 	, m_eEffectType(EFFECT::END)
+	, m_bLoop(false)
 {
 }
 
@@ -15,14 +16,13 @@ CEffect::~CEffect()
 {
 }
 
-CGameObject * CEffect::Create(const ANIMATION * _tAnimationInfo, D3DXVECTOR3 _vPos, bool _bFrameStart, EFFECT::TYPE _eEffectType)
+CGameObject * CEffect::Create(const ANIMATION * _tAnimationInfo, D3DXVECTOR3 _vPos)
 {
 	CGameObject* pInstance = new CEffect;
 	pInstance->Set_Pos(_vPos);
 	static_cast<CEffect*>(pInstance)->Set_Prefab(_tAnimationInfo);
-	static_cast<CEffect*>(pInstance)->Set_Type(_eEffectType);
-	static_cast<CEffect*>(pInstance)->Set_FrameStart(_bFrameStart);
 	static_cast<CEffect*>(pInstance)->Set_Frame(_tAnimationInfo);
+
 	if (FAILED(pInstance->Ready_GameObject()))
 	{
 		delete pInstance;
@@ -31,6 +31,37 @@ CGameObject * CEffect::Create(const ANIMATION * _tAnimationInfo, D3DXVECTOR3 _vP
 	}
 	return pInstance;
 }
+
+CGameObject * CEffect::Create(EFFECT::TYPE _eEffectType,D3DXVECTOR3 _vPos, bool _bFrameStart)
+{
+	CGameObject* pInstance = new CEffect;
+	pInstance->Set_Pos(_vPos);
+	static_cast<CEffect*>(pInstance)->Set_EffectType(_eEffectType);
+	static_cast<CEffect*>(pInstance)->Set_FrameStart(_bFrameStart);
+	if (FAILED(pInstance->Ready_GameObject()))
+	{
+		delete pInstance;
+		pInstance = nullptr;
+		return pInstance;
+	}
+	return pInstance;
+}
+CGameObject * CEffect::Create(EFFECT::TYPE _eEffectType, D3DXVECTOR3 _vPos, bool _bFrameStart,float _fSize)
+{
+	CGameObject* pInstance = new CEffect;
+	pInstance->Set_Pos(_vPos);
+	static_cast<CEffect*>(pInstance)->Set_EffectType(_eEffectType);
+	static_cast<CEffect*>(pInstance)->Set_FrameStart(_bFrameStart);
+	static_cast<CEffect*>(pInstance)->Set_Size(_fSize);
+	if (FAILED(pInstance->Ready_GameObject()))
+	{
+		delete pInstance;
+		pInstance = nullptr;
+		return pInstance;
+	}
+	return pInstance;
+}
+
 
 CGameObject * CEffect::Create(const PLACEMENT * _tPlacementInfo, D3DXVECTOR3 _vPos)
 {
@@ -49,13 +80,10 @@ CGameObject * CEffect::Create(const PLACEMENT * _tPlacementInfo, D3DXVECTOR3 _vP
 }
 
 
-
-
-
 HRESULT CEffect::Ready_GameObject()
 {
 	m_eRenderId = RENDERID::EFFECT;
-	Setting_Size();
+	InitEffect();
 	return S_OK;
 }
 
@@ -88,7 +116,6 @@ void CEffect::Set_Frame(const ANIMATION * _tAnimationInfo)
 	m_tFrame.wstrStateKey = m_pAnimation->wstrStateKey;
 	m_tFrame.fStartFrame = 0;
 	m_tFrame.fMaxFrame = (float)m_pAnimation->iMax_Index;
-	m_tFrame.fFrameSpeed = 0.2f;
 }
 
 void CEffect::Set_Frame(const PLACEMENT * _tPlacementInfo)
@@ -114,6 +141,9 @@ void CEffect::State_Change()
 			m_bDead = true;
 		m_tFrame.fStartFrame = 0;
 		break;
+	case EFFECT::ROCKET_BOOM_PTFIRE:
+		Frame_Change();
+		break;
 	case EFFECT::JET_PTFIRE:
 		if (m_bFrameStart)
 			Frame_Change();
@@ -125,10 +155,25 @@ void CEffect::State_Change()
 			m_tFrame.fStartFrame = 0;
 		}
 		break;
-	default :
+	case EFFECT::CHAGE_BEAM:
+		if (m_bFrameStart)
+		{
+			if (m_tInfo.vSize.x > 0.8f)
+				m_fReduce = 0.f;
+			m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
+			Frame_Change();
+		}
+		else
+		{
+			m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+			m_fReduce = -0.005f;
+		}
+		break;
+	default:
 		Frame_Change();
 		break;
 	}
+	
 }
 
 void CEffect::Frame_Change()
@@ -137,7 +182,7 @@ void CEffect::Frame_Change()
 	m_tFrame.fStartFrame += m_tFrame.fFrameSpeed*fTime;
 	if (m_tFrame.fStartFrame >= m_tFrame.fMaxFrame)
 	{
-		if (m_pAnimation->bLoop)
+		if (m_bLoop)
 			m_tFrame.fStartFrame = 0.f;
 		else
 		{
@@ -146,24 +191,47 @@ void CEffect::Frame_Change()
 		}
 	}
 } 
-void CEffect::Setting_Size()
+void CEffect::InitEffect()
 {
 	switch (m_eEffectType)
 	{
 	case EFFECT::ROCKET_PTFIRE:
+		m_pAnimation = 	CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
+		Set_Frame(m_pAnimation);
 		m_fSize = 0.15f;
 		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
 		m_fReduce = 0.01f;
 		break;
+	case EFFECT::ROCKET_BOOM_PTFIRE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire_Black");
+		Set_Frame(m_pAnimation);
+		m_tInfo.vSize = { m_fSize+ float(rand() % 10)*0.05f ,m_fSize+ float(rand() % 10)*0.05f,0.f };
+		m_tFrame.fFrameSpeed = 20.f;
+		m_fAngle = (float)(rand() % 360);
+		m_fReduce = 0.f;
+		break;
 	case EFFECT::JET_PTFIRE:
-		m_fSize = float((rand() % 6)+ 4) * 0.05f;
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
+		Set_Frame(m_pAnimation);
+		m_fSize = float((rand() % 6) + 4) * 0.05f;
 		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
-		m_fReduce = float((rand() % 10) + 6) * 0.001f;  
+		m_fReduce = float((rand() % 10) + 6) * 0.001f;
+		break;
+	case EFFECT::CHAGE_BEAM:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"PlayerBeam_Charge");
+		Set_Frame(m_pAnimation);
+		m_fSize = 0.f;
+		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 50.f;
+		m_fReduce = -0.005f;
+		m_bLoop = true;
+		m_tColor = { 200,255,255,255 };
 		break;
 	default:
 		m_fSize = 1.f;
 		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
-		m_fReduce = 0.1f;
+		m_fReduce = 0.f;
+		m_tFrame.fFrameSpeed = 30.f;
 		break;
 	}
 }

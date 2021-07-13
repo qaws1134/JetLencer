@@ -8,8 +8,11 @@ private:
 public:
 	virtual ~CEffect();
 public:
-	static	CGameObject* Create(const ANIMATION*	_tAnimationInfo, D3DXVECTOR3 _vPos, bool _bFrameStart, EFFECT::TYPE _eEffectType);
+	static	CGameObject* Create(const ANIMATION* _tAnimation, D3DXVECTOR3 _vPos);
 	static	CGameObject* Create(const PLACEMENT*	_tPlacementInfo, D3DXVECTOR3 _vPos );
+	static	CGameObject* Create(EFFECT::TYPE _eEffectType, D3DXVECTOR3 _vPos, bool _bFrameStart);
+	static	CGameObject* Create(EFFECT::TYPE _eEffectType, D3DXVECTOR3 _vPos, bool _bFrameStart,float _fSize);
+
 
 public :
 	virtual HRESULT Ready_GameObject() override;
@@ -22,13 +25,15 @@ public :
 	void Set_Prefab(const ANIMATION * _pPrefab) { m_pAnimation = _pPrefab; }
 	void Set_Prefab(const PLACEMENT * _pPrefab) { m_pPlacement = _pPrefab; }
 	void Set_FrameStart(bool _bFrameStart) { m_bFrameStart = _bFrameStart; }
-	void Set_Type(EFFECT::TYPE _eEffectType) { m_eEffectType = _eEffectType; }
+	void Set_EffectType(EFFECT::TYPE _eEffectType) { m_eEffectType = _eEffectType; }
+	void Set_Size(float _fSize) { m_fSize = _fSize; }
 	void Set_Frame(const ANIMATION*	_tAnimationInfo);
 	void Set_Frame( const PLACEMENT*	_tPlacementInfo);
+	void Set_Loop(bool _bLoop) { m_bLoop = _bLoop; }
 public :
 	virtual void State_Change() override;
 	void Frame_Change();
-	void Setting_Size();
+	void InitEffect();
 
 
 
@@ -38,6 +43,7 @@ protected:
 	//const PLACEMENT*	m_pPlacementInfo;
 	EFFECT::TYPE		m_eEffectType;
 	bool				m_bFrameStart;
+	bool				m_bLoop;
 	float				m_fSize;
 	float				m_fReduce;
 	// CGameObject을(를) 통해 상속됨

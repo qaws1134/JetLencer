@@ -15,6 +15,12 @@ public:
 	virtual void Render_GameObject() override;
 	virtual void Release_GameObject() override;
 	void Set_Type(BULLET::TYPE _eID) { m_eID = _eID; }
+	void Set_SubWeaponState(BULLET::SUBWEAPON _eState) { m_eSubWeaponState = _eState; }
+	
+
+	COMBAT	Get_CombatInfo() { return m_tCombatInfo; }
+	void	Set_Dmg(int _iAtk) { m_tCombatInfo.iHp += _iAtk; }
+
 protected:
 	virtual void State_Change() PURE;
 	virtual void Move() PURE;
@@ -22,6 +28,9 @@ protected:
 	
 protected:
 	BULLET::TYPE m_eID;
+	BULLET::SUBWEAPON m_eSubWeaponState;
+
+	COMBAT	m_tCombatInfo;
 
 };
 

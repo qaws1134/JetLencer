@@ -19,6 +19,11 @@
 #define KEY_E		0x00000100
 
 #define KEY_Q		0x00000200
+
+#define KEY_O		0x00000400
+
+#define KEY_P		0x00000800
+
 class CKey_Manager
 {
 	DECLARE_SINGLETON(CKey_Manager)

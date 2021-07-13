@@ -3,6 +3,7 @@
 #include "Prefab_Manager.h"
 #include "Time_Manager.h"
 #include "GameObject_Manager.h"
+#include "ColSphere.h"
 CNormal::CNormal()
 {
 }
@@ -33,7 +34,7 @@ CGameObject * CNormal::Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos, floa
 
 HRESULT CNormal::Ready_GameObject()
 {
-	m_tInfo.vSize = { 0.28f,0.28f,0.f };
+	m_tInfo.vSize = { 0.5f,0.5f,0.f };
 	m_tInfo.vDir.z = 0.f;
 	m_tFrame.wstrObjKey = m_pObjectInfo->wstrIdleImage_ObjectKey;
 	m_tFrame.wstrStateKey = m_pObjectInfo->wstrIdleImage_StateKey;
@@ -41,29 +42,55 @@ HRESULT CNormal::Ready_GameObject()
 	m_tFrame.fStartFrame = 0;
 	m_eRenderId = RENDERID::BULLET;
 	m_fSpeed = 3.f;
-	
+	m_vecCollider.reserve(1);
+
+	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
+	{
+		m_tCombatInfo.iAtk = 1;
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 7.f, COLLIDER::PLAYER_BULLET));
+	}
+	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
+	{
+		m_tCombatInfo.iAtk = 2;
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 5.f, COLLIDER::ENEMY_BULLET));
+	}
 	return S_OK;
 }
 
 void CNormal::State_Change()
 {
-	if (m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
+	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
 	{
 		if (m_tInfo.vSize.x < 1.2f)
 			m_tInfo.vSize += _vec3{ 0.085f,0.085f,0.f };
 		else
 			m_tFrame.fStartFrame = 1;
 	}
+	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
+	{
+		m_tInfo.vSize = { 1.f,1.f,0.f };
+	}
 }
 
 void CNormal::Move()
 {
-	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-	m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
-	float fVelocity = D3DXVec3Length(&m_vVelocity);
+	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
+	{
+		float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+		m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
 
-	m_tInfo.vDir *= 850.f*fTime;
-	m_tInfo.vDir+= CGameObject_Manager::Get_Instance()->Get_Player()->Get_Velocity()*fTime;
+		m_tInfo.vDir *= 850.f*fTime;
+		m_tInfo.vDir += CGameObject_Manager::Get_Instance()->Get_Player()->Get_Velocity()*fTime;
+
+	}
+	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
+	{
+		float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+		m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
+
+		m_tInfo.vDir *= 850.f*fTime;
+	}
+
 	m_tInfo.vPos += m_tInfo.vDir;
 
 }
@@ -71,4 +98,5 @@ void CNormal::Move()
 void CNormal::DeadEffect()
 {
 	//오브젝트와 충돌이 되면 충돌 시 이펙트 생성
+	m_bDead = true;
 }

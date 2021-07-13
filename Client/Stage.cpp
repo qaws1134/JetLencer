@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Mouse.h"
 #include "Spawn_Manager.h"
+#include "Scroll_Manager.h"
+#include "Gui.h"
 CStage::CStage()
 {
 }
@@ -22,7 +24,11 @@ HRESULT CStage::Ready_Scene()
 	CPrefab_Manager::Get_Instance()->SpawnObjectbyScene(CScene_Manager::SCENE_STAGE);
 
 
+	
+
 	CGameObject* pObject = nullptr;
+
+
 
 	pObject = CPlayer::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::PLAYER, pObject);
@@ -30,15 +36,31 @@ HRESULT CStage::Ready_Scene()
 	pObject = CMouse::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::MOUSE, pObject);
 
+	m_pOject1 = CGui::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject1);
+	m_pOject2 = CGui::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject2);
 
+	CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+float(Map_Width>>1),100.f+ float(Map_Height>>1),0.f });
+	CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+ float(Map_Width>>1),200.f+ float(Map_Height>>1),0.f });
 
 	return S_OK;
 }
 
 void CStage::Update_Scene()
 {
-	CSpawn_Manager::Get_Instance()->Update_Spawn();
+	if (CKey_Manager::Get_Instance()->Key_Down(KEY_P))
+	{
+		CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
+		CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
+	}
+
+	CSpawn_Manager::Get_Instance()->Update_MultiSpawn();
 	CGameObject_Manager::Get_Instance()->Update_GameObject_Manager(); 
+	CScroll_Manager::Scroll_Lock();
+	static_cast<CGui*>(m_pOject1)->Set_Point(CScroll_Manager::Get_Scroll().x);
+	static_cast<CGui*>(m_pOject2)->Set_Point(CScroll_Manager::Get_Scroll().y);
+
 }
 
 void CStage::Render_Scene()

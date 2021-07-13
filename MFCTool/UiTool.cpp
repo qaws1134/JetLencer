@@ -107,6 +107,7 @@ BEGIN_MESSAGE_MAP(CUiTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON18_PLACE4, &CUiTool::OnBnClickedButtonClear)
 	ON_BN_CLICKED(IDC_BUTTON18_PLACE5, &CUiTool::OnBnClickedButtonMultiDelete)
 	ON_LBN_SELCHANGE(IDC_LIST4_PLACE2, &CUiTool::OnLbnSelchangeListMultiReultSel)
+	ON_BN_CLICKED(IDC_BUTTON21_PLACE3, &CUiTool::OnBnClickedButtonUpdate)
 END_MESSAGE_MAP()
 
 
@@ -701,8 +702,16 @@ void CUiTool::OnBnClickedAdd()
 
 	if (strID == L"BACKGROUND")
 		pPlacementInfo->eRenderID = RENDERID::BACKGROUND;
+	else if (strID == L"MOVE_BACKGROUND1")
+		pPlacementInfo->eRenderID = RENDERID::MOVE_BACKGROUND1;
+	else if (strID == L"MOVE_BACKGROUND2")
+		pPlacementInfo->eRenderID = RENDERID::MOVE_BACKGROUND2;
+	else if (strID == L"MOVE_BACKGROUND3")
+		pPlacementInfo->eRenderID = RENDERID::MOVE_BACKGROUND3;
 	else if(strID == L"UI")
 		pPlacementInfo->eRenderID = RENDERID::UI;
+	else if (strID == L"GROUND")
+		pPlacementInfo->eRenderID = RENDERID::GROUND;
 	else if (strID == L"EFFECT")
 	{
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
@@ -917,6 +926,10 @@ void CUiTool::OnBnClickedResultSave()
 			WriteFile(hFile, &rPair.second->m_tMatInfo.mat[MATID::ROT], sizeof(D3DXVECTOR3), &dwbyte, nullptr);
 			WriteFile(hFile, &rPair.second->m_tMatInfo.mat[MATID::SCALE], sizeof(D3DXVECTOR3), &dwbyte, nullptr);
 
+
+			//WriteFile(hFile, &rPair.second->m_tMatInfo.mat[MATID::COLOR], sizeof(D3DXVECTOR3), &dwbyte, nullptr);
+
+
 			WriteFile(hFile, &rPair.second->m_bRender, sizeof(bool), &dwbyte, nullptr);
 	
 			if (rPair.second->wstrPrefabName.IsEmpty())
@@ -992,6 +1005,8 @@ void CUiTool::OnBnClickedResultLoad()
 			ReadFile(hFile, &pPlacement->m_tMatInfo.mat[MATID::TRANS], sizeof(D3DXVECTOR3), &dwbyte, nullptr);
 			ReadFile(hFile, &pPlacement->m_tMatInfo.mat[MATID::ROT], sizeof(D3DXVECTOR3), &dwbyte, nullptr);
 			ReadFile(hFile, &pPlacement->m_tMatInfo.mat[MATID::SCALE], sizeof(D3DXVECTOR3), &dwbyte, nullptr);
+
+
 
 			ReadFile(hFile, &pPlacement->m_bRender, sizeof(bool), &dwbyte, nullptr);
 
@@ -1077,12 +1092,32 @@ void CUiTool::OnLbnSelchangeResultList()
 		idx = m_ComboID.FindString(-1,L"BACKGROUND");
 		m_ComboID.SetCurSel(idx);
 		break;
+	case RENDERID::MOVE_BACKGROUND1:
+		idx = m_ComboID.FindString(-1, L"MOVE_BACKGROUND1");
+		m_ComboID.SetCurSel(idx);
+		break;
+	case RENDERID::MOVE_BACKGROUND2:
+		idx = m_ComboID.FindString(-1, L"MOVE_BACKGROUND2");
+		m_ComboID.SetCurSel(idx);
+		break;
+	case RENDERID::MOVE_BACKGROUND3:
+		idx = m_ComboID.FindString(-1, L"MOVE_BACKGROUND3");
+		m_ComboID.SetCurSel(idx);
+		break;
+	case RENDERID::GROUND:
+		idx = m_ComboID.FindString(-1, L"GROUND");
+		m_ComboID.SetCurSel(idx);
+		break;
 	case RENDERID::OBJECT:
 		idx = m_ComboID.FindString(-1, L"OBJECT");
 		m_ComboID.SetCurSel(idx);
 		break;
 	case RENDERID::UI:
 		idx = m_ComboID.FindString(-1, L"UI");
+		m_ComboID.SetCurSel(idx);
+		break;
+	case RENDERID::EFFECT:
+		idx = m_ComboID.FindString(-1, L"EFFECT");
 		m_ComboID.SetCurSel(idx);
 		break;
 	}
@@ -1137,9 +1172,6 @@ void CUiTool::OnLbnSelchangeResultList()
 		wstrPrefabKey = iter_find->second->cstrObjectImage_ObjectKey;
 		SetImageView(wstrPrefabKey.GetString(), m_Picture_Prefab);
 	}
-
-
-
 
 	m_bMatTrans = false;
 	m_bMatScale = false;
@@ -1564,4 +1596,48 @@ void CUiTool::OnLbnSelchangeListMultiReultSel()
 	RadioCtrl(IDC_RADIO8);
 	m_CenterCheck.SetCheck(BST_CHECKED);
 
+}
+
+
+void CUiTool::OnBnClickedButtonUpdate()
+{
+	UpdateData(TRUE);
+	int iIdx = m_Result_ListBox.GetCurSel();
+	CString wstrName;
+	m_Result_ListBox.GetText(iIdx, wstrName);
+
+	auto& iter_find = m_mapPlacementInfo.find(wstrName);
+	if (iter_find == m_mapPlacementInfo.end())
+	{
+		ERR_MSG(L"멀티 맵에 키가 없다");
+		return;
+	}
+	int ComboiIdx = m_ComboID.GetCurSel();
+	CString strID;
+	m_ComboID.GetLBText(ComboiIdx, strID);
+
+	if (strID == L"BACKGROUND")
+		iter_find->second->eRenderID = RENDERID::BACKGROUND;
+	else if (strID == L"MOVE_BACKGROUND1")
+		iter_find->second->eRenderID = RENDERID::MOVE_BACKGROUND1;
+	else if (strID == L"MOVE_BACKGROUND2")
+		iter_find->second->eRenderID = RENDERID::MOVE_BACKGROUND2;
+	else if (strID == L"MOVE_BACKGROUND3")
+		iter_find->second->eRenderID = RENDERID::MOVE_BACKGROUND3;
+	else if (strID == L"UI")
+		iter_find->second->eRenderID = RENDERID::UI;
+	else if (strID == L"GROUND")
+		iter_find->second->eRenderID = RENDERID::GROUND;
+	else if (strID == L"EFFECT")
+		iter_find->second->eRenderID = RENDERID::EFFECT;
+
+
+	CString ObjKey = m_wstrObjID.GetString();
+	if (ObjKey.IsEmpty())
+	{
+		ERR_MSG(L"이름을 안적었다");
+		return;
+	}
+	iter_find->second->wstrName = ObjKey;
+	UpdateData(FALSE);
 }

@@ -457,6 +457,15 @@ void CAnimationTool::OnBnClickedLoad()
 			ReadFile(hFile, &pAnimaInfo->bLoop, sizeof(bool), &dwbyte, nullptr);
 			ReadFile(hFile, &pAnimaInfo->bIsSingle, sizeof(bool), &dwbyte, nullptr);
 
+			//if (pAnimaInfo->wstrObjectKey + pAnimaInfo->wstrStateKey == L"EnemyBullet")
+			//{
+			//	continue;
+			//}
+			//if (pAnimaInfo->wstrObjectKey + pAnimaInfo->wstrStateKey == L"EnemyJet_BulletSplash")
+			//{
+			//	continue;
+			//}
+
 			m_mapAnima.emplace(pAnimaInfo->wstrObjectKey+pAnimaInfo->wstrStateKey, pAnimaInfo);
 			m_Animation_ListBox.AddString(pAnimaInfo->wstrObjectKey +"->"+pAnimaInfo->wstrStateKey);
 

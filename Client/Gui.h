@@ -9,6 +9,8 @@ public:
 	virtual ~CGui();
 public:
 	static	CGameObject* Create(const PLACEMENT*	_pPlacement);
+	static	CGameObject* Create(_vec3 vPos,wstring _wstrText);
+
 
 	virtual HRESULT Ready_GameObject() override;
 	virtual int Update_GameObject() override;
@@ -16,8 +18,13 @@ public:
 	virtual void Render_GameObject() override;
 	virtual void Release_GameObject() override;
 	virtual void State_Change() override;
-protected:
 
-	// CGameObject을(를) 통해 상속됨
+	virtual void WriteMatrix();
+public:
+	void	Set_Text(wstring _wstrText) { m_wstrText = _wstrText;  }
+	void	Set_Point(float  _fPoint) { m_fPoint = _fPoint; }
+
+	wstring m_wstrText;
+	float m_fPoint;
 };
 
