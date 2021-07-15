@@ -23,7 +23,7 @@ public :
 	virtual void WriteMatrix()PURE;
 public :
 	void				Set_CollisionSize(float fSphereSize) { m_fSphereSize = fSphereSize; }
-	void				Set_ColRect(_vec3 LeftTop, _vec3 RightBottom);
+	void				Set_ColRect(float _fWidth, float _fHeight);
 	void				Set_ColId(COLLIDER::ID eColId) { m_eColId = eColId; }
 	void				Set_OffSetDir(_vec3 vOffsetDir) { m_vOffsetDir = vOffsetDir; }
 	void				Set_CombatInfo(COMBAT _tCombatInfo) { m_tCombatInfo = _tCombatInfo; }

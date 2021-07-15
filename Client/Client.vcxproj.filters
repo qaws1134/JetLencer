@@ -133,6 +133,21 @@
     <Filter Include="01.GameObject\08.Particle">
       <UniqueIdentifier>{d2110e93-8680-4156-b3e7-7c554fc456a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameObject\05.Gui\00.Arrow_Offscreen">
+      <UniqueIdentifier>{1508309e-33ba-47f6-aea9-2a7edcbcca4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\99.ViewText">
+      <UniqueIdentifier>{f0e786f5-d277-4879-93fc-c6a2762bbc50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\01.Gui">
+      <UniqueIdentifier>{918c76eb-e21a-43d3-9741-2214c65ac3a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\02.Flip">
+      <UniqueIdentifier>{c7a57d2a-2768-48a2-8fbb-79ae600ebca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\03.Rocket_Ui">
+      <UniqueIdentifier>{11da95fd-b272-4eed-b371-c10b32fb365c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -210,9 +225,6 @@
     <ClInclude Include="BackGround.h">
       <Filter>01.GameObject\04.BackGround</Filter>
     </ClInclude>
-    <ClInclude Include="Gui.h">
-      <Filter>01.GameObject\05.Gui</Filter>
-    </ClInclude>
     <ClInclude Include="Mouse.h">
       <Filter>01.GameObject\06.Mouse</Filter>
     </ClInclude>
@@ -272,6 +284,24 @@
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>01.GameObject\08.Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Arrow_Offscreen.h">
+      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewText.h">
+      <Filter>01.GameObject\05.Gui\99.ViewText</Filter>
+    </ClInclude>
+    <ClInclude Include="Ui.h">
+      <Filter>01.GameObject\05.Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.h">
+      <Filter>01.GameObject\05.Gui\01.Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Flip.h">
+      <Filter>01.GameObject\05.Gui\02.Flip</Filter>
+    </ClInclude>
+    <ClInclude Include="Rocket_Ui.h">
+      <Filter>01.GameObject\05.Gui\03.Rocket_Ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +374,6 @@
     <ClCompile Include="BackGround.cpp">
       <Filter>01.GameObject\04.BackGround</Filter>
     </ClCompile>
-    <ClCompile Include="Gui.cpp">
-      <Filter>01.GameObject\05.Gui</Filter>
-    </ClCompile>
     <ClCompile Include="Mouse.cpp">
       <Filter>01.GameObject\06.Mouse</Filter>
     </ClCompile>
@@ -406,6 +433,24 @@
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>01.GameObject\08.Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Arrow_Offscreen.cpp">
+      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewText.cpp">
+      <Filter>01.GameObject\05.Gui\99.ViewText</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui.cpp">
+      <Filter>01.GameObject\05.Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui.cpp">
+      <Filter>01.GameObject\05.Gui\01.Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Flip.cpp">
+      <Filter>01.GameObject\05.Gui\02.Flip</Filter>
+    </ClCompile>
+    <ClCompile Include="Rocket_Ui.cpp">
+      <Filter>01.GameObject\05.Gui\03.Rocket_Ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

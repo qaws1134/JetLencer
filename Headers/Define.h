@@ -4,6 +4,21 @@
 #define OBJ_NOEVENT 0 
 
 
+//#define SearchSizeFar			2800.f
+//#define SearchSizeLv0			2100.f
+//#define SearchSizeLv1			1400.f
+//#define SearchSizeLv2			700.f
+//
+//
+//
+
+
+
+
+
+
+
+
 #ifdef _AFX
 #define ERR_MSG(msg)		AfxMessageBox(msg)
 #else 

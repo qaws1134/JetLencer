@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Scene_Manager.h"
 #include "Prefab_Manager.h"
+#include "Spawn_Manager.h"
 CMainApp::CMainApp()
 {
 }
@@ -54,6 +55,9 @@ void CMainApp::Release_MainApp()
 	CGameObject_Manager::Destroy_Instance();
 	CScene_Manager::Destroy_Instance();
 	CGraphic_Device::Destroy_Instance();
+	CPrefab_Manager::Destroy_Instance();
+	CTexture_Manager::Destroy_Instance();
+	CSpawn_Manager::Destroy_Instance();
 }
 
 CMainApp * CMainApp::Create()

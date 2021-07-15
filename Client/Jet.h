@@ -23,6 +23,8 @@ public :
 
 public :
 	void			Set_Dmg(int _iAtk) { m_tCombatInfo.iHp += _iAtk; }
+
+public :
 	COMBAT			Get_CombatInfo() { return m_tCombatInfo; }
 
 
@@ -51,13 +53,11 @@ protected:
 
 	bool	m_bAccel;
 
-	ENEMY::STATE m_eJetState;
-	ENEMY::STATE m_ePreJetState;
 
 	BURNER::STATE		m_eBurnerState;
 	BURNER::STATE		m_PreBurnerState;
 
-	const ANIMATION* ptFire;
+	//const ANIMATION* ptFire;
 	CGameObject* m_pBurner;
 };
 

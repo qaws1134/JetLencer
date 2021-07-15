@@ -13,7 +13,7 @@ public:
 	static void Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameStart);
 	static void Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle, _vec3 vSpeed);
 	static void Spawn(const wstring _wstrObjName, _vec3 vPos);
-	static void Spawn(const wstring _wstrObjName, _vec3 vPos, wstring _wstrText, float _fPoint);
+	//static void Spawn(const wstring _wstrObjName, _vec3 vPos, wstring _wstrText, float _fPoint);
 
 public :
 	void Update_MultiSpawn();

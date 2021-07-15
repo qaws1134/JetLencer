@@ -48,12 +48,12 @@ void CCollider::State_Change()
 {
 }
 
-void CCollider::Set_ColRect(_vec3 LeftTop, _vec3 RightBottom)
+void CCollider::Set_ColRect(float _fWidth, float _fHeight)
 {
-	m_ColRect.left = (LONG)LeftTop.x;
-	m_ColRect.top= (LONG)LeftTop.y;
-	m_ColRect.right = (LONG)RightBottom.x;
-	m_ColRect.bottom = (LONG)RightBottom.y;
+	m_ColRect.left		= (LONG)m_tInfo.vPos.x/* - _fWidth*0.5f*/;
+	m_ColRect.top		= (LONG)m_tInfo.vPos.y /*- _fHeight*0.5f*/;
+	m_ColRect.right		= (LONG)m_tInfo.vPos.x + _fWidth/**0.5f*/;
+	m_ColRect.bottom	= (LONG)m_tInfo.vPos.y + _fHeight/**0.5f*/;
 }
 
 int CCollider::Update_GameObject()

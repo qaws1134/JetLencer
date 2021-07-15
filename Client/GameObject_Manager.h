@@ -15,6 +15,7 @@ public:
 public :
 	CGameObject* Get_Mouse() { return m_listGameObject[OBJID::MOUSE].front(); }
 	CGameObject* Get_Player() { if (!m_listGameObject[OBJID::PLAYER].empty())return m_listGameObject[OBJID::PLAYER].front(); return nullptr; }
+
 private:
 	list<CGameObject*> m_listGameObject[OBJID::END]; 
 	list<CGameObject*> m_listGameObjectRender[RENDERID::END];

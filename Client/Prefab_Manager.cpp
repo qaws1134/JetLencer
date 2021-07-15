@@ -4,7 +4,7 @@
 
 IMPLEMENT_SINGLETON(CPrefab_Manager)
 CPrefab_Manager::CPrefab_Manager() 
-	:m_wstrPlacementPath(L"../Data/Placement%d.dat")
+	//:m_wstrPlacementPath(L"../Data/Placement%d.dat")
 {
 }
 
@@ -28,6 +28,14 @@ CPrefab_Manager::~CPrefab_Manager()
 		Safe_Delete(rPair.second);
 	}
 	m_mapPlacementPrefab.clear();
+
+
+	for (auto & rPair : m_mapMultPlaceiPrefab)
+	{
+		Safe_Delete(rPair.second);
+	}
+	m_mapMultPlaceiPrefab.clear();
+
 }
 
 HRESULT CPrefab_Manager::Ready_Prefab_Manager()
@@ -244,6 +252,7 @@ HRESULT CPrefab_Manager::LoadPlacementPrefab(const wstring & _path)
 
 	while (true)
 	{
+
 		pPlacement = new PLACEMENT;
 		ReadFile(hFile, &pPlacement->eRenderID, sizeof(int), &dwbyte, nullptr);
 		if (0 == dwbyte)
@@ -311,9 +320,6 @@ HRESULT CPrefab_Manager::LoadMultiPlacementPrefab(const wstring & _path)
 		return E_FAIL;
 	}
 
-	//for (auto& rPair : m_mapMultPlaceiPrefab)
-	//	Safe_Delete(rPair.second);
-	//m_mapMultPlaceiPrefab.clear();
 
 
 	DWORD dwbyte = 0;
@@ -461,7 +467,7 @@ HRESULT CPrefab_Manager::SpawnObjectbyScene(const CScene_Manager::ID & _id)
 {
 	TCHAR szFilePath[MAX_PATH] = L"";
 	swprintf_s(szFilePath, m_wstrPlacementPath.c_str(), (int)_id);
-	LoadPlacementPrefab(szFilePath);
+	//LoadPlacementPrefab(szFilePath);
 
 	//placement Ãâ·Â 
 	PLACEMENT* pPlacement = nullptr;

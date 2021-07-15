@@ -33,6 +33,8 @@ CSpawn_Manager::CSpawn_Manager(): m_fWaitSpeed(1.f)
 
 CSpawn_Manager::~CSpawn_Manager()
 {
+	for (auto& iter : m_listWaitPlacement)
+		Safe_Delete(iter);
 }
 
 //UI
@@ -68,6 +70,7 @@ HRESULT CSpawn_Manager::Spawn(const wstring _wstrObjName, const PLACEMENT * _pPl
 }
 
 //총알
+//wstrname 다 오브젝트로 바꿔서 넘겨주기 전에 검색 한 뒤 넘겨주기 
 void CSpawn_Manager::Spawn(const wstring _wstrObjName,_vec3 vPos, float fAngle,_vec3 vSpeed,BULLET::SUBWEAPON eSubState)
 {
 	CGameObject* pObject = nullptr;
@@ -151,6 +154,7 @@ void CSpawn_Manager::Spawn(/*const wstring _wstrObjName,*/EFFECT::TYPE _eEffectT
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pEffect);
 	pEffect = nullptr;
 }
+
 void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameStart,float _fSize)
 {
 	CGameObject* pEffect = nullptr;
@@ -158,6 +162,7 @@ void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameSta
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pEffect);
 	pEffect = nullptr;
 }
+
 
 
 void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
@@ -237,8 +242,6 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 
 void CSpawn_Manager::Update_MultiSpawn()
 {
-
-
 	if (m_listWaitPlacement.empty())
 		return;
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
@@ -274,7 +277,5 @@ void CSpawn_Manager::Update_MultiSpawn()
 			}
 		}
 	}
-
-
 }
 

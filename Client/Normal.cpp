@@ -4,6 +4,7 @@
 #include "Time_Manager.h"
 #include "GameObject_Manager.h"
 #include "ColSphere.h"
+#include "Spawn_Manager.h"
 CNormal::CNormal()
 {
 }
@@ -47,12 +48,12 @@ HRESULT CNormal::Ready_GameObject()
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
 	{
 		m_tCombatInfo.iAtk = 1;
-		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 7.f, COLLIDER::PLAYER_BULLET));
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 10.f, COLLIDER::PLAYER_BULLET));
 	}
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
 		m_tCombatInfo.iAtk = 2;
-		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 5.f, COLLIDER::ENEMY_BULLET));
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 10.f, COLLIDER::ENEMY_BULLET));
 	}
 	return S_OK;
 }
@@ -98,5 +99,12 @@ void CNormal::Move()
 void CNormal::DeadEffect()
 {
 	//오브젝트와 충돌이 되면 충돌 시 이펙트 생성
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+
+	if (m_tInfo.vPos.y > Map_Height+70)
+	{
+		CSpawn_Manager::Spawn(EFFECT::GROUND_WATERSPLASH_FAST, _vec3{ m_tInfo.vPos.x , float(Map_Height + 72) ,0.f}, false, 1.0f);
+	}
+
 	m_bDead = true;
 }

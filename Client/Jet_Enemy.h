@@ -17,8 +17,31 @@ public:
 	virtual void Ai_State()PURE;
 	virtual void DeadEffect() override;
 
+
+
+public:
+	void	Ui_DistanseState();
+	void	Ui_DirState();
+	//void	Distanse_Check(); ui알파값 변경 
+
+public :
+	void	Set_JetState(ENEMY::STATE _eJetState) { m_eJetState = _eJetState; }
+	void	Set_UiState(ARROW::UI _eUiState) { m_eUiState = _eUiState; }
+	bool	Get_Zoom() { return m_bZoom; }
+	void	EnemyBurnerSet();
+public :
+	ENEMY::STATE m_eJetState;
+	ENEMY::STATE m_ePreJetState;
+
+	ARROW::UI m_eUiState;
+	CGameObject* m_pArrow_Offscreen;
+
+
+	_vec3 m_vResultDir;
 	float m_fOffsetAngle;
 	float m_fTargetAngle;
+	bool	m_bZoom;
+
 	// CJet을(를) 통해 상속됨
 };
 

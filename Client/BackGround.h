@@ -18,8 +18,10 @@ public:
 	virtual void State_Change() override;		//gui 와 함께 red로 바꿔주기 위해서
 
 	virtual void WriteMatrix();
-
 protected:
+	float m_fSplashTime;
+	_vec3 vMaxScale;
+	_vec3 vMinScale;
 
 	// CGameObject을(를) 통해 상속됨
 };

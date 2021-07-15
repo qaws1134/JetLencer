@@ -2,6 +2,7 @@
 #include "Jet_Normal.h"
 #include "Spawn_Manager.h"
 #include "ColSphere.h"
+#include "Arrow_Offscreen.h"
 CJet_Normal::CJet_Normal()
 {
 }
@@ -34,7 +35,7 @@ HRESULT CJet_Normal::Ready_GameObject()
 	m_tCombatInfo.iHp = 5;
 
 	m_fAttackTime = 5.f;
-	m_fAttackSpeed = 0.08f;
+	m_fAttackSpeed = 5.f;
 
 	m_fAccel = 1800.f;
 	m_fMaxSpeed = 500.f;
@@ -45,36 +46,25 @@ HRESULT CJet_Normal::Ready_GameObject()
 	m_vecCollider.reserve(1);
 	m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 15.f, COLLIDER::ENEMY));
 
+	m_pArrow_Offscreen = CArrow_Offscreen::Create(UI::JET);
 	return S_OK;
 }
 
 void CJet_Normal::State_Change()
 {
-	//타겟 앵글을 잡을 때 offset을 정해서 앵글을 준다 
-	//offset값을 변경 
+
 	if (m_ePreJetState!= m_eJetState)
 	{
 		switch (m_eJetState)
 		{
 		case ENEMY::ATTACK:
-			//m_fAngleOffset = float(rand() % 10);			
-			
-			//offsetAngle 정하기
-			//타겟을 플레이어
-			//타겟이 자신의 dir방향에서 일정 각도 범위 내에 들어오면 총알 발사 오차는 +-5도정도??
-
-
 
 			break;
-
 		case ENEMY::BACK:
 			//타겟을 화면 끝 아무지점 
 			//컬라이더를 만들어서 컬라이더 안에 들어오면 공격, 공격 끝나면 컬라이더를 벗어나자
 			//혹은 컬라이더 내부에서 일정 시간이 지나면 다시 공격 상태로 변경
-			
-
-
-
+			m_vResultDir = m_tInfo.vPos - m_pTarget->Get_ObjInfo().vPos;
 			break;
 		}
 		m_ePreJetState = m_eJetState;
@@ -83,16 +73,19 @@ void CJet_Normal::State_Change()
 
 void CJet_Normal::Ai_State()
 {
+	
+	
+	m_vTarget_Dir = m_vResultDir;
+	TargetAngle_Check();
 	Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
 	m_bAccel = true;
 	SpawnPtFire();
+
 	if (m_eJetState == ENEMY::ATTACK)
 	{
-		float fDis = D3DXVec3Length(&(m_pTarget->Get_ObjInfo().vPos - m_tInfo.vPos));
-		float fRad = 400.f;
-		m_vTarget_Dir = m_pTarget->Get_ObjInfo().vPos - m_tInfo.vPos;
-		TargetAngle_Check();
-		if ((fDis <= fRad)&& AttackTime())
+		m_vResultDir = m_pTarget->Get_ObjInfo().vPos - m_tInfo.vPos;
+		
+		if (m_eUiState == ARROW::END&& AttackTime())
 		{
 			CSpawn_Manager::Spawn(L"EnemyBullet", m_tInfo.vPos, m_fAngle, m_vVelocity);
 			m_eJetState = ENEMY::BACK;
@@ -100,12 +93,8 @@ void CJet_Normal::Ai_State()
 	}
 	else
 	{
-		float fDis = D3DXVec3Length(&(m_pTarget->Get_ObjInfo().vPos - m_tInfo.vPos));
-		float fRad = 600.f;
-		m_vTarget_Dir = m_tInfo.vPos-m_pTarget->Get_ObjInfo().vPos;
-		TargetAngle_Check();
-
-		if (fDis >= fRad)
+		if (m_eUiState == ARROW::DISTANS_LEVEL1
+			|| AttackTime())
 		{
 			m_eJetState = ENEMY::ATTACK;
 		}
@@ -123,11 +112,4 @@ void CJet_Normal::Ai_State()
 	//혹은 컬라이더 내부에서 일정 시간이 지나면 다시 공격 상태로 변경
 }
 
-void CJet_Normal::DeadEffect()
-{
-	CSpawn_Manager::Spawn(L"Dead_Explosion1", m_tInfo.vPos);
-	m_pBurner->Set_Dead(true);
-	m_pBurner = nullptr;
-	m_bDead = true;
-}
 

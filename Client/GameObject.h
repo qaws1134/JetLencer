@@ -34,6 +34,7 @@ public :
 	void				Set_Dead(bool bDead) { m_bDead = bDead; }
 	void				Set_DeadEffect(bool bDeadEffect) { m_bDeadEffect = bDeadEffect; }
 	void				Set_Color(MATCOLOR _tColor) { m_tColor = _tColor; }
+	void				Set_Size(_vec3 _vSize) { m_tInfo.vSize = _vSize; }
 
 public:
 	const INFO&			Get_ObjInfo()const { return m_tInfo; }
@@ -45,7 +46,7 @@ public:
 	_vec3				Get_Velocity() { return m_vVelocity; }
 	float				Get_Angle() { return m_fAngle; }
 	CGameObject*		Get_Target() { return m_pTarget; }
-
+	MATCOLOR			Get_Color() { return m_tColor; }
 
 public :
 	virtual void		State_Change()PURE;
@@ -89,5 +90,6 @@ protected:
 
 	bool				m_bDeadEffect;
 	bool				m_bCenter;
+
 };
 

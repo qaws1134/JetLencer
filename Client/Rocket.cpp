@@ -44,7 +44,7 @@ HRESULT CRocket::Ready_GameObject()
 	m_tFrame.fMaxFrame = 1;
 	m_tFrame.fStartFrame = 0;
 	m_eRenderId = RENDERID::BULLET;
-	m_fAccel = 3000.f;
+	m_fAccel = 4000.f;
 	m_vecCollider.reserve(1);
 	
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
@@ -78,9 +78,9 @@ void CRocket::Move()
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	m_vVelocity += m_tInfo.vDir*m_fAccel*fTime;
 	float fVelLength = D3DXVec3Length(&m_vVelocity);
-	if (fVelLength > 1200.f)
+	if (fVelLength > 1500.f)
 	{
-		m_vVelocity *= 1200.f / fVelLength;
+		m_vVelocity *= 1500.f / fVelLength;
 	}
 	m_tInfo.vPos += m_vVelocity*fTime;
 	_vec3 vNormalVel = m_vVelocity;

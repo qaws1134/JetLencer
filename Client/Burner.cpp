@@ -140,7 +140,7 @@ void CBurner::State_Change()
 		m_ePreBurnerState = m_eBurnerState;
 		m_tFrame.fMaxFrame = (float)CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"Player" + m_tFrame.wstrStateKey)->iMax_Index;
 		m_tFrame.fStartFrame = 0;
-		m_tFrame.fFrameSpeed = 10.f;
+		m_tFrame.fFrameSpeed = 20.f;
 		if (m_eBurnerState != BURNER::IDLE)
 			m_bRender = true;
 	}

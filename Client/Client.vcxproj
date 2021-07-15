@@ -71,16 +71,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -151,6 +153,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Arrow_Offscreen.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Beam.h" />
     <ClInclude Include="Bottle.h" />
@@ -162,11 +165,14 @@
     <ClInclude Include="ColRect.h" />
     <ClInclude Include="ColSphere.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Flip.h" />
     <ClInclude Include="Frame_Manager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObject_Manager.h" />
     <ClInclude Include="Graphic_Device.h" />
     <ClInclude Include="Gui.h" />
+    <ClInclude Include="Rocket_Ui.h" />
+    <ClInclude Include="Ui.h" />
     <ClInclude Include="Gundrone.h" />
     <ClInclude Include="Jet.h" />
     <ClInclude Include="Jet_BulletSplash.h" />
@@ -197,8 +203,10 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture_Manager.h" />
     <ClInclude Include="Time_Manager.h" />
+    <ClInclude Include="ViewText.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Arrow_Offscreen.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Beam.cpp" />
     <ClCompile Include="Bottle.cpp" />
@@ -210,11 +218,14 @@
     <ClCompile Include="ColRect.cpp" />
     <ClCompile Include="ColSphere.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Flip.cpp" />
     <ClCompile Include="Frame_Manager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObject_Manager.cpp" />
     <ClCompile Include="Graphic_Device.cpp" />
     <ClCompile Include="Gui.cpp" />
+    <ClCompile Include="Rocket_Ui.cpp" />
+    <ClCompile Include="Ui.cpp" />
     <ClCompile Include="Gundrone.cpp" />
     <ClCompile Include="Jet.cpp" />
     <ClCompile Include="Jet_BulletSplash.cpp" />
@@ -248,6 +259,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture_Manager.cpp" />
     <ClCompile Include="Time_Manager.cpp" />
+    <ClCompile Include="ViewText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

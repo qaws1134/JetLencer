@@ -36,7 +36,7 @@ HRESULT CBottle::Ready_GameObject()
 
 	m_tFrame.wstrObjKey = m_pObjectInfo->wstrIdleImage_ObjectKey;
 	m_tFrame.wstrStateKey = m_pObjectInfo->wstrIdleImage_StateKey;
-	m_tFrame.fMaxFrame = CPrefab_Manager::Get_Instance()
+	m_tFrame.fMaxFrame = (float)CPrefab_Manager::Get_Instance()
 		->Get_AnimationPrefab(m_pObjectInfo->wstrIdleImage_ObjectKey 
 			+ m_pObjectInfo->wstrIdleImage_StateKey)->iMax_Index;
 

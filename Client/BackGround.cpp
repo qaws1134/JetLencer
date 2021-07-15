@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "BackGround.h"
+#include "GameObject_Manager.h"
+#include "Spawn_Manager.h"
+#include "Player.h"
 
-
-CBackGround::CBackGround()
+CBackGround::CBackGround() : m_fSplashTime(0.f)
 {
 }
 
@@ -31,7 +33,8 @@ HRESULT CBackGround::Ready_GameObject()
 	m_tInfo.vPos = m_pPlacement->m_tMatInfo.mat[MATID::TRANS];
 	m_tInfo.vSize = m_pPlacement->m_tMatInfo.mat[MATID::SCALE];
 	m_fAngle = m_pPlacement->m_tMatInfo.mat[MATID::ROT].z;
-
+	vMaxScale = m_tInfo.vSize + m_tInfo.vSize*0.2f;
+	vMinScale = m_tInfo.vSize;
 	return S_OK;
 }
 
@@ -39,6 +42,9 @@ int CBackGround::Update_GameObject()
 {
 	if (m_bDead)
 		return OBJ_DEAD;
+	m_pTarget = CGameObject_Manager::Get_Instance()->Get_Player();
+
+
 
 	return OBJ_NOEVENT;
 }
@@ -74,10 +80,24 @@ void CBackGround::Render_GameObject()
 	if (m_eRenderId == RENDERID::MOVE_BACKGROUND1)
 	{
 		m_tInfo.vDir = _vec3{ CScroll_Manager::Get_Scroll().x*0.9f,CScroll_Manager::Get_Scroll().y,0.f };
+
+		if (static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_Zoom())
+		{
+			if (D3DXVec3Length(&vMaxScale) > D3DXVec3Length(&m_tInfo.vSize))
+				m_tInfo.vSize += m_tInfo.vSize*0.003f;
+			else
+				static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Set_Zoom(false);			
+		}
+		else
+		{
+			if (D3DXVec3Length(&vMinScale) < D3DXVec3Length(&m_tInfo.vSize))
+				m_tInfo.vSize -= vMinScale*0.001f;
+		}
 	}
 	else if (m_eRenderId == RENDERID::MOVE_BACKGROUND2)
 	{
 		m_tInfo.vDir = _vec3{CScroll_Manager::Get_Scroll().x*0.8f,CScroll_Manager::Get_Scroll().y,0.f };
+
 	}
 	else if (m_eRenderId == RENDERID::MOVE_BACKGROUND3)
 	{
@@ -89,6 +109,29 @@ void CBackGround::Render_GameObject()
 	else if(m_eRenderId == RENDERID::GROUND)
 	{
 		m_tInfo.vDir = _vec3{ CScroll_Manager::Get_Scroll().x,0.f,0.f };
+		
+
+
+		if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)-100.f < m_pTarget->Get_ObjInfo().vPos.y)
+		{
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			m_fSplashTime += fTime;
+			
+			//땅과 플레이어의 y값 차
+			float fYGap = (m_pTarget->Get_ObjInfo().vPos.y)-(m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)- 100.f) ;
+			float fYNormalGap = fYGap* 0.01f;
+
+			//최대 크기
+			if (fYNormalGap > 1.5f)
+				fYNormalGap = 1.5f;
+
+			if (m_fSplashTime > 0.015f)
+			{
+ 				CSpawn_Manager::Spawn(EFFECT::GROUND_WATERSPLASH_FAST, _vec3(m_pTarget->Get_ObjInfo().vPos.x - m_pTarget->Get_Velocity().x*fTime, m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)*0.5f, 0.f), false, fYNormalGap);
+				m_fSplashTime = 0.f;
+			}
+		}
+		
 	}
 	else if (m_eRenderId == RENDERID::BACKGROUND)
 	{

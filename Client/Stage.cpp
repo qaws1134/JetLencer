@@ -6,7 +6,10 @@
 #include "Mouse.h"
 #include "Spawn_Manager.h"
 #include "Scroll_Manager.h"
-#include "Gui.h"
+#include "ViewText.h"
+#include "Arrow_Offscreen.h"
+
+
 CStage::CStage()
 {
 }
@@ -36,13 +39,18 @@ HRESULT CStage::Ready_Scene()
 	pObject = CMouse::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::MOUSE, pObject);
 
-	m_pOject1 = CGui::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
+	m_pOject1 = CViewText::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject1);
-	m_pOject2 = CGui::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
+	m_pOject2 = CViewText::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject2);
 
-	CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+float(Map_Width>>1),100.f+ float(Map_Height>>1),0.f });
-	CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+ float(Map_Width>>1),200.f+ float(Map_Height>>1),0.f });
+	//m_pUI3 = CArrow_Offscreen::Create(UI::JET);
+	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pUI3);
+
+
+
+	//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+float(Map_Width>>1),100.f+ float(Map_Height>>1),0.f });
+	//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+ float(Map_Width>>1),200.f+ float(Map_Height>>1),0.f });
 
 	return S_OK;
 }
@@ -52,14 +60,14 @@ void CStage::Update_Scene()
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_P))
 	{
 		CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
-		CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
+		//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
 	}
 
 	CSpawn_Manager::Get_Instance()->Update_MultiSpawn();
 	CGameObject_Manager::Get_Instance()->Update_GameObject_Manager(); 
 	CScroll_Manager::Scroll_Lock();
-	static_cast<CGui*>(m_pOject1)->Set_Point(CScroll_Manager::Get_Scroll().x);
-	static_cast<CGui*>(m_pOject2)->Set_Point(CScroll_Manager::Get_Scroll().y);
+	static_cast<CViewText*>(m_pOject1)->Set_Point(CScroll_Manager::Get_Scroll().x);
+	static_cast<CViewText*>(m_pOject2)->Set_Point(CScroll_Manager::Get_Scroll().y);
 
 }
 
@@ -70,6 +78,7 @@ void CStage::Render_Scene()
 
 void CStage::Release_Scene()
 {
+	CSpawn_Manager::Destroy_Instance();
 }
 
 CScene * CStage::Create()

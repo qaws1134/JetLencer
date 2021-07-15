@@ -25,8 +25,6 @@ public :
 	void				Key_State();
  	void				Keybord_OffSet();
 
-
-
 	bool				RocketTime();
 	bool				ChargeShotTime();
 
@@ -36,10 +34,10 @@ public :
 	void				SubWeapon_Select();
 
 	void				SubWeapon_Charge();
-
-
-
-
+	float				Get_AfterTime() { return m_fAfterBurnlimit / m_fAfterBurnTime; }
+	void				Set_Zoom(bool _bZoom) { m_bZoom = _bZoom; }
+	bool				Get_Zoom() { return m_bZoom; }
+	float				Get_Special_Reload() { return m_fChargeTime; }
 private:
 	float				m_fRocketTime[4];
 	float				m_fRocketSpeed;
@@ -59,18 +57,32 @@ private:
 	float				m_fChargeCoolTime;	// 
 	float				m_fChargeSpeed;	//차지 주기를  측정 ->공격속도 같은
 
-	
+
+	float				m_fAfterBurnTime;
+	float				m_fAfterBurnlimit;
+	bool				m_bOverHeat;
+	float				m_fReduceAccelRate;
+	bool				m_bZoom;
 
 
 	PLAYER::STATE		m_eState;
 	PLAYER::STATE		m_ePreState;
 
+	PLAYER::STATE		m_eWeaponState;
+	PLAYER::STATE		m_ePreWeaponState;
+
+
+
+
 	BULLET::SUBWEAPON	m_eSubWeaponState;
 	
-
 	CGameObject*		m_pBurner;
-	
 	CGameObject*		m_pChargeBeam;
+
+	CGameObject*		m_pGuiLFlip;
+	CGameObject*		m_pGuiRFlip;
+
+
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;
 

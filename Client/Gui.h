@@ -1,30 +1,38 @@
 #pragma once
-#include "GameObject.h"
+#include "Ui.h"
 class CGui :
-	public CGameObject
+	public CUi
 {
 private:
 	explicit CGui();
 public:
 	virtual ~CGui();
-public:
-	static	CGameObject* Create(const PLACEMENT*	_pPlacement);
-	static	CGameObject* Create(_vec3 vPos,wstring _wstrText);
 
+public :
+	static CGameObject *Create(const PLACEMENT * _pPlacement);
+	static CGameObject *Create(UI::TYPE _eUiType);
 
+public :
 	virtual HRESULT Ready_GameObject() override;
 	virtual int Update_GameObject() override;
-	virtual void Late_Update_GameObject() override;
-	virtual void Render_GameObject() override;
-	virtual void Release_GameObject() override;
 	virtual void State_Change() override;
-
-	virtual void WriteMatrix();
 public:
-	void	Set_Text(wstring _wstrText) { m_wstrText = _wstrText;  }
-	void	Set_Point(float  _fPoint) { m_fPoint = _fPoint; }
+	void	Set_UiType(UI::TYPE _eUiType)	{ m_eUiType = _eUiType; }
+	void	Set_Action(bool _bAction)		{ m_bAction = _bAction; }
+	void	Set_Start(bool _bStart)			{ m_bStart  = _bStart; }
+	void	Set_TargetPos(_vec3 _vPos)		{ m_vTargetPos = _vPos;}
 
-	wstring m_wstrText;
-	float m_fPoint;
+
+public:
+	void	InitGui();
+	void	Frame_Change();
+private:
+	UI::TYPE m_eUiType;
+	bool m_bLoop;
+	bool m_bAction;
+	bool m_bStart;
+	_vec3 m_vTargetPos;
+	float m_fIncrease;
+	// CUi을(를) 통해 상속됨
 };
 

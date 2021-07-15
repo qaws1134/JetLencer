@@ -7,8 +7,9 @@
 #include "Spawn_Manager.h"
 #include "Burner.h"
 #include "ColSphere.h"
+#include "ColRect.h"
 #include "Effect.h"
-
+#include "Flip.h"
 #define SubWeaponDelay 1.f
 #define ChargeWeaponDelayLV1 2.5f
 #define ChargeWeaponDelayLV2 5.9f
@@ -25,6 +26,13 @@ CPlayer::CPlayer()
 	, m_fChargeCoolTime(0.f)
 	, wstrSubWeapon(L"")
 	, wstrChargeWeapon(L"")
+	, m_pGuiLFlip(nullptr)
+	, m_pGuiRFlip(nullptr)
+	, m_fAfterBurnTime(0.f)
+	, m_fAfterBurnlimit(0.f)
+	, m_bOverHeat(false)
+	, m_fReduceAccelRate(0.f)
+	, m_bZoom(false)
 
 {
 	
@@ -100,7 +108,7 @@ HRESULT CPlayer::Ready_GameObject()
 	m_fChargeTime = 5.f;
 	m_fChargeSpeed = 0.08f;
 	m_eSubWeaponState = BULLET::CHARGE_0;
-
+	m_fChargeCoolTime = 10.f;
 
 	//회피
 	m_fRollTime = 0.f;
@@ -113,6 +121,7 @@ HRESULT CPlayer::Ready_GameObject()
 	wstrChargeWeapon = L"Beam";		// Beam, GunDrone, MultiHomming,boom, 
 
 
+	//빔 차지 이펙트
 	if (wstrChargeWeapon == L"Beam")
 	{
 		m_pChargeBeam = CEffect::Create(EFFECT::CHAGE_BEAM,m_tInfo.vPos,false);
@@ -121,15 +130,35 @@ HRESULT CPlayer::Ready_GameObject()
 
 	//버너 생성
 
-	ptFire = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
+	//ptFire = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
 	m_pBurner = CBurner::Create();
 	m_eBurnerState = BURNER::IDLE;	//START로 바꿔주자
 	m_iMax_ptFireNum = 10;
 
+	m_fAfterBurnTime = 0.f;
+	m_fAfterBurnlimit = 4.f;
+	m_fReduceAccelRate = 0.08f;
+
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pBurner);
 
-	m_vecCollider.reserve(1);
-	m_vecCollider.emplace_back(CColSphere::Create(this,m_tCombatInfo,10.f, COLLIDER::PLAYER));
+
+
+
+
+	//컬라이더
+#define PlayerColliderSize	10.f
+	m_vecCollider.reserve(8);
+	m_vecCollider.emplace_back(CColSphere::Create(this,m_tCombatInfo, PlayerColliderSize, COLLIDER::PLAYER));
+	for (int i = 0; i < 4; i++)
+		m_vecCollider.emplace_back(CColRect::Create(this, (float)WINCX*(i+1),(float)WINCY*(i+1), COLLIDER::PLAYER_SEARCH));
+
+	_vec3 vLOffset = { 0.3f,0.7f,0.f };
+	_vec3 vROffset = { 0.7f,0.7f,0.f };
+
+	m_pGuiLFlip = CFlip::Create(_vec3{ float(WINCX)*vLOffset.x,float(WINCY)*vLOffset.y,0.f },false);
+	m_pGuiRFlip = CFlip::Create(_vec3{ float(WINCX)*vROffset.x,float(WINCY)*vROffset.y,0.f }, true);
+
+
 
 	return S_OK;
 }
@@ -145,6 +174,24 @@ int CPlayer::Update_GameObject()
 		DeadEffect();
 		return OBJ_DEAD;
 	}
+
+	//TCHAR szPos1[32] = {};
+
+	//GetPrivateProfileString(L"Section", L"PosX", nullptr, szPos1, 32, L"../Test.ini");
+	//float PosX = _ttof(szPos1);
+
+	//TCHAR szPos2[32] = {};
+	//GetPrivateProfileString(L"Section", L"PosY", nullptr, szPos2, 32, L"../Test.ini");
+	//float PosY = _ttof(szPos2);
+
+	//TCHAR szPos3[32] = {};
+
+	//GetPrivateProfileString(L"Section", L"PosX1 ", nullptr, szPos3, 32, L"../Test.ini");
+	//float PosX2 = _ttof(szPos3);
+
+	//TCHAR szPos4[32] = {};
+	//GetPrivateProfileString(L"Section", L"PosY1 ", nullptr, szPos4, 32, L"../Test.ini");
+	//float PosY2 = _ttof(szPos4);
 
 	m_pTarget = CGameObject_Manager::Get_Instance()->Get_Mouse();
 
@@ -179,6 +226,7 @@ void CPlayer::Release_GameObject()
 }
 
 
+
 void CPlayer::State_Change()
 {
 	if (m_eState != m_ePreState)
@@ -187,14 +235,48 @@ void CPlayer::State_Change()
 		{
 		case PLAYER::IDLE:
 			JetAngleCheck();
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::IDLE);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::IDLE);
 			break;
 		case PLAYER::ROLL:
 			m_tFrame.fStartFrame = 0.f;
 			m_bRoll = true;
 			break;
+		case PLAYER::ACCEL:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::ACCEL);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::ACCEL);
+			break;
+		case PLAYER::AFTER_BURNUR:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::AFTER_BURNUR);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::AFTER_BURNUR);
+			break;
+		case PLAYER::OVERHEAT:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::OVERHEAT);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::OVERHEAT);
+			break;
 		}
 	}
 	m_ePreState = m_eState;
+
+	if (m_eWeaponState != m_ePreWeaponState)
+	{
+		switch (m_eWeaponState)
+		{
+		case PLAYER::SPECIAL_CHARGE:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_WeaponState(PLAYER::SPECIAL_CHARGE);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_WeaponState(PLAYER::SPECIAL_CHARGE);
+			break;
+		case PLAYER::SPECIAL_RELOAD_START:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_WeaponState(PLAYER::SPECIAL_RELOAD_START);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_WeaponState(PLAYER::SPECIAL_RELOAD_START);
+			break;
+		case PLAYER::SPECIAL_RELOAD_END:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_WeaponState(PLAYER::SPECIAL_RELOAD_END);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_WeaponState(PLAYER::SPECIAL_RELOAD_END);
+			break;
+		}
+	}
+	m_ePreWeaponState = m_eWeaponState;
 }
 
 void CPlayer::Roll()
@@ -258,6 +340,10 @@ void CPlayer::PositionRock_Check()
 		Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
 		m_eBurnerState = BURNER::ACCEL;
 		static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::ACCEL);
+		m_fAfterBurnTime -= fTime;
+		m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
+		m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
+
 		m_bAccel = true;
 	}
 }
@@ -275,14 +361,14 @@ void CPlayer::Key_State()
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	if (!m_bAuto)
 	{
-		if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_SPACE))
+		if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_SPACE)&& !m_bOverHeat)
 		{
 			//쉐이크 효과
 
 			m_fMaxSpeed = 800.f;
 
 			Accel(m_tInfo.vDir, m_fAccel + m_fBoostAccel, m_fMaxSpeed, false);
-
+			m_eState = PLAYER::AFTER_BURNUR;
 			if (m_bMega)
 				m_eBurnerState = BURNER::MEGA;
 			else
@@ -295,6 +381,10 @@ void CPlayer::Key_State()
 				else
 					static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::BURST);
 			}
+			m_fAfterBurnTime += fTime;
+			m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
+			m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
+
 
 			m_bAccel = true;
 		}
@@ -302,9 +392,12 @@ void CPlayer::Key_State()
 		{
 			m_fMaxSpeed = 600.f;
 			Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
-
+			m_eState = PLAYER::ACCEL;
 			m_eBurnerState = BURNER::ACCEL;
 			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::ACCEL);
+			m_fAfterBurnTime -= fTime;
+			m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
+			m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
 			m_bAccel = true;
 		}
 		else
@@ -313,6 +406,9 @@ void CPlayer::Key_State()
 			Accel(m_vGravity, m_fGravity, m_fMaxSpeed, true);
 			m_eBurnerState = BURNER::IDLE;
 			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::IDLE);
+			m_fAfterBurnTime -= fTime;
+			m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
+			m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
 			m_bAccel = false;
 		}
 	}
@@ -357,6 +453,7 @@ void CPlayer::Keybord_OffSet()
 }
 
 
+
 bool CPlayer::RocketTime()
 {
 	
@@ -390,8 +487,29 @@ void CPlayer::TimeCheck()
 		if (m_fRocketTime[i]<m_fRocketSpeed)
 			m_fRocketTime[i] += fTime;
 	}
+	//충전된 값을 스피드에 넘겨줘서 체크 
 	if (m_fChargeCoolTime < m_fChargeSpeed)
+	{
 		m_fChargeCoolTime += fTime;
+		if(m_fChargeCoolTime > m_fChargeSpeed)
+			m_eWeaponState = PLAYER::SPECIAL_RELOAD_END;
+	}
+	if (m_fAfterBurnTime >= m_fAfterBurnlimit)
+	{
+		m_bOverHeat = true;
+		m_eState = PLAYER::OVERHEAT;
+	}
+
+
+	if (m_fAfterBurnTime < 0)
+	{
+		static_cast<CFlip*>(m_pGuiLFlip)->Set_OverHeat(false);
+		static_cast<CFlip*>(m_pGuiRFlip)->Set_OverHeat(false);
+		m_bOverHeat = false;
+		m_fAfterBurnTime = 0.f;
+	}
+	
+
 }
 
 void CPlayer::DeadEffect()
@@ -429,7 +547,7 @@ void CPlayer::SubWeapon_Select()
 	switch (m_eSubWeaponState)
 	{
 	case BULLET::CHARGE_0:
-		CSpawn_Manager::Spawn(wstrSubWeapon, m_tInfo.vPos- m_tInfo.vDir*fTime+m_vVelocity*fTime, m_fAngle, m_vVelocity);
+		CSpawn_Manager::Spawn(wstrSubWeapon, m_tInfo.vPos+ m_tInfo.vDir*fTime+m_vVelocity*fTime, m_fAngle, m_vVelocity);
 		break;
 	case BULLET::CHARGE_1: 
 	case BULLET::CHARGE_2:
@@ -440,6 +558,7 @@ void CPlayer::SubWeapon_Select()
 			static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(false);
 			static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.f);
 		}
+		m_eWeaponState = PLAYER::SPECIAL_RELOAD_START;
 		break;
 	}
 
@@ -453,13 +572,14 @@ void CPlayer::SubWeapon_Charge()
 	{
 		//요깅
 		//차지 이펙트 넣어주자
-		if (wstrChargeWeapon == L"Beam")
+		if (m_fChargeTime > SubWeaponDelay)
 		{
-			if (m_fChargeTime > SubWeaponDelay)
+			if (wstrChargeWeapon == L"Beam")
 			{
 				static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(true);
 				m_pChargeBeam->Set_Pos(m_tInfo.vPos + m_tInfo.vDir*1000.f*fTime);
 			}
+			m_eWeaponState = PLAYER::SPECIAL_CHARGE;
 		}
 		if (m_fChargeTime < 6.f)
 			m_fChargeTime += fTime;

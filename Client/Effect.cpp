@@ -60,6 +60,7 @@ CGameObject * CEffect::Create(EFFECT::TYPE _eEffectType, D3DXVECTOR3 _vPos, bool
 		return pInstance;
 	}
 	return pInstance;
+
 }
 
 
@@ -91,7 +92,6 @@ int CEffect::Update_GameObject()
 {
 	if (m_bDead)
 		return OBJ_DEAD;
-	State_Change();
 
 	return OBJ_NOEVENT;
 }
@@ -99,6 +99,7 @@ int CEffect::Update_GameObject()
 void CEffect::Late_Update_GameObject()
 {
 	FAILED_CHECK_RETURN(Set_Texture(), );
+	State_Change();
 }
 
 void CEffect::Render_GameObject()
@@ -136,10 +137,7 @@ void CEffect::State_Change()
 	switch (m_eEffectType)
 	{
 	case EFFECT::ROCKET_PTFIRE:
-		m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
-		if (m_tInfo.vSize.x < 0.f)
-			m_bDead = true;
-		m_tFrame.fStartFrame = 0;
+		Size_Reduce();
 		break;
 	case EFFECT::ROCKET_BOOM_PTFIRE:
 		Frame_Change();
@@ -148,12 +146,7 @@ void CEffect::State_Change()
 		if (m_bFrameStart)
 			Frame_Change();
 		else
-		{
-			m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
-			if (m_tInfo.vSize.x < 0.f)
-				m_bDead = true;
-			m_tFrame.fStartFrame = 0;
-		}
+			Size_Reduce();
 		break;
 	case EFFECT::CHAGE_BEAM:
 		if (m_bFrameStart)
@@ -169,12 +162,36 @@ void CEffect::State_Change()
 			m_fReduce = -0.005f;
 		}
 		break;
+	case EFFECT::GROUND_WATERSPLASH:
+	case EFFECT::GROUND_WATERSPLASH_FAST:
+		if (m_pTexInfo)
+		{
+			m_bCenter = true;
+			m_fCenterY = float(m_pTexInfo->tImageInfo.Height);
+			m_fCenterX = float(m_pTexInfo->tImageInfo.Width >> 1);
+			if (m_tFrame.fFrameSpeed > 10.f)
+			{
+				m_tFrame.fFrameSpeed -= 0.02f;
+			}
+		}
+		Frame_Change();
+		break;
 	default:
 		Frame_Change();
 		break;
 	}
 	
 }
+
+
+void CEffect::Size_Reduce()
+{
+	m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
+	if (m_tInfo.vSize.x < 0.f)
+		m_bDead = true;
+	m_tFrame.fStartFrame = 0;
+}
+
 
 void CEffect::Frame_Change()
 {
@@ -226,6 +243,20 @@ void CEffect::InitEffect()
 		m_fReduce = -0.005f;
 		m_bLoop = true;
 		m_tColor = { 200,255,255,255 };
+		break;
+	case EFFECT::GROUND_WATERSPLASH:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectWatersplash");
+		Set_Frame(m_pAnimation);
+		m_fSize = float(rand() %5+7)*0.1f;
+		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = float(rand() % 30 + 10);
+		break;
+	case EFFECT::GROUND_WATERSPLASH_FAST:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectWatersplash_fast");
+		Set_Frame(m_pAnimation);
+		m_fSize += float(rand() % 5 +1)*0.1f;
+		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = float(rand() % 20 + 20);
 		break;
 	default:
 		m_fSize = 1.f;

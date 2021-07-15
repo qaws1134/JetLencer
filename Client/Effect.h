@@ -34,7 +34,7 @@ public :
 	virtual void State_Change() override;
 	void Frame_Change();
 	void InitEffect();
-
+	void Size_Reduce();
 
 
 protected:

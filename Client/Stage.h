@@ -19,6 +19,7 @@ public:
 
 	CGameObject* m_pOject1;
 	CGameObject* m_pOject2;
+	CGameObject* m_pUI3;
 
 
 };

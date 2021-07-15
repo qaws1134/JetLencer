@@ -7,9 +7,7 @@
 
 
 CJet::CJet()
-	: m_ePreJetState(ENEMY::END)
-	, m_eJetState(ENEMY::END)
-	, m_fAttackTime(0.f)
+	: m_fAttackTime(0.f)
 	, m_fAttackSpeed(0.f)
 	, m_pBurner(nullptr)
 	, m_fMaxSpeedOffSet(0.f)
@@ -67,8 +65,6 @@ void CJet::InitJet()
 
 	m_pBurner = CBurner::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pBurner);
-
-	ptFire = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
 	
 }
 
