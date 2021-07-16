@@ -24,6 +24,8 @@
 
 #define KEY_P		0x00000800
 
+#define KEY_L		0x00001000
+
 class CKey_Manager
 {
 	DECLARE_SINGLETON(CKey_Manager)

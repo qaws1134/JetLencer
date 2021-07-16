@@ -25,15 +25,19 @@ void CScroll_Manager::Scroll_Lock()
 	Position_Lock();
 
 	if (0 < m_vScroll.x)
+	{
 		m_vScroll.x = 0;
-	
+		//왼쪽 ui 출력 
+	}
 
 	if (0 < m_vScroll.y)
 		m_vScroll.y = 0;
 	
 	if (WINCX - Map_Width > m_vScroll.x)
+	{
 		m_vScroll.x = WINCX - Map_Width;
-	
+		//오른쪽 ui 출력 
+	}
 
 	if (-Map_Height + Map_HeightOffset > m_vScroll.y)
 		m_vScroll.y = -Map_Height + Map_HeightOffset;

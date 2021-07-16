@@ -27,6 +27,7 @@ public :
 
 	bool				RocketTime();
 	bool				ChargeShotTime();
+	bool				SuperTime();
 
 	virtual void		TimeCheck();
 	void				DeadEffect();
@@ -38,8 +39,8 @@ public :
 	void				Set_Zoom(bool _bZoom) { m_bZoom = _bZoom; }
 	bool				Get_Zoom() { return m_bZoom; }
 	float				Get_Special_Reload() { return m_fChargeTime; }
-	//void				Shake();
-
+	void				Set_State(PLAYER::STATE _eState) { m_eState = _eState; }
+	//void				Shake();	
 
 private:
 	float				m_fRocketTime[4];
@@ -49,7 +50,10 @@ private:
 	bool				m_bRoll;
 	float				m_fRollTime;
 	float				m_fRollCoolSpeed;
-	
+
+	float				m_fSuperTime;
+	float				m_fSuperSpeed;
+						  
 	bool				m_bMega;
 
 	bool				m_bAuto;
@@ -70,6 +74,10 @@ private:
 	PLAYER::STATE		m_eState;
 	PLAYER::STATE		m_ePreState;
 
+	PLAYER::STATE		m_eAfterBurnState;
+	PLAYER::STATE		m_ePreAfterBurnState;
+
+
 	PLAYER::STATE		m_eWeaponState;
 	PLAYER::STATE		m_ePreWeaponState;
 
@@ -84,6 +92,9 @@ private:
 	CGameObject*		m_pGuiLFlip;
 	CGameObject*		m_pGuiRFlip;
 	CGameObject*		m_pGuiRocket;
+	CGameObject*		m_pGuiHp;
+	CGameObject*		m_pGuiDamageGrid;
+
 
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;

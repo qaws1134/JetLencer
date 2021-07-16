@@ -4,7 +4,8 @@
 #include "Time_Manager.h"
 #include "Player.h"
 #include "Scroll_Manager.h"
-CGui::CGui():m_bLoop(false) , m_bAction(false), m_bStart(false)
+
+CGui::CGui():m_bLoop(false) , m_bAction(false), m_bStart(false), m_fTimer(0.f), m_fTime(0.f), m_bRed(false), m_bGreen(false)
 {
 }
 
@@ -227,6 +228,59 @@ void CGui::State_Change()
 		break;
 	case UI::SPECIAL_RELOAD_READY_BACKPLATE_RED:
 		break;
+	case UI::HP:
+		break;
+	case UI::HP_GLITCH:
+		if (m_bAction)
+		{
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			m_fTime += fTime;
+			if (m_fTime > m_fTimer)
+				m_bAction = false;
+			m_tFrame.fFrameSpeed = 30.f;
+		}
+		else
+		{
+			m_fTime = 0.f;
+			m_tFrame.fStartFrame = 0.f;
+		}
+		Frame_Change();
+		break;
+	case UI::HP_PLATE:
+		break;
+	case UI::HP_PLATE_RED:
+		break;
+	case UI::HP_RED:
+		break;
+	case UI::DMGGRID:
+		if (m_bAction)
+		{
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			if (m_bGreen)
+			{
+				if (m_tColor.iRed > 0)
+				{
+					m_tColor.iRed -= -10.f+fTime*10.f;
+					m_tColor.iBlue -= -10.f+fTime*10.f;
+				}
+			}
+			if (m_bRed)
+			{
+				if (m_tColor.iGreen > 0)
+				{
+					m_tColor.iGreen -= fTime*1000.f;
+					m_tColor.iBlue -= fTime*1000.f;
+				}
+			}
+			m_fTime += fTime;
+			if (m_fTime > m_fTimer)
+			{
+				m_bRender = false;
+				m_bAction = false;
+				m_fTime = 0.f;
+			}
+		}
+		break;
 	default:
 		break;
 	}
@@ -320,10 +374,6 @@ void CGui::InitGui()
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiRocket_plate_red");
 		m_bRender = false;
 		break;
-
-
-
-
 	case UI::SPECIAL_CHARGE:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiSpecial_charge");
 		m_bCenter = true;
@@ -358,6 +408,31 @@ void CGui::InitGui()
 		break;
 	case UI::SPECIAL_RELOAD_READY_BACKPLATE_RED:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiSpecial_reload_ready_backplate_red");
+		m_bRender = false;
+		break;
+	case UI::HP:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiHp_idle");
+		m_bRender = true;
+		break;
+	case UI::HP_GLITCH:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiHp_glitch");
+		m_bRender = false;
+		m_fTimer = 0.5f;
+		break;
+	case UI::HP_PLATE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiHp_plate");
+		m_bRender = true;
+		break;
+	case UI::HP_PLATE_RED:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiHp_plate_red");
+		m_bRender = false;
+		break;
+	case UI::HP_RED:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiHp_red");
+		m_bRender = false;
+		break;
+	case UI::DMGGRID:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDamage_grid");
 		m_bRender = false;
 		break;
 	default:

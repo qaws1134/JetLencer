@@ -3,25 +3,25 @@
 #include "Gui.h"
 #include "Prefab_Manager.h"
 
-Rocket_Ui::Rocket_Ui()
+CRocket_Ui::CRocket_Ui()
 	: m_iIdx(0)
 	, m_bPlate(false)
 	, m_fRedTime(0.f)
 	, m_bUiRed(false)
-	
+	, m_bUnReady(false)
 {
 	for (int i = 0; i < 4; i++)
 		m_bRocket[i] = false;
 }
 
 
-Rocket_Ui::~Rocket_Ui()
+CRocket_Ui::~CRocket_Ui()
 {
 }
 
-CGameObject * Rocket_Ui::Create(_vec3 _vPos)
+CGameObject * CRocket_Ui::Create(_vec3 _vPos)
 {
-	CGameObject* pInstance = new Rocket_Ui;
+	CGameObject* pInstance = new CRocket_Ui;
 	const ANIMATION* pAniInfo = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiRocket_plate");
 	pInstance->Set_Animation(pAniInfo);
 	pInstance->Set_Pos(_vPos);
@@ -35,7 +35,7 @@ CGameObject * Rocket_Ui::Create(_vec3 _vPos)
 	return pInstance;
 }
 
-HRESULT Rocket_Ui::Ready_GameObject()
+HRESULT CRocket_Ui::Ready_GameObject()
 {
 
 	Set_Frame(m_pAnimation);
@@ -66,12 +66,13 @@ HRESULT Rocket_Ui::Ready_GameObject()
 	return S_OK;
 }
 
-int Rocket_Ui::Update_GameObject()
+int CRocket_Ui::Update_GameObject()
 {
 	if (m_bDead)
 		return OBJ_DEAD;
 
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+
 	if (m_bUiRed)
 	{
 		m_fRedTime += fTime;
@@ -81,7 +82,6 @@ int Rocket_Ui::Update_GameObject()
 			{
 				static_cast<CUi*>(m_pRocket_Red[i])->Select_Frame(m_pRocket_Red[i]->Get_Frame().fStartFrame);
 				static_cast<CUi*>(m_pRocket_Red[i])->Set_Render(m_bRed);
-				static_cast<CUi*>(m_pRocket[i])->Set_Render(m_bRed);
 			}
 			static_cast<CUi*>(m_pRocket_Plate_Red)->Set_Render(m_bRed);
 			m_bRender = m_bRed;
@@ -91,14 +91,32 @@ int Rocket_Ui::Update_GameObject()
 	}
 	else
 	{
-		for (int i = 0; i < 4; i++)
+ 		for (int i = 0; i < 4; i++)
 			static_cast<CUi*>(m_pRocket_Red[i])->Set_Render(false);
 		static_cast<CUi*>(m_pRocket_Plate_Red)->Set_Render(false);
+		m_bPlate = false;
+
+		if (m_bUnReady)
+		{
+			for (int i = 0; i < 4; i++)
+				m_pRocket[i]->Set_Color(MATCOLOR{ 255,255,0,0 });
+			m_fRedTime += fTime;
+			if(m_fRedTime> 0.1f)
+				m_bUnReady = false;
+		}
+		else
+		{
+			m_fRedTime = 0.f;
+			for (int i = 0; i < 4; i++)
+				m_pRocket[i]->Set_Color(MATCOLOR{ 255,255,255,255 });
+		}
 	}
+
+
 	return OBJ_NOEVENT;
 }
 
-void Rocket_Ui::State_Change()
+void CRocket_Ui::State_Change()
 {
 	m_bPlate = false;
 	for (int i = 0; i < 4; i++)
@@ -114,22 +132,30 @@ void Rocket_Ui::State_Change()
 			static_cast<CGui*>(m_pRocket[i])->Select_Frame(0.f);
 		}
 	}
-	if (!m_bPlate) 
-	{
-		for (int i = 0; i < 4; i++)
-			static_cast<CUi*>(m_pRocket[i])->Set_Render(false);
-		m_bRender = false;
-	}
-	else
+	if (m_bUiRed)
 	{
 		for (int i = 0; i < 4; i++)
 			static_cast<CUi*>(m_pRocket[i])->Set_Render(true);
-		m_bRender = true;
+	}
+	else
+	{
+		if (!m_bPlate)
+		{
+			for (int i = 0; i < 4; i++)
+				static_cast<CUi*>(m_pRocket[i])->Set_Render(false);
+			m_bRender = false;
+		}
+		else
+		{
+			for (int i = 0; i < 4; i++)
+				static_cast<CUi*>(m_pRocket[i])->Set_Render(true);
+			m_bRender = true;
+		}
 	}
 
 }
 
-void Rocket_Ui::Update_Pos()
+void CRocket_Ui::Update_Pos()
 {
 	m_pRocket_Plate_Red->Set_Pos(m_tInfo.vPos);
 	m_pRocket[0]->Set_Pos(_vec3{m_tInfo.vPos.x-m_pTexInfo->tImageInfo.Width*0.45f,m_tInfo.vPos.y,0.f });
@@ -143,7 +169,7 @@ void Rocket_Ui::Update_Pos()
 
 }
 
-void Rocket_Ui::Update_Size()
+void CRocket_Ui::Update_Size()
 {
 	m_pRocket_Plate_Red->Set_Size(m_tInfo.vSize);
 	for (int i = 0; i < 4; i++)

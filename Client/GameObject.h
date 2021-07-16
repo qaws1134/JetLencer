@@ -35,7 +35,7 @@ public :
 	void				Set_DeadEffect(bool bDeadEffect) { m_bDeadEffect = bDeadEffect; }
 	void				Set_Color(MATCOLOR _tColor) { m_tColor = _tColor; }
 	void				Set_Size(_vec3 _vSize) { m_tInfo.vSize = _vSize; }
-
+	void				Set_Alpha(int iAlpha) { m_tColor.iAlpha = iAlpha; }
 public:
 	const INFO&			Get_ObjInfo()const { return m_tInfo; }
 		  FRAME&		Get_Frame() { return m_tFrame; }
@@ -47,7 +47,7 @@ public:
 	float				Get_Angle() { return m_fAngle; }
 	CGameObject*		Get_Target() { return m_pTarget; }
 	MATCOLOR			Get_Color() { return m_tColor; }
-
+	const TEXINFO*		Get_Texture() const { return m_pTexInfo; }
 public :
 	virtual void		State_Change()PURE;
 	virtual void		WriteMatrix();

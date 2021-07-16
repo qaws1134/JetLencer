@@ -223,7 +223,7 @@ void CEffect::InitEffect()
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire_Black");
 		Set_Frame(m_pAnimation);
 		m_tInfo.vSize = { m_fSize+ float(rand() % 10)*0.05f ,m_fSize+ float(rand() % 10)*0.05f,0.f };
-		m_tFrame.fFrameSpeed = 20.f;
+		m_tFrame.fFrameSpeed = 10.f;
 		m_fAngle = (float)(rand() % 360);
 		m_fReduce = 0.f;
 		break;

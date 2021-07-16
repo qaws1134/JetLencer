@@ -37,8 +37,37 @@ bool CCollision_Manager::Check_Sphere(CCollider * _Dst, CCollider * _Src)
 	}
 	return false;
 }
+void CCollision_Manager::Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+{
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pDst, pSrc))
+			{
+				if (!static_cast<CPlayer*>(pDst->Get_Target())->SuperTime())
+				{
+					pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::HIT);
+					if (pDst->Get_CombatInfo().iHp <= 0)
+					{
+						pDst->Get_Target()->Set_DeadEffect(true);
+						pDst->Set_Dead(true);
+					}
+					pSrc->Get_Target()->Set_DeadEffect(true);
+					pSrc->Set_Dead(true);
+				}
+				else
+				{
+					//ÀÜ»ó ¿Â 
+
+				}
+			}
+		}
+	}
+}
 //¿ÀºêÁ§Æ®, ÃÑ¾Ë
-void CCollision_Manager::Collision_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+void CCollision_Manager::Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
 {
 	for (auto& pDst : _Dst)
 	{

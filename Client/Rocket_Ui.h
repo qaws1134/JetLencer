@@ -1,12 +1,12 @@
 #pragma once
 #include "Ui.h"
-class Rocket_Ui :
+class CRocket_Ui :
 	public CUi
 {
 private:
-	explicit Rocket_Ui();
+	explicit CRocket_Ui();
 public:
-	virtual ~Rocket_Ui();
+	virtual ~CRocket_Ui();
 	static CGameObject* Create(_vec3 _vPos);
 
 	// CUi을(를) 통해 상속됨
@@ -18,13 +18,14 @@ public:
 	void	Update_Pos();
 	void	Update_Size();
 	void	Set_Red(bool _bRed) { m_bUiRed = _bRed; }
-
+	void	UnReady() { m_bUnReady = true; }
 
 	CGameObject* m_pRocket_Plate_Red;
 	CGameObject* m_pRocket[4];
 	CGameObject* m_pRocket_Red[4];
 
 
+	bool m_bUnReady;
 	int m_iIdx;
 	bool m_bRocket[4];
 	bool m_bPlate;

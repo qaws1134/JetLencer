@@ -148,6 +148,12 @@
     <Filter Include="01.GameObject\05.Gui\03.Rocket_Ui">
       <UniqueIdentifier>{11da95fd-b272-4eed-b371-c10b32fb365c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameObject\05.Gui\04.Hp">
+      <UniqueIdentifier>{efe1a5c1-3cda-4074-adb4-e982bff331cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\05.DmgGrid">
+      <UniqueIdentifier>{005fb594-3f57-429f-8fca-cefc932545a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -303,6 +309,12 @@
     <ClInclude Include="Rocket_Ui.h">
       <Filter>01.GameObject\05.Gui\03.Rocket_Ui</Filter>
     </ClInclude>
+    <ClInclude Include="Hp.h">
+      <Filter>01.GameObject\05.Gui\04.Hp</Filter>
+    </ClInclude>
+    <ClInclude Include="DmgGrid.h">
+      <Filter>01.GameObject\05.Gui\05.DmgGrid</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -451,6 +463,12 @@
     </ClCompile>
     <ClCompile Include="Rocket_Ui.cpp">
       <Filter>01.GameObject\05.Gui\03.Rocket_Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Hp.cpp">
+      <Filter>01.GameObject\05.Gui\04.Hp</Filter>
+    </ClCompile>
+    <ClCompile Include="DmgGrid.cpp">
+      <Filter>01.GameObject\05.Gui\05.DmgGrid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

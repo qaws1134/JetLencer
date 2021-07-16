@@ -22,11 +22,6 @@ void CTerrain::Render_Terrain()
 
 }
 
-void CTerrain::MiniRender_Terrain()
-{
-
-
-}
 
 void CTerrain::Release_Terrain()
 {

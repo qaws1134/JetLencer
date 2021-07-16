@@ -16,7 +16,6 @@ public:
 public:
 	HRESULT Ready_Terrain();
 	void Render_Terrain(); 
-	void MiniRender_Terrain();
 	void Release_Terrain(); 
 public:
 	void TilePicking_Terrain(const D3DXVECTOR3& vMousePos, const BYTE& byDrawID, const BYTE& byOption = 0 ); 

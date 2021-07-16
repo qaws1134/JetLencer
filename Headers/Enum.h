@@ -60,6 +60,7 @@ namespace PLAYER
 	{
 		IDLE,
 		ROLL,
+		HIT,
 		ACCEL,
 		AFTER_BURNUR,
 		OVERHEAT,
@@ -134,7 +135,13 @@ namespace UI
 		SPECIAL_RELOAD_READY_BACKPLATE,
 		SPECIAL_RELOAD_READY_BACKPLATE_RED,
 		
+		HP,
+		HP_RED,
+		HP_PLATE,
+		HP_PLATE_RED,
+		HP_GLITCH,
 
+		DMGGRID
 	};
 	//æ∆¿Ãƒ‹
 	enum ICON

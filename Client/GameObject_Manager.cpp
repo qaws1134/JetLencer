@@ -75,7 +75,11 @@ void CGameObject_Manager::Update_GameObject_Manager()
 	{
 		m_bColRender = !m_bColRender;
 	}
-	CCollision_Manager::Collision_Bullet(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET]);
+
+	CCollision_Manager::Collision_Player_Enemy_Bullet(m_listGameObjectCollider[COLLIDER::PLAYER], m_listGameObjectCollider[COLLIDER::ENEMY_BULLET]);
+
+	CCollision_Manager::Collision_Enemy_Player_Bullet(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET]);
+
 	CCollision_Manager::Collision_Beam(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET_BEAM]);
 	CCollision_Manager::Collision_Search(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_SEARCH]);
 }

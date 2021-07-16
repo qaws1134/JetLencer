@@ -67,7 +67,7 @@ void CParticle::Move()
 	//파티클 꼬리 선택 후 이펙트에서 스폰 
 
 	CSpawn_Manager::Spawn(m_eEffectType,m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)) - (vNormalVel*0.2f), false, m_fSize);
-	m_fSize -= 0.05f;	
+	m_fSize -= 0.06f;	
 	if (m_fSize < 0)
 		m_bDead = true;
 

@@ -1,67 +1,13 @@
-﻿  stdafx.cpp
-  Arrow_Offscreen.cpp
-Arrow_Offscreen.cpp(67): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Arrow_Offscreen.cpp(178): warning C4244: '인수': 'const UINT'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Arrow_Offscreen.cpp(179): warning C4244: '인수': 'const UINT'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Arrow_Offscreen.cpp(180): warning C4244: '인수': 'const UINT'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Arrow_Offscreen.cpp(181): warning C4244: '인수': 'const UINT'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  BackGround.cpp
-  Beam.cpp
-  Bottle.cpp
-Bottle.cpp(41): warning C4244: '=': 'const int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Bullet.cpp
-  Burner.cpp
-  Client.cpp
-  Collider.cpp
-Collider.cpp(53): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Collider.cpp(54): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Collider.cpp(55): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Collider.cpp(56): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Collision_Manager.cpp
-  ColRect.cpp
-  ColSphere.cpp
-  Effect.cpp
-  Flip.cpp
-  Frame_Manager.cpp
-  GameObject.cpp
-  GameObject_Manager.cpp
-  Graphic_Device.cpp
+﻿  DmgGrid.cpp
   Gui.cpp
-  Ui.cpp
-  Gundrone.cpp
-  컴파일하고 있습니다...
-  Jet.cpp
-Jet.cpp(20): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Jet_BulletSplash.cpp
-  Jet_Enemy.cpp
-  Jet_Homming.cpp
-  Jet_Normal.cpp
-  Jet_Rocket.cpp
-  Jet_Rush.cpp
-  Jet_Sniper.cpp
-  Key_Manager.cpp
-  MainApp.cpp
-  Mouse.cpp
-  Multi_Texture.cpp
-  Normal.cpp
-  Particle.cpp
-Particle.cpp(41): warning C4244: '=': 'const int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Player.cpp
-  Prefab_Manager.cpp
-  Rocket.cpp
-  Scene.cpp
-  Scene_Manager.cpp
-  Scroll_Manager.cpp
-  컴파일하고 있습니다...
-  Single_Texture.cpp
-  Spawn_Manager.cpp
-  Stage.cpp
-  Texture.cpp
-  Texture_Manager.cpp
-  Time_Manager.cpp
-  ViewText.cpp
+Gui.cpp(263): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Gui.cpp(264): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Gui.cpp(271): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Gui.cpp(272): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다.
-  All 2039 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  2 of 2162 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> C:\Users\qaws1\Desktop\JetLancer Project\Release\Client.exe
   Client.vcxproj -> C:\Users\qaws1\Desktop\JetLancer Project\Release\Client.pdb (Full PDB)

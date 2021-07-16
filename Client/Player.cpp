@@ -11,6 +11,8 @@
 #include "Effect.h"
 #include "Flip.h"
 #include "Rocket_Ui.h"
+#include "Hp.h"
+#include "DmgGrid.h"
 
 #define SubWeaponDelay 1.f
 #define ChargeWeaponDelayLV1 2.5f
@@ -30,12 +32,15 @@ CPlayer::CPlayer()
 	, wstrChargeWeapon(L"")
 	, m_pGuiLFlip(nullptr)
 	, m_pGuiRFlip(nullptr)
+	, m_pGuiDamageGrid(nullptr)
+	, m_pGuiHp(nullptr)
 	, m_fAfterBurnTime(0.f)
 	, m_fAfterBurnlimit(0.f)
 	, m_bOverHeat(false)
 	, m_fReduceAccelRate(0.f)
 	, m_bZoom(false)
-
+	,m_fSuperTime(0.f)
+	,m_fSuperSpeed(0.f)
 {
 	
 }
@@ -115,7 +120,10 @@ HRESULT CPlayer::Ready_GameObject()
 	//회피
 	m_fRollTime = 0.f;
 	m_fRollCoolSpeed = 0.15f;
-	m_eState = PLAYER::IDLE;
+	m_eAfterBurnState = PLAYER::IDLE;
+
+	m_fSuperSpeed = 1.f;
+	m_fSuperTime = 1.f;
 
 
 	//무기상태
@@ -155,15 +163,19 @@ HRESULT CPlayer::Ready_GameObject()
 		m_vecCollider.emplace_back(CColRect::Create(this, (float)WINCX*(i+1),(float)WINCY*(i+1), COLLIDER::PLAYER_SEARCH));
 
 
-	m_pGuiRocket = Rocket_Ui::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 100.f,0.f });
 
+	//Gui 생성
 
 	_vec3 vLOffset = { 0.3f,0.7f,0.f };
 	_vec3 vROffset = { 0.7f,0.7f,0.f };
 	m_pGuiLFlip = CFlip::Create(_vec3{ float(WINCX)*vLOffset.x,float(WINCY)*vLOffset.y,0.f },false);
 	m_pGuiRFlip = CFlip::Create(_vec3{ float(WINCX)*vROffset.x,float(WINCY)*vROffset.y,0.f }, true);
 
+	m_pGuiRocket = CRocket_Ui::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 160.f,0.f });
 
+	m_pGuiHp = CHp::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 200.f,0.f });
+	static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
+	m_pGuiDamageGrid = CDmgGrid::Create();
 
 	return S_OK;
 }
@@ -240,12 +252,32 @@ void CPlayer::State_Change()
 		{
 		case PLAYER::IDLE:
 			JetAngleCheck();
-			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::IDLE);
-			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::IDLE);
+			static_cast<CHp*>(m_pGuiHp)->Set_State(m_eState);
 			break;
 		case PLAYER::ROLL:
 			m_tFrame.fStartFrame = 0.f;
+			m_fSuperSpeed = 1.f;
+			m_fSuperTime = 0.f;
 			m_bRoll = true;
+			break;
+		case PLAYER::HIT:
+			m_fSuperTime = 0.f;	//무적
+			m_fSuperSpeed = 0.3f;
+			static_cast<CHp*>(m_pGuiHp)->Set_State(m_eState);
+			static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
+			static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Red(true);
+			break;
+		}
+		m_ePreState = m_eState;
+	}
+
+	if (m_ePreAfterBurnState != m_eAfterBurnState)
+	{
+		switch (m_eAfterBurnState)
+		{
+		case PLAYER::IDLE:
+			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::IDLE);
+			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::IDLE);
 			break;
 		case PLAYER::ACCEL:
 			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::ACCEL);
@@ -258,12 +290,12 @@ void CPlayer::State_Change()
 		case PLAYER::OVERHEAT:
 			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::OVERHEAT);
 			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::OVERHEAT);
-			static_cast<Rocket_Ui*>(m_pGuiRocket)->Set_Red(true);
-
+			static_cast<CRocket_Ui*>(m_pGuiRocket)->Set_Red(true);
 			break;
 		}
+		m_ePreAfterBurnState = m_eAfterBurnState;
 	}
-	m_ePreState = m_eState;
+
 
 	if (m_eWeaponState != m_ePreWeaponState)
 	{
@@ -282,8 +314,8 @@ void CPlayer::State_Change()
 			static_cast<CFlip*>(m_pGuiRFlip)->Set_WeaponState(PLAYER::SPECIAL_RELOAD_END);
 			break;
 		}
+		m_ePreWeaponState = m_eWeaponState;
 	}
-	m_ePreWeaponState = m_eWeaponState;
 }
 
 void CPlayer::Roll()
@@ -301,6 +333,7 @@ void CPlayer::Roll()
 		{
 			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1;
 			m_fRollTime += fTime;
+
 			if (m_fRollTime> m_fRollCoolSpeed)
 			{
 				m_fRollTime = 0.f;
@@ -364,6 +397,13 @@ void CPlayer::Key_State()
 		else
 			m_bMega = true;
 	}
+	
+	if (CKey_Manager::Get_Instance()->Key_Down(KEY_L))
+	{
+		m_tCombatInfo.iHp -= 1;
+		m_eState = PLAYER::HIT;
+	}
+
 
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	if (!m_bAuto)
@@ -375,7 +415,7 @@ void CPlayer::Key_State()
 			m_fMaxSpeed = 800.f;
 
 			Accel(m_tInfo.vDir, m_fAccel + m_fBoostAccel, m_fMaxSpeed, false);
-			m_eState = PLAYER::AFTER_BURNUR;
+			m_eAfterBurnState = PLAYER::AFTER_BURNUR;
 			if (m_bMega)
 				m_eBurnerState = BURNER::MEGA;
 			else
@@ -399,9 +439,11 @@ void CPlayer::Key_State()
 		{
 			m_fMaxSpeed = 600.f;
 			Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
-			m_eState = PLAYER::ACCEL;
+			m_eAfterBurnState = PLAYER::ACCEL;
+
 			m_eBurnerState = BURNER::ACCEL;
 			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::ACCEL);
+
 			m_fAfterBurnTime -= fTime;
 			m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
 			m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
@@ -411,8 +453,10 @@ void CPlayer::Key_State()
 		{
 			m_fMaxSpeed = 500.f;
 			Accel(m_vGravity, m_fGravity, m_fMaxSpeed, true);
+
 			m_eBurnerState = BURNER::IDLE;
 			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::IDLE);
+
 			m_fAfterBurnTime -= fTime;
 			m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
 			m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
@@ -468,17 +512,27 @@ bool CPlayer::RocketTime()
 	{
 		if (m_fRocketTime[i] >= m_fRocketSpeed)
 		{
-			static_cast<Rocket_Ui*>(m_pGuiRocket)->Start_Rocket(i);
+			static_cast<CRocket_Ui*>(m_pGuiRocket)->Start_Rocket(i);
 			m_fRocketTime[i] = 0.f;
 			return true;
 		}
 	}
+	static_cast<CRocket_Ui*>(m_pGuiRocket)->UnReady();
 	return false;
 }
 
 bool CPlayer::ChargeShotTime()
 {
 	if (m_fChargeCoolTime > m_fChargeSpeed)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CPlayer::SuperTime()
+{
+	if (m_fSuperTime < m_fSuperSpeed)
 	{
 		return true;
 	}
@@ -495,7 +549,7 @@ void CPlayer::TimeCheck()
 		if (m_fRocketTime[i] < m_fRocketSpeed)
 			m_fRocketTime[i] += fTime;
 		else
-			static_cast<Rocket_Ui*>(m_pGuiRocket)->End_Rocket(i);
+			static_cast<CRocket_Ui*>(m_pGuiRocket)->End_Rocket(i);
 	}
 	//충전된 값을 스피드에 넘겨줘서 체크 
 	if (m_fChargeCoolTime < m_fChargeSpeed)
@@ -506,21 +560,25 @@ void CPlayer::TimeCheck()
 	}
 	if (m_fAfterBurnTime >= m_fAfterBurnlimit)
 	{
-		m_bOverHeat = true;
-		m_eState = PLAYER::OVERHEAT;
+  		m_bOverHeat = true;
+		m_eAfterBurnState = PLAYER::OVERHEAT;
 	}
-
 
 	if (m_fAfterBurnTime < 0)
 	{
 		static_cast<CFlip*>(m_pGuiLFlip)->Set_OverHeat(false);
 		static_cast<CFlip*>(m_pGuiRFlip)->Set_OverHeat(false);
-		static_cast<Rocket_Ui*>(m_pGuiRocket)->Set_Red(false);
+		static_cast<CRocket_Ui*>(m_pGuiRocket)->Set_Red(false);
 
 		m_bOverHeat = false;
 		m_fAfterBurnTime = 0.f;
 	}
 	
+	static_cast<CHp*>(m_pGuiHp)->End_Super(SuperTime());
+	if (m_fSuperTime < m_fSuperSpeed)
+	{
+		m_fSuperTime += fTime;
+	}
 
 }
 

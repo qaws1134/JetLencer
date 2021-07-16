@@ -164,6 +164,7 @@
     <ClInclude Include="Collision_Manager.h" />
     <ClInclude Include="ColRect.h" />
     <ClInclude Include="ColSphere.h" />
+    <ClInclude Include="DmgGrid.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Flip.h" />
     <ClInclude Include="Frame_Manager.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="GameObject_Manager.h" />
     <ClInclude Include="Graphic_Device.h" />
     <ClInclude Include="Gui.h" />
+    <ClInclude Include="Hp.h" />
     <ClInclude Include="Rocket_Ui.h" />
     <ClInclude Include="Ui.h" />
     <ClInclude Include="Gundrone.h" />
@@ -217,6 +219,7 @@
     <ClCompile Include="Collision_Manager.cpp" />
     <ClCompile Include="ColRect.cpp" />
     <ClCompile Include="ColSphere.cpp" />
+    <ClCompile Include="DmgGrid.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Flip.cpp" />
     <ClCompile Include="Frame_Manager.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="GameObject_Manager.cpp" />
     <ClCompile Include="Graphic_Device.cpp" />
     <ClCompile Include="Gui.cpp" />
+    <ClCompile Include="Hp.cpp" />
     <ClCompile Include="Rocket_Ui.cpp" />
     <ClCompile Include="Ui.cpp" />
     <ClCompile Include="Gundrone.cpp" />

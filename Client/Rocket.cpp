@@ -99,17 +99,28 @@ void CRocket::DeadEffect()
 	//{
 	//	CSpawn_Manager::Spawn(L"Rocket_Explosion", m_tInfo.vPos);
 	//}
+
+
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
 	{
-		CSpawn_Manager::Spawn(L"EffectExplosion_smoke", m_tInfo.vPos);
+		
 
-		for (int i = 0; i < rand() % 5; i++)
+		if (m_tInfo.vPos.y > Map_Height + 70)
 		{
-			float fAngle = (float)(rand() % 360);
-			_vec3 Dir = { cosf(D3DXToRadian(fAngle)) ,-sinf(D3DXToRadian(fAngle)) ,0.f };
-			float fRad = 100.f;
-			CSpawn_Manager::Spawn(EFFECT::ROCKET_BOOM_PTFIRE, m_tInfo.vPos + Dir*fRad, fAngle , m_vVelocity);
+			CSpawn_Manager::Spawn(EFFECT::GROUND_WATERSPLASH_FAST, _vec3{ m_tInfo.vPos.x , float(Map_Height + 72) ,0.f }, false, 1.0f);
 		}
+		else
+		{
+			CSpawn_Manager::Spawn(L"EffectExplosion_smoke", m_tInfo.vPos);
+			for (int i = 0; i < rand() % 5; i++)
+			{
+				float fAngle = (float)(rand() % 360);
+				_vec3 Dir = { cosf(D3DXToRadian(fAngle)) ,-sinf(D3DXToRadian(fAngle)) ,0.f };
+				float fRad = 100.f;
+				CSpawn_Manager::Spawn(EFFECT::ROCKET_BOOM_PTFIRE, m_tInfo.vPos + Dir*fRad, fAngle, m_vVelocity);
+			}
+		}
+
 		m_bDead = true;
 	}
 }

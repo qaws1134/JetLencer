@@ -2,7 +2,7 @@
 #include "Bullet.h"
 #include "Effect.h"
 #include "Prefab_Manager.h"
-
+#include "Collider.h"
 CBullet::CBullet()
 {
 }
@@ -49,5 +49,6 @@ void CBullet::Render_GameObject()
 
 void CBullet::Release_GameObject()
 {
+
 }
 

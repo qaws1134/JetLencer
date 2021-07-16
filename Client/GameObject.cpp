@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameObject.h"
-
+#include "Collider.h"
 
 CGameObject::CGameObject()
 	:m_pObjectInfo(nullptr)
@@ -26,7 +26,8 @@ CGameObject::CGameObject()
 
 CGameObject::~CGameObject()
 {
-
+	for (auto& iter : m_vecCollider)
+		iter->Set_Dead(true);
 }
 
 

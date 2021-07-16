@@ -64,7 +64,7 @@ HRESULT CArrow_Offscreen::Ready_GameObject()
 
 
 	m_bRender = false;
-	static_cast<CGui*>(m_pArrow_Icon)->Select_Frame((int)m_eIcon);
+	static_cast<CGui*>(m_pArrow_Icon)->Select_Frame(float((int)m_eIcon));
 
 	return S_OK;
 }
@@ -175,10 +175,10 @@ void CArrow_Offscreen::ArrowPosition_Change()
 		m_tInfo.vPos.y = 15.f;
 
 
-	m_pArrow_Offscreen1->Set_Pos(m_tInfo.vPos - m_pTexInfo->tImageInfo.Width *m_vecArrowResult);
-	m_pArrow_Offscreen2->Set_Pos(m_tInfo.vPos - m_pTexInfo->tImageInfo.Width *m_vecArrowResult);
-	m_pArrow_Offscreen_Rect->Set_Pos(m_tInfo.vPos + m_pTexInfo->tImageInfo.Height *m_vecRectResult);
-	m_pArrow_Icon->Set_Pos(m_tInfo.vPos + m_pTexInfo->tImageInfo.Height *m_vecRectResult);
+	m_pArrow_Offscreen1->Set_Pos(m_tInfo.vPos - (float)m_pTexInfo->tImageInfo.Width *m_vecArrowResult);
+	m_pArrow_Offscreen2->Set_Pos(m_tInfo.vPos - (float)m_pTexInfo->tImageInfo.Width *m_vecArrowResult);
+	m_pArrow_Offscreen_Rect->Set_Pos(m_tInfo.vPos + (float)m_pTexInfo->tImageInfo.Height *m_vecRectResult);
+	m_pArrow_Icon->Set_Pos(m_tInfo.vPos + (float)m_pTexInfo->tImageInfo.Height *m_vecRectResult);
 
 }
 
