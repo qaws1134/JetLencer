@@ -267,7 +267,7 @@ void CFlip::State_Change()
 
 void CFlip::VertUpdate()
 {
-	static_cast<CUi*>(m_pVertSpeed)->Set_Offset(m_pVertSpeed->Get_Frame().fMaxFrame*CGameObject_Manager::Get_Instance()->Get_Player()->Get_ObjInfo().vPos.x / Map_Width);
+	static_cast<CUi*>(m_pVertSpeed)->Set_Offset(m_pVertSpeed->Get_Frame().fMaxFrame*CGameObject_Manager::Get_Instance()->Get_Player()->Get_ObjInfo().vPos.x/ Map_Width);
 }
 
 void CFlip::HoriUpdate()

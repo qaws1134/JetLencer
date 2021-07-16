@@ -3,6 +3,7 @@
 #include "Prefab_Manager.h"
 #include "Time_Manager.h"
 #include "Player.h"
+#include "Scroll_Manager.h"
 CGui::CGui():m_bLoop(false) , m_bAction(false), m_bStart(false)
 {
 }
@@ -116,15 +117,17 @@ void CGui::State_Change()
 		break;
 	case UI::FLIP_VERTSPEED:
 		m_bRender = true;
-		if ((m_tFrame.fMaxFrame/m_tFrame.fStartFrame) > m_fOffset)		//화면의 몇분의 몇지점 
+
+		if ( m_tFrame.fStartFrame<m_fOffset)		//화면의 몇분의 몇지점 
 		{
-			m_tFrame.fFrameSpeed = 5.f;
+			m_tFrame.fFrameSpeed = 15.f;
 		}
 		else
 		{
-			m_tFrame.fFrameSpeed = -5.f;
+			m_tFrame.fFrameSpeed = -15.f;
 		}
 		Frame_Change();
+	
 		break;
 	case UI::FLIP_VERTSPEED_RED:
 		break;
@@ -144,9 +147,13 @@ void CGui::State_Change()
 		if (m_bAction)
 		{
 			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-			m_tFrame.fFrameSpeed = 5.f*fTime*60.f;
+			m_tFrame.fFrameSpeed = -2.7f*fTime*60.f;
 			m_fCenterX = 0.f;
 			m_fCenterY = (float)m_pTexInfo->tImageInfo.Height;
+		}
+		else
+		{
+			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1;
 		}
 		Frame_Change();
 		break;
@@ -267,7 +274,6 @@ void CGui::InitGui()
 		break;
 	case UI::FLIP_VERTSPEED:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiFlip_vertspeed");
-		m_bLoop = true;
 		m_bRender = false;
 		break;
 	case UI::FLIP_VERTSPEED_RED:
@@ -306,6 +312,18 @@ void CGui::InitGui()
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiRocket_red");
 		m_bRender = false;
 		break;
+	case UI::ROCKET_PLATE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiRocket_plate");
+		m_bRender = false;
+		break;
+	case UI::ROCKET_PLATE_RED:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiRocket_plate_red");
+		m_bRender = false;
+		break;
+
+
+
+
 	case UI::SPECIAL_CHARGE:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiSpecial_charge");
 		m_bCenter = true;

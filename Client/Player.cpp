@@ -10,6 +10,8 @@
 #include "ColRect.h"
 #include "Effect.h"
 #include "Flip.h"
+#include "Rocket_Ui.h"
+
 #define SubWeaponDelay 1.f
 #define ChargeWeaponDelayLV1 2.5f
 #define ChargeWeaponDelayLV2 5.9f
@@ -152,9 +154,12 @@ HRESULT CPlayer::Ready_GameObject()
 	for (int i = 0; i < 4; i++)
 		m_vecCollider.emplace_back(CColRect::Create(this, (float)WINCX*(i+1),(float)WINCY*(i+1), COLLIDER::PLAYER_SEARCH));
 
+
+	m_pGuiRocket = Rocket_Ui::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 100.f,0.f });
+
+
 	_vec3 vLOffset = { 0.3f,0.7f,0.f };
 	_vec3 vROffset = { 0.7f,0.7f,0.f };
-
 	m_pGuiLFlip = CFlip::Create(_vec3{ float(WINCX)*vLOffset.x,float(WINCY)*vLOffset.y,0.f },false);
 	m_pGuiRFlip = CFlip::Create(_vec3{ float(WINCX)*vROffset.x,float(WINCY)*vROffset.y,0.f }, true);
 
@@ -253,6 +258,8 @@ void CPlayer::State_Change()
 		case PLAYER::OVERHEAT:
 			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::OVERHEAT);
 			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::OVERHEAT);
+			static_cast<Rocket_Ui*>(m_pGuiRocket)->Set_Red(true);
+
 			break;
 		}
 	}
@@ -461,6 +468,7 @@ bool CPlayer::RocketTime()
 	{
 		if (m_fRocketTime[i] >= m_fRocketSpeed)
 		{
+			static_cast<Rocket_Ui*>(m_pGuiRocket)->Start_Rocket(i);
 			m_fRocketTime[i] = 0.f;
 			return true;
 		}
@@ -484,8 +492,10 @@ void CPlayer::TimeCheck()
 
 	for (int i = 0; i < m_iMaxRocket; i++)
 	{
-		if (m_fRocketTime[i]<m_fRocketSpeed)
+		if (m_fRocketTime[i] < m_fRocketSpeed)
 			m_fRocketTime[i] += fTime;
+		else
+			static_cast<Rocket_Ui*>(m_pGuiRocket)->End_Rocket(i);
 	}
 	//충전된 값을 스피드에 넘겨줘서 체크 
 	if (m_fChargeCoolTime < m_fChargeSpeed)
@@ -505,6 +515,8 @@ void CPlayer::TimeCheck()
 	{
 		static_cast<CFlip*>(m_pGuiLFlip)->Set_OverHeat(false);
 		static_cast<CFlip*>(m_pGuiRFlip)->Set_OverHeat(false);
+		static_cast<Rocket_Ui*>(m_pGuiRocket)->Set_Red(false);
+
 		m_bOverHeat = false;
 		m_fAfterBurnTime = 0.f;
 	}

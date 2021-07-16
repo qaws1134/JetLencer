@@ -38,6 +38,9 @@ public :
 	void				Set_Zoom(bool _bZoom) { m_bZoom = _bZoom; }
 	bool				Get_Zoom() { return m_bZoom; }
 	float				Get_Special_Reload() { return m_fChargeTime; }
+	//void				Shake();
+
+
 private:
 	float				m_fRocketTime[4];
 	float				m_fRocketSpeed;
@@ -56,7 +59,6 @@ private:
 	
 	float				m_fChargeCoolTime;	// 
 	float				m_fChargeSpeed;	//차지 주기를  측정 ->공격속도 같은
-
 
 	float				m_fAfterBurnTime;
 	float				m_fAfterBurnlimit;
@@ -81,7 +83,7 @@ private:
 
 	CGameObject*		m_pGuiLFlip;
 	CGameObject*		m_pGuiRFlip;
-
+	CGameObject*		m_pGuiRocket;
 
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;
