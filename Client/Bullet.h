@@ -32,5 +32,10 @@ protected:
 
 	COMBAT	m_tCombatInfo;
 
+	float m_fRemoveTIme;
+	float m_fRemoveSpeed;
+	bool m_bRemove;
+
+
 };
 

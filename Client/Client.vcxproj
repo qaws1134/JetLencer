@@ -72,7 +72,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -81,7 +81,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -174,6 +174,11 @@
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Hp.h" />
     <ClInclude Include="Rocket_Ui.h" />
+    <ClInclude Include="Serpent.h" />
+    <ClInclude Include="SerpentBody.h" />
+    <ClInclude Include="SerpentHead.h" />
+    <ClInclude Include="SerpentObject.h" />
+    <ClInclude Include="SerpentTail.h" />
     <ClInclude Include="Ui.h" />
     <ClInclude Include="Gundrone.h" />
     <ClInclude Include="Jet.h" />
@@ -229,6 +234,11 @@
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Hp.cpp" />
     <ClCompile Include="Rocket_Ui.cpp" />
+    <ClCompile Include="Serpent.cpp" />
+    <ClCompile Include="SerpentBody.cpp" />
+    <ClCompile Include="SerpentHead.cpp" />
+    <ClCompile Include="SerpentObject.cpp" />
+    <ClCompile Include="SerpentTail.cpp" />
     <ClCompile Include="Ui.cpp" />
     <ClCompile Include="Gundrone.cpp" />
     <ClCompile Include="Jet.cpp" />

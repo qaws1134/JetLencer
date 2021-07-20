@@ -79,40 +79,44 @@ void CDmgGrid::State_Change()
 	if (m_bUiGreen)
 	{
 		for (auto& iter : m_vecGrid)
+			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
+		for (auto& iter : m_vecGrid)
 		{
 			static_cast<CUi*>(iter)->Set_Render(true);
 			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
 			static_cast<CGui*>(iter)->Set_Green(true);
 
-			iter->Set_Alpha(rand() % 180+20);
+			iter->Set_Alpha(rand() % 150+20);
 			if (rand() % 4 == 0)
 				static_cast<CUi*>(iter)->Select_Frame(1.f);
 			else
 				static_cast<CUi*>(iter)->Select_Frame(0.f);
 
 			static_cast<CGui*>(iter)->Set_Action(true);
-			static_cast<CGui*>(iter)->Set_Timer(((float)(rand() % 20 + 20)*0.05f));
+			static_cast<CGui*>(iter)->Set_Timer(((float)(rand() % 20 + 20)*0.05f) + 0.05f);
 		}
 		Remove_Grid();
 		m_bUiGreen = false;
 	}
 	else if (m_bUiRed)
 	{
+		for (auto& iter : m_vecGrid)
+			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
+		
 		//들어왔을때 값 초기화
 		for (auto& iter : m_vecGrid)
 		{
 			static_cast<CUi*>(iter)->Set_Render(true);
-			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
 			static_cast<CGui*>(iter)->Set_Red(true);
 
-			iter->Set_Alpha(rand() % 180+20);
+			iter->Set_Alpha(rand() % 150+20);
 			if(rand() % 4 == 0 )
 				static_cast<CUi*>(iter)->Select_Frame(1.f);
 			else
 				static_cast<CUi*>(iter)->Select_Frame(0.f);
 
 			static_cast<CGui*>(iter)->Set_Action(true);
-			static_cast<CGui*>(iter)->Set_Timer(((float)(rand()%20+20)*0.05f)+1.f);
+			static_cast<CGui*>(iter)->Set_Timer(((float)(rand()%20+20)*0.05f)+0.05f);
 		}
 		Remove_Grid();
 		m_bUiRed = false;

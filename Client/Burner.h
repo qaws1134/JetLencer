@@ -17,7 +17,7 @@ public :
 	virtual void		Late_Update_GameObject() override;
 	virtual void		Render_GameObject() override;
 	virtual void		Release_GameObject() override;
-	virtual void		WriteMatrix()override;
+	//virtual void		WriteMatrix()override;
 public :
 	virtual void		State_Change() override;
 	void				Set_BurnerState(BURNER::STATE _eState) { m_eBurnerState = _eState; }

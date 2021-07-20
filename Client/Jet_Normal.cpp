@@ -7,11 +7,9 @@ CJet_Normal::CJet_Normal()
 {
 }
 
-
 CJet_Normal::~CJet_Normal()
 {
 }
-
 
 CGameObject * CJet_Normal::Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos)
 {
@@ -61,9 +59,6 @@ void CJet_Normal::State_Change()
 
 			break;
 		case ENEMY::BACK:
-			//타겟을 화면 끝 아무지점 
-			//컬라이더를 만들어서 컬라이더 안에 들어오면 공격, 공격 끝나면 컬라이더를 벗어나자
-			//혹은 컬라이더 내부에서 일정 시간이 지나면 다시 공격 상태로 변경
 			m_vResultDir = m_tInfo.vPos - m_pTarget->Get_ObjInfo().vPos;
 			break;
 		}
@@ -73,8 +68,6 @@ void CJet_Normal::State_Change()
 
 void CJet_Normal::Ai_State()
 {
-	
-	
 	m_vTarget_Dir = m_vResultDir;
 	TargetAngle_Check();
 	Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
@@ -99,17 +92,6 @@ void CJet_Normal::Ai_State()
 			m_eJetState = ENEMY::ATTACK;
 		}
 	}
-
-	//공격
-	//공격하고나서 state 변경 
-	//타겟을 플레이어
-	//타겟이 자신의 dir방향에서 일정 각도 범위 내에 들어오면 총알 발사 오차는 +-5도정도??
-	
-	//도주
-	//플레이어의 범위 컬라이더를 만들어서 컬라이더 밖은 회피상태 안은 공격상태 
-	//공격 끝나면 컬라이더를 벗어나자 -> auto k??
-	//
-	//혹은 컬라이더 내부에서 일정 시간이 지나면 다시 공격 상태로 변경
 }
 
 

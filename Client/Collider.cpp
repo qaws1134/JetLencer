@@ -26,7 +26,6 @@ int CCollider::Update_ColObject()
 	if (!m_pTarget)
 		return OBJ_NOEVENT;
 
-	
 	m_tInfo.vPos = m_pTarget->Get_ObjInfo().vPos + m_vOffsetDir;
 
 	return OBJ_NOEVENT;
@@ -34,6 +33,7 @@ int CCollider::Update_ColObject()
 
 void CCollider::Late_Update_GameObject()
 {
+
 }
 
 void CCollider::Render_GameObject()

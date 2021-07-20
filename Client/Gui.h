@@ -31,6 +31,7 @@ public:
 private:
 	float m_fTimer;
 	float m_fTime;
+	float m_fReloadTime;
 	UI::TYPE m_eUiType;
 	bool m_bLoop;
 	bool m_bAction;

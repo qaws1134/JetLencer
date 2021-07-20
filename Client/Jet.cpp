@@ -35,7 +35,6 @@ void CJet::Late_Update_GameObject()
 void CJet::Render_GameObject()
 {
 	WriteMatrix();
-
 }
 
 void CJet::Release_GameObject()

@@ -47,20 +47,14 @@ void CCollision_Manager::Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, l
 			{
 				if (!static_cast<CPlayer*>(pDst->Get_Target())->SuperTime())
 				{
-					pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
-					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::HIT);
-					if (pDst->Get_CombatInfo().iHp <= 0)
-					{
-						pDst->Get_Target()->Set_DeadEffect(true);
-						pDst->Set_Dead(true);
-					}
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::STOP);
 					pSrc->Get_Target()->Set_DeadEffect(true);
 					pSrc->Set_Dead(true);
 				}
 				else
 				{
 					//잔상 온 
-
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::EVEDE);
 				}
 			}
 		}
@@ -76,7 +70,8 @@ void CCollision_Manager::Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, l
 			if (Check_Sphere(pDst, pSrc))
 			{
 				pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
-				pDst->Get_Target()->Set_Color(MATCOLOR{ 255,255,0,0 });
+				pDst->Get_Target()->Set_Color(MATCOLOR{ 200,0,255,255 });
+				pDst->Get_Target()->Set_ColorTime();
 				if (pDst->Get_CombatInfo().iHp <= 0)
 				{
 					pDst->Get_Target()->Set_DeadEffect(true);
@@ -109,6 +104,31 @@ void CCollision_Manager::Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>
 		}
 	}
 }
+
+
+void CCollision_Manager::Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>& _Src, bool _bPlayer)
+{
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pDst, pSrc))
+			{
+				if (!static_cast<CPlayer*>(pDst->Get_Target())->SuperTime())
+				{
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::STOP);
+					pSrc->Set_Dead(true);
+				}
+				else
+				{
+					//잔상 온 
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::EVEDE);
+				}
+			}
+		}
+	}
+}
+
 
 // 적,플레이어 서치
 void CCollision_Manager::Collision_Search(list<CCollider*>& _Dst, list<CCollider*>& _Src)

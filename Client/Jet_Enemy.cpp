@@ -101,7 +101,12 @@ void CJet_Enemy::EnemyBurnerSet()
 
 int CJet_Enemy::Update_GameObject()
 {
-	m_tColor = { 255,255,255,255 };
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+	m_fColorTime += fTime;
+	if (m_fColorTime > m_fColorSpeed)
+	{
+		m_tColor = { 255,255,255,255 };
+	}
 	if (m_bDeadEffect)
 		DeadEffect();
 	if (m_bDead)

@@ -10,4 +10,6 @@ const int TILEY = 12;
 
 const int Map_Height = WINCY*5;
 const int Map_Width  = WINCX*6;
+
+const int GroundY = Map_Height + 70;
 extern HWND g_hWND; 

@@ -70,33 +70,6 @@
     <Filter Include="01.GameObject\02.Bullet\04.Gundrone">
       <UniqueIdentifier>{4a61ae2d-30c6-4c8a-ae5e-80e0a6b64c52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.GameObject\00.Jet">
-      <UniqueIdentifier>{cf0f60a4-b04d-4136-8570-7e203b16864b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\00.Player">
-      <UniqueIdentifier>{1632b8a1-b4de-4f02-beb2-6a5908e08ed6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy">
-      <UniqueIdentifier>{ac324810-e3b8-4069-897a-fdadd6b6cc11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\05.Jet_Homming">
-      <UniqueIdentifier>{03d429af-b895-435f-86d3-1161c55b8d36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\00.Jet_Normal">
-      <UniqueIdentifier>{a84ed9ed-ef82-42b0-b167-5cca8124fc12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\01.Jet_Rocket">
-      <UniqueIdentifier>{e08a44fc-b82a-4bbc-95ca-a91d886d73ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\02.Jet_Rush">
-      <UniqueIdentifier>{8f055ad4-3861-4160-b668-6397a89d481b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\03.Jet_BulletSplash">
-      <UniqueIdentifier>{da61cfe1-2002-439d-9cbc-64370eae579f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\00.Jet\01.Jet_Enemy\04.Jet_Sniper">
-      <UniqueIdentifier>{8384691e-cd19-4ecc-82e4-77aed40d1e25}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Manager\00.GameObject_Manager">
       <UniqueIdentifier>{34161b6d-cc71-4e57-8578-4a6b69b4e50a}</UniqueIdentifier>
     </Filter>
@@ -120,15 +93,6 @@
     </Filter>
     <Filter Include="Manager\07.Time_Manager">
       <UniqueIdentifier>{85ec249f-5578-4ca5-a586-137451067360}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\01.Collider">
-      <UniqueIdentifier>{a37a6e3b-dc04-44b0-9ff1-dab087b431fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\01.Collider\00.Sphere">
-      <UniqueIdentifier>{94dd8e7d-50d0-4c6d-9a3d-60c3bc961903}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.GameObject\01.Collider\01.Rect">
-      <UniqueIdentifier>{a186216d-1183-4162-9bc5-b39ea16c0f83}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.GameObject\08.Particle">
       <UniqueIdentifier>{d2110e93-8680-4156-b3e7-7c554fc456a1}</UniqueIdentifier>
@@ -154,6 +118,66 @@
     <Filter Include="01.GameObject\05.Gui\05.DmgGrid">
       <UniqueIdentifier>{005fb594-3f57-429f-8fca-cefc932545a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameObject\99.Collider">
+      <UniqueIdentifier>{a37a6e3b-dc04-44b0-9ff1-dab087b431fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\99.Collider\00.Sphere">
+      <UniqueIdentifier>{94dd8e7d-50d0-4c6d-9a3d-60c3bc961903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\99.Collider\01.Rect">
+      <UniqueIdentifier>{a186216d-1183-4162-9bc5-b39ea16c0f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object">
+      <UniqueIdentifier>{cf0f60a4-b04d-4136-8570-7e203b16864b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\00.Player">
+      <UniqueIdentifier>{1632b8a1-b4de-4f02-beb2-6a5908e08ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy">
+      <UniqueIdentifier>{4405e07f-bfba-41c6-8c3f-01ce09929f03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\03.Ship">
+      <UniqueIdentifier>{56edc592-699e-4484-ac07-4172721b6d43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy">
+      <UniqueIdentifier>{ac324810-e3b8-4069-897a-fdadd6b6cc11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\05.Jet_Homming">
+      <UniqueIdentifier>{03d429af-b895-435f-86d3-1161c55b8d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\00.Jet_Normal">
+      <UniqueIdentifier>{a84ed9ed-ef82-42b0-b167-5cca8124fc12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\01.Jet_Rocket">
+      <UniqueIdentifier>{e08a44fc-b82a-4bbc-95ca-a91d886d73ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\02.Jet_Rush">
+      <UniqueIdentifier>{8f055ad4-3861-4160-b668-6397a89d481b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\03.Jet_BulletSplash">
+      <UniqueIdentifier>{da61cfe1-2002-439d-9cbc-64370eae579f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\04.Jet_Sniper">
+      <UniqueIdentifier>{8384691e-cd19-4ecc-82e4-77aed40d1e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\01.Surpent">
+      <UniqueIdentifier>{30ed3c2e-c5f6-4fd2-ab58-c833b9b9f2ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject">
+      <UniqueIdentifier>{73dfc84f-13b6-4b88-813b-59ec9784a0a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\00.Head">
+      <UniqueIdentifier>{2a350f49-b30d-4e12-abbe-701060c47b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\01.Body">
+      <UniqueIdentifier>{9c94f7cf-e87a-45da-bad6-288b6e4075d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\02.Tail">
+      <UniqueIdentifier>{58701575-ee87-4868-bd18-83df72510321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\00.Object\01.Enemy\02.Tank">
+      <UniqueIdentifier>{80563522-3284-454c-a79f-cd88364f5441}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -175,7 +199,7 @@
       <Filter>01.GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>01.GameObject\00.Jet\00.Player</Filter>
+      <Filter>01.GameObject\00.Object\00.Player</Filter>
     </ClInclude>
     <ClInclude Include="Graphic_Device.h">
       <Filter>02.Graphic_Device</Filter>
@@ -253,40 +277,37 @@
       <Filter>01.GameObject\02.Bullet\04.Gundrone</Filter>
     </ClInclude>
     <ClInclude Include="Jet_Normal.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\00.Jet_Normal</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\00.Jet_Normal</Filter>
     </ClInclude>
     <ClInclude Include="Jet_Rocket.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\01.Jet_Rocket</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\01.Jet_Rocket</Filter>
     </ClInclude>
     <ClInclude Include="Jet_Rush.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\02.Jet_Rush</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\02.Jet_Rush</Filter>
     </ClInclude>
     <ClInclude Include="Jet_BulletSplash.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\03.Jet_BulletSplash</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\03.Jet_BulletSplash</Filter>
     </ClInclude>
     <ClInclude Include="Jet_Homming.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\05.Jet_Homming</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\05.Jet_Homming</Filter>
     </ClInclude>
     <ClInclude Include="Jet_Sniper.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\04.Jet_Sniper</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\04.Jet_Sniper</Filter>
     </ClInclude>
     <ClInclude Include="Jet.h">
-      <Filter>01.GameObject\00.Jet</Filter>
-    </ClInclude>
-    <ClInclude Include="Jet_Enemy.h">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy</Filter>
+      <Filter>01.GameObject\00.Object</Filter>
     </ClInclude>
     <ClInclude Include="Collider.h">
-      <Filter>01.GameObject\01.Collider</Filter>
+      <Filter>01.GameObject\99.Collider</Filter>
     </ClInclude>
     <ClInclude Include="Collision_Manager.h">
       <Filter>Manager\03.ColiiderManager</Filter>
     </ClInclude>
     <ClInclude Include="ColSphere.h">
-      <Filter>01.GameObject\01.Collider\00.Sphere</Filter>
+      <Filter>01.GameObject\99.Collider\00.Sphere</Filter>
     </ClInclude>
     <ClInclude Include="ColRect.h">
-      <Filter>01.GameObject\01.Collider\01.Rect</Filter>
+      <Filter>01.GameObject\99.Collider\01.Rect</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>01.GameObject\08.Particle</Filter>
@@ -315,6 +336,24 @@
     <ClInclude Include="DmgGrid.h">
       <Filter>01.GameObject\05.Gui\05.DmgGrid</Filter>
     </ClInclude>
+    <ClInclude Include="SerpentObject.h">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SerpentTail.h">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\02.Tail</Filter>
+    </ClInclude>
+    <ClInclude Include="SerpentBody.h">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\01.Body</Filter>
+    </ClInclude>
+    <ClInclude Include="SerpentHead.h">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\00.Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Serpent.h">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent</Filter>
+    </ClInclude>
+    <ClInclude Include="Jet_Enemy.h">
+      <Filter>01.GameObject\00.Object\01.Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -330,7 +369,7 @@
       <Filter>01.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>01.GameObject\00.Jet\00.Player</Filter>
+      <Filter>01.GameObject\00.Object\00.Player</Filter>
     </ClCompile>
     <ClCompile Include="Graphic_Device.cpp">
       <Filter>02.Graphic_Device</Filter>
@@ -408,40 +447,37 @@
       <Filter>01.GameObject\02.Bullet\04.Gundrone</Filter>
     </ClCompile>
     <ClCompile Include="Jet_Normal.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\00.Jet_Normal</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\00.Jet_Normal</Filter>
     </ClCompile>
     <ClCompile Include="Jet_Rocket.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\01.Jet_Rocket</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\01.Jet_Rocket</Filter>
     </ClCompile>
     <ClCompile Include="Jet_Rush.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\02.Jet_Rush</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\02.Jet_Rush</Filter>
     </ClCompile>
     <ClCompile Include="Jet_BulletSplash.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\03.Jet_BulletSplash</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\03.Jet_BulletSplash</Filter>
     </ClCompile>
     <ClCompile Include="Jet_Homming.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\05.Jet_Homming</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\05.Jet_Homming</Filter>
     </ClCompile>
     <ClCompile Include="Jet_Sniper.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy\04.Jet_Sniper</Filter>
+      <Filter>01.GameObject\00.Object\01.Enemy\00.Jet_Enemy\04.Jet_Sniper</Filter>
     </ClCompile>
     <ClCompile Include="Jet.cpp">
-      <Filter>01.GameObject\00.Jet</Filter>
-    </ClCompile>
-    <ClCompile Include="Jet_Enemy.cpp">
-      <Filter>01.GameObject\00.Jet\01.Jet_Enemy</Filter>
+      <Filter>01.GameObject\00.Object</Filter>
     </ClCompile>
     <ClCompile Include="Collider.cpp">
-      <Filter>01.GameObject\01.Collider</Filter>
+      <Filter>01.GameObject\99.Collider</Filter>
     </ClCompile>
     <ClCompile Include="Collision_Manager.cpp">
       <Filter>Manager\03.ColiiderManager</Filter>
     </ClCompile>
     <ClCompile Include="ColSphere.cpp">
-      <Filter>01.GameObject\01.Collider\00.Sphere</Filter>
+      <Filter>01.GameObject\99.Collider\00.Sphere</Filter>
     </ClCompile>
     <ClCompile Include="ColRect.cpp">
-      <Filter>01.GameObject\01.Collider\01.Rect</Filter>
+      <Filter>01.GameObject\99.Collider\01.Rect</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>01.GameObject\08.Particle</Filter>
@@ -469,6 +505,24 @@
     </ClCompile>
     <ClCompile Include="DmgGrid.cpp">
       <Filter>01.GameObject\05.Gui\05.DmgGrid</Filter>
+    </ClCompile>
+    <ClCompile Include="SerpentTail.cpp">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\02.Tail</Filter>
+    </ClCompile>
+    <ClCompile Include="SerpentObject.cpp">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SerpentBody.cpp">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\01.Body</Filter>
+    </ClCompile>
+    <ClCompile Include="SerpentHead.cpp">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent\00.SurpentObject\00.Head</Filter>
+    </ClCompile>
+    <ClCompile Include="Serpent.cpp">
+      <Filter>01.GameObject\00.Object\01.Enemy\01.Surpent</Filter>
+    </ClCompile>
+    <ClCompile Include="Jet_Enemy.cpp">
+      <Filter>01.GameObject\00.Object\01.Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

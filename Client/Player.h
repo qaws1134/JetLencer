@@ -10,15 +10,12 @@ public:
 	// CGameObject을(를) 통해 상속됨
 	virtual HRESULT		Ready_GameObject() override;
 	virtual int			Update_GameObject() override;
-	virtual void		Late_Update_GameObject() override;
-	virtual void		Render_GameObject() override;
 	virtual void		Release_GameObject() override;
 public:
 	static CGameObject*	Create();
 
 public :
 	virtual void		State_Change();
-	
 	void				Roll();
 
 	void				PositionRock_Check();
@@ -39,7 +36,10 @@ public :
 	void				Set_Zoom(bool _bZoom) { m_bZoom = _bZoom; }
 	bool				Get_Zoom() { return m_bZoom; }
 	float				Get_Special_Reload() { return m_fChargeTime; }
+	PLAYER::STATE		Get_State() { return m_eState; }
 	void				Set_State(PLAYER::STATE _eState) { m_eState = _eState; }
+	void				Spectrum();
+	void				Set_SuperEvade(bool _Superevade) { m_bSuperEvade = _Superevade; }
 	//void				Shake();	
 
 private:
@@ -53,7 +53,7 @@ private:
 
 	float				m_fSuperTime;
 	float				m_fSuperSpeed;
-						  
+						
 	bool				m_bMega;
 
 	bool				m_bAuto;
@@ -70,6 +70,15 @@ private:
 	float				m_fReduceAccelRate;
 	bool				m_bZoom;
 
+	float				m_fSpectrumTime;
+
+	bool				m_bSpectrum;
+	float				m_fSpecAddNumTime;
+	int					m_iSpectrum;
+
+	bool				m_bSuperEvade;
+
+	CGameObject*		m_pSpecEffect;
 
 	PLAYER::STATE		m_eState;
 	PLAYER::STATE		m_ePreState;

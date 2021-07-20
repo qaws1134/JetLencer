@@ -36,6 +36,11 @@ public :
 	void				Set_Color(MATCOLOR _tColor) { m_tColor = _tColor; }
 	void				Set_Size(_vec3 _vSize) { m_tInfo.vSize = _vSize; }
 	void				Set_Alpha(int iAlpha) { m_tColor.iAlpha = iAlpha; }
+	void				Set_ColorTime() { m_fColorTime = 0.f; }
+
+	void				Set_TrueMod(bool _bTrueMod) { m_bTrueMod = _bTrueMod; }
+	void				Set_AllTrueMod(bool _bAllTrueMoad) { m_bAllTrueMod = _bAllTrueMoad; }
+
 public:
 	const INFO&			Get_ObjInfo()const { return m_tInfo; }
 		  FRAME&		Get_Frame() { return m_tFrame; }
@@ -48,9 +53,14 @@ public:
 	CGameObject*		Get_Target() { return m_pTarget; }
 	MATCOLOR			Get_Color() { return m_tColor; }
 	const TEXINFO*		Get_Texture() const { return m_pTexInfo; }
+
+	bool				Get_TrueMod(){ return m_bTrueMod; }
+
+
 public :
 	virtual void		State_Change()PURE;
 	virtual void		WriteMatrix();
+
 	void				TargetAngle_Check();
 
 protected:
@@ -63,6 +73,11 @@ protected:
 	RENDERID::ID		m_eRenderId;
 	ANGLE::STATE		m_eAngleState;
 	
+
+	float				m_fColorTime;
+	float				m_fColorSpeed;
+
+
 	float				m_fCenterX;
 	float				m_fCenterY;
 
@@ -78,6 +93,8 @@ protected:
 	float				m_fSpeed;
 	float				m_fMaxSpeed;
 
+
+	_vec3				m_vCross;
 	_vec3				m_vTarget_Dir;
 	_vec3				m_vVelocity;
 	float				m_fAccel;
@@ -91,5 +108,7 @@ protected:
 	bool				m_bDeadEffect;
 	bool				m_bCenter;
 
+	bool				m_bTrueMod;
+	bool				m_bAllTrueMod;
 };
 

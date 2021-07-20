@@ -27,14 +27,16 @@ namespace RENDERID
 	enum ID 
 	{
 		BACKGROUND,
+		TRUE_FACT,
 		MOVE_BACKGROUND1,
 		MOVE_BACKGROUND2,
 		MOVE_BACKGROUND3,
-		GROUND,
 		BULLET,
+		ENENY,
 		OBJECT,
 		EFFECT,
 		BURNER,
+		GROUND,
 		UI,
 		END
 	};
@@ -49,6 +51,7 @@ namespace COLLIDER
 		PLAYER_BULLET,
 		PLAYER_BULLET_BEAM,
 		ENEMY_BULLET,
+		ENEMY_BULLET_BEAM,
 		EFFECT,
 		END
 	};
@@ -61,6 +64,9 @@ namespace PLAYER
 		IDLE,
 		ROLL,
 		HIT,
+		EVEDE,	//잔상
+		STOP,	//맞음 상태
+		SUPER_EVEDE, //맞음상태에서 롤입력 
 		ACCEL,
 		AFTER_BURNUR,
 		OVERHEAT,
@@ -79,6 +85,22 @@ namespace ENEMY
 		END
 	};
 }
+
+namespace SERPENT
+{
+	enum PATTERN
+	{
+		PAGE1,
+		PAGE2,
+		CIRCLE_BULLET,
+		RAGER,
+		TAILGUN,
+		TAILSHOTGUN,
+		END
+	};
+}
+
+
 
 namespace ARROW
 {
@@ -176,6 +198,17 @@ namespace EFFECT
 		CHAGE_BEAM,
 		GROUND_WATERSPLASH, 
 		GROUND_WATERSPLASH_FAST,
+		PLAYER,
+		BOSS_LASER_END,
+		BOSS_CHAGE_BEAM,
+		BULLET_IMPACT,
+		OBJECT_IMPACT,
+		FIRE_BOSS,
+		EXPLOSION1,
+		EXPLOSION2,
+		EXPLOSION3,
+
+
 		END
 	};
 }

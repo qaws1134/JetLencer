@@ -20,6 +20,7 @@
 #include "Jet_Sniper.h"
 
 #include "Particle.h"
+#include "Serpent.h"
 
 IMPLEMENT_SINGLETON(CSpawn_Manager)
 list<_vec3> CSpawn_Manager:: m_listPos;
@@ -45,6 +46,7 @@ HRESULT CSpawn_Manager::Spawn(const wstring _wstrObjName, const PLACEMENT * _pPl
 	{
 		switch ((RENDERID::ID)_pPlacement->eRenderID)
 		{
+		case RENDERID::TRUE_FACT:
 		case RENDERID::BACKGROUND:
 		case RENDERID::MOVE_BACKGROUND1:
 		case RENDERID::MOVE_BACKGROUND2:
@@ -61,6 +63,8 @@ HRESULT CSpawn_Manager::Spawn(const wstring _wstrObjName, const PLACEMENT * _pPl
 			CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), pObject);
 			pObject = nullptr;
 			break;
+
+
 		default:
 			break;
 		}
@@ -117,6 +121,13 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
 		pObject = nullptr;
 	}
+	if (_wstrObjName == L"Serpent_Bullet")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CNormal::Create(pObjInfo, vPos, fAngle, vSpeed);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
+		pObject = nullptr;
+	}
 	if (_wstrObjName == L"Rocket")
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
@@ -145,11 +156,10 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 
 
 //ÀÌÆåÆ®
-void CSpawn_Manager::Spawn(/*const wstring _wstrObjName,*/EFFECT::TYPE _eEffectType, _vec3 vPos,bool _FrameStart)
+void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos,bool _FrameStart)
 {
 	CGameObject* pEffect = nullptr;
-	//const ANIMATION* pAnimationInfo = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(_wstrObjName);
-	//pEffect = CEffect::Create(pAnimationInfo, vPos, _FrameStart,_eEffectType);
+
 	pEffect = CEffect::Create(_eEffectType,vPos, _FrameStart);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pEffect);
 	pEffect = nullptr;
@@ -161,6 +171,19 @@ void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameSta
 	pEffect = CEffect::Create(_eEffectType, vPos, _FrameStart,_fSize);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pEffect);
 	pEffect = nullptr;
+}
+
+void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle, _vec3 vSpeed, CGameObject * pTarget)
+{
+	CGameObject* pObject = nullptr;
+	if (_wstrObjName == L"Boss_Beam")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(L"Beam");
+		pObject = CBeam::Create(pObjInfo, vPos, fAngle, vSpeed, pTarget,true);
+		static_cast<CBeam*>(pObject)->Set_BossBeam(true);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
+		pObject = nullptr;
+	}
 }
 
 
@@ -239,6 +262,8 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 	//}
 
 }
+
+
 
 void CSpawn_Manager::Update_MultiSpawn()
 {

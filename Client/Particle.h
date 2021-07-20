@@ -28,5 +28,9 @@ public:
 	EFFECT::TYPE m_eEffectType;
 	float m_fTime;
 	float m_fSize;
+
+
+	float m_fSpawnTime;
+	float m_fSpawnSpeed;
 };
 

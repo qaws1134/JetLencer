@@ -47,7 +47,7 @@ HRESULT CPrefab_Manager::Ready_Prefab_Manager()
 		return E_FAIL;
 	if (FAILED(LoadMultiPlacementPrefab(L"../Data/EffectPlace.dat")))
 		return E_FAIL;
-	if (FAILED(LoadPlacementPrefab(L"../Data/BackgroundStage1.dat")))
+	if (FAILED(LoadPlacementPrefab(L"../Data/BackgroundStage2.dat")))
 		return E_FAIL;
 
 

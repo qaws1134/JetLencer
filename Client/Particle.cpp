@@ -3,7 +3,7 @@
 #include "Prefab_Manager.h"
 #include "Spawn_Manager.h"
 #include "ColSphere.h"
-CParticle::CParticle() : m_fTime(0.f)
+CParticle::CParticle() : m_fTime(0.f),m_fSpawnSpeed(0.f),m_fSpawnTime(0.f)
 {
 }
 
@@ -42,10 +42,11 @@ HRESULT CParticle::Ready_GameObject()
 
 	m_tFrame.fStartFrame = 0;
 	m_eRenderId = RENDERID::EFFECT;
-	m_fAccel = 500.f;
+	m_fAccel = 1200.f;
 	m_fRegistPower = 2.f;
-	m_tFrame.fFrameSpeed = 30.f;
+	m_tFrame.fFrameSpeed = 40.f;
 	m_fSize = 0.5f;
+	m_fSpawnSpeed = 0.01f;
 
 	m_vecCollider.reserve(1);
 	m_vecCollider.emplace_back(CColSphere::Create(this, 10.f, COLLIDER::EFFECT));
@@ -56,21 +57,27 @@ void CParticle::Move()
 {
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
-	m_fTime += fTime;
-	_vec3 vNormalVel = m_vVelocity;
-	D3DXVec3Normalize(&vNormalVel, &vNormalVel);
 
-	m_tInfo.vPos += (m_tInfo.vDir*fTime*m_fAccel + (m_vVelocity*fTime)) + (_vec3{ 0.f,1.f,0.f }*0.5f*200.f *m_fTime*m_fTime);
+	m_fSpawnTime += fTime;
+	if (m_fSpawnTime > m_fSpawnSpeed)
+	{
+		//m_fTime += fTime;
+		_vec3 vNormalVel = m_vVelocity;
+		D3DXVec3Normalize(&vNormalVel, &vNormalVel);
 
-	if (!m_pTexInfo)
-		return;  
-	//파티클 꼬리 선택 후 이펙트에서 스폰 
+		m_tInfo.vPos += (m_tInfo.vDir*fTime*m_fAccel + (m_vVelocity*fTime)) + (_vec3{ 0.f,1.f,0.f }*0.5f*200.f *m_fSpawnTime*m_fTime);
 
-	CSpawn_Manager::Spawn(m_eEffectType,m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)) - (vNormalVel*0.2f), false, m_fSize);
-	m_fSize -= 0.06f;	
-	if (m_fSize < 0)
-		m_bDead = true;
+		if (!m_pTexInfo)
+			return;
+		//파티클 꼬리 선택 후 이펙트에서 스폰 
 
+		CSpawn_Manager::Spawn(m_eEffectType, m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)) - (vNormalVel*0.2f), false, m_fSize);
+		m_fSize -= 0.05f;
+		if (m_fSize < 0.1f)
+			m_bDead = true;
+		m_fSpawnTime = 0.f;
+
+	}
 }
 
 

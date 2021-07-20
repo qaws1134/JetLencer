@@ -18,6 +18,10 @@ CGameObject::CGameObject()
 	, m_bDead(false)
 	, m_bCenter(false)
 	, m_bDeadEffect(false)
+	, m_fColorTime(0.f)
+	, m_fColorSpeed(0.1f)
+	, m_bTrueMod(false)
+	, m_bAllTrueMod(false)
 {
 	ZeroMemory(&m_tInfo, sizeof(INFO)); 
 	m_tColor = {255,255,255,255};
@@ -33,6 +37,19 @@ CGameObject::~CGameObject()
 
 void CGameObject::WriteMatrix()
 {
+	if (m_bTrueMod|| m_bAllTrueMod)
+	{
+		m_tColor.iRed = 0;
+		m_tColor.iGreen = 0;
+		m_tColor.iBlue = 0;
+	}
+	else
+	{
+		m_tColor.iRed = 255;
+		m_tColor.iGreen = 255;
+		m_tColor.iBlue = 255;
+	}
+
 	D3DXVECTOR3 vScroll = CScroll_Manager::Get_Scroll();
 
 	D3DXMATRIX matScale, matTrans, matRotZ, matWorld;
@@ -55,8 +72,6 @@ void CGameObject::WriteMatrix()
 	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(m_pTexInfo->pTexture, nullptr, &D3DXVECTOR3(m_fCenterX, m_fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(m_tColor.iAlpha, m_tColor.iRed, m_tColor.iGreen, m_tColor.iBlue));
 }
-
-
 
 HRESULT CGameObject::Set_Texture()
 {
@@ -100,17 +115,18 @@ void CGameObject::TargetAngle_Check()
 	if (fCos > 0.99)
 		return;
 	float fAngle = D3DXToDegree(acosf(fCos));
-	_vec3 vCross = {};
-	D3DXVec3Cross(&vCross, &m_vTarget_Dir, &m_tInfo.vDir);
-	if (vCross.z > 0)
-		m_fAngle += m_fAngleSpeed*fTime;
-	else if(vCross.z<0)
-		m_fAngle -= m_fAngleSpeed*fTime;
+	m_vCross = {};
+	D3DXVec3Cross(&m_vCross, &m_vTarget_Dir, &m_tInfo.vDir);
 
+	if (m_vCross.z > 0)
+		m_fAngle += m_fAngleSpeed*fTime;
+	else if(m_vCross.z<0)
+		m_fAngle -= m_fAngleSpeed*fTime;
 
 	if (m_fAngle > 360.f)
 		m_fAngle = 0.f;
 	if (m_fAngle < 0.f)
 		m_fAngle = 360.f;
+
 }
 

@@ -15,10 +15,6 @@
 
 
 
-
-
-
-
 #ifdef _AFX
 #define ERR_MSG(msg)		AfxMessageBox(msg)
 #else 

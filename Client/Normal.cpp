@@ -36,7 +36,7 @@ CGameObject * CNormal::Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos, floa
 HRESULT CNormal::Ready_GameObject()
 {
 	m_tInfo.vSize = { 0.5f,0.5f,0.f };
-	m_tInfo.vDir.z = 0.f;
+	//m_tInfo.vDir.z = 0.f;
 	m_tFrame.wstrObjKey = m_pObjectInfo->wstrIdleImage_ObjectKey;
 	m_tFrame.wstrStateKey = m_pObjectInfo->wstrIdleImage_StateKey;
 	m_tFrame.fMaxFrame = (float)CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(m_tFrame.wstrObjKey + m_tFrame.wstrStateKey)->iMax_Index;
@@ -48,12 +48,16 @@ HRESULT CNormal::Ready_GameObject()
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
 	{
 		m_tCombatInfo.iAtk = 1;
-		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 10.f, COLLIDER::PLAYER_BULLET));
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 13.f, COLLIDER::PLAYER_BULLET));
 	}
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
-		m_tCombatInfo.iAtk = 2;
-		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 10.f, COLLIDER::ENEMY_BULLET));
+		m_tCombatInfo.iAtk = 1;
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 13.f, COLLIDER::ENEMY_BULLET));
+	}
+	if (m_tFrame.wstrStateKey == L"Serpent_Bullet")
+	{
+		m_fRemoveSpeed = 5.f;
 	}
 	return S_OK;
 }
@@ -84,12 +88,22 @@ void CNormal::Move()
 		m_tInfo.vDir += CGameObject_Manager::Get_Instance()->Get_Player()->Get_Velocity()*fTime;
 
 	}
-	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
+	else if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
 		float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 		m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
 
-		m_tInfo.vDir *= 850.f*fTime;
+		if (m_tFrame.wstrStateKey == L"Serpent_Bullet")
+		{
+			m_tInfo.vDir *= 350.f*fTime;
+			m_fRemoveTIme += fTime;
+			if (m_fRemoveTIme > m_fRemoveSpeed)
+			{
+				m_bDead = true;
+			}
+		}
+		else
+			m_tInfo.vDir *= 850.f*fTime;
 	}
 
 	m_tInfo.vPos += m_tInfo.vDir;
@@ -104,6 +118,10 @@ void CNormal::DeadEffect()
 	if (m_tInfo.vPos.y > Map_Height+70)
 	{
 		CSpawn_Manager::Spawn(EFFECT::GROUND_WATERSPLASH_FAST, _vec3{ m_tInfo.vPos.x , float(Map_Height + 72) ,0.f}, false, 1.0f);
+	}
+	else
+	{
+		CSpawn_Manager::Spawn(EFFECT::BULLET_IMPACT,m_tInfo.vPos,false);
 	}
 
 	m_bDead = true;

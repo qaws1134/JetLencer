@@ -14,6 +14,8 @@ public:
 	static void Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src);
 	static void Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src);
 	static void Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>& _Src);
+	static void Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>& _Src,bool _bPlayer);
 	static void Collision_Search(list<CCollider*>& _Dst, list<CCollider*>& _Src);
+
 };
 

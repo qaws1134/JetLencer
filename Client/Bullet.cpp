@@ -3,8 +3,11 @@
 #include "Effect.h"
 #include "Prefab_Manager.h"
 #include "Collider.h"
-CBullet::CBullet()
-{
+CBullet::CBullet() 
+	: m_fRemoveTIme(0.f)
+	, m_fRemoveSpeed(0.f)
+	, m_bRemove(false)
+{					 
 }
 
 

@@ -147,9 +147,14 @@ int CFlip::Update_GameObject()
 			static_cast<CUi*>(m_pOverHeat_Text_Red)	->Set_Render(m_bRed);
 
 
-			if (m_ePlayerWeaponState == PLAYER::SPECIAL_RELOAD_START)
+			if (m_ePlayerWeaponState == PLAYER::SPECIAL_RELOAD_END)
+			{
+				static_cast<CUi*>(m_pSpecial_Reload_Ready_Backplate_Red)->Set_Render(false);
+			}
+			else if (m_ePlayerWeaponState == PLAYER::SPECIAL_RELOAD_START)
 			{
 				static_cast<CUi*>(m_pSpecial_Reload_Ready_Backplate_Red)->Set_Render(m_bRed);
+				static_cast<CUi*>(m_pSpecial_Plate_Red)->Set_Render(false);
 			}
 			else if (m_ePlayerWeaponState == PLAYER::SPECIAL_CHARGE)
 			{
@@ -170,6 +175,8 @@ int CFlip::Update_GameObject()
 		static_cast<CUi*>(m_pOverHeat_Plate_Red)->Set_Render(false);
 		static_cast<CUi*>(m_pOverHeat_Text)->Set_Render(false);
 		static_cast<CUi*>(m_pOverHeat_Text_Red)->Set_Render(false);
+		static_cast<CUi*>(m_pSpecial_Reload_Ready_Backplate_Red)->Set_Render(false);
+		static_cast<CUi*>(m_pSpecial_Plate_Red)->Set_Render(false);
 	}
 
 	Update_Pos();
@@ -199,19 +206,23 @@ void CFlip::State_Change()
 		m_bReload = false;
 		m_bGlitch = false;
 		static_cast<CUi*>(m_pSpecial_Charge)->Set_Render(true);
-		static_cast<CUi*>(m_pSpecial_Plate)->Set_Render(true);
 		static_cast<CGui*>(m_pSpecial_Charge)->Set_Action(true);
+		static_cast<CUi*>(m_pSpecial_Plate)->Set_Render(true);
 
 		static_cast<CGui*>(m_pSpecial_Reload_Ready_Bar)->Set_Action(false);
-		static_cast<CUi*>(m_pSpecial_Reload_Ready_Bar)->Set_Render(false);
-		static_cast<CGui*>(m_pSpecial_Reload_Ready_Bar)->Select_Frame(0.f);
+		static_cast<CUi*> (m_pSpecial_Reload_Ready_Bar)->Set_Render(false);
+		static_cast<CGui*>(m_pSpecial_Reload_Ready_Bar)->Select_Frame(0);
 
-		static_cast<CUi*>(m_pSpecial_Reload_Ready_Backplate)->Set_Render(false);
+
+		static_cast<CUi*> (m_pSpecial_Reload_Ready_Backplate)->Set_Render(false);
 		static_cast<CGui*>(m_pSpecial_Reload_Ready_Backplate)->Set_Action(false);
 		static_cast<CGui*>(m_pSpecial_Reload_Ready_Backplate)->Select_Frame(0.f);
+		
 		static_cast<CGui*>(m_pSpecial_Reload_Bar)->Set_Start(true);
+
 		break;
 	case PLAYER::SPECIAL_RELOAD_START:
+	
 		static_cast<CUi*>(m_pSpecial_Reload_Bar)->Set_Render(true);
 		static_cast<CUi*>(m_pSpecial_Reload_Glitch)->Set_Render(true);
 		static_cast<CUi*>(m_pSpecial_Reload_Ready_Backplate)->Set_Render(true);
@@ -223,6 +234,7 @@ void CFlip::State_Change()
 		static_cast<CGui*>(m_pSpecial_Charge)->Set_Action(false);
 		static_cast<CUi*>(m_pSpecial_Charge)->Select_Frame(0.f);
 		static_cast<CUi*>(m_pSpecial_Charge)->Set_Render(false);
+
 		static_cast<CUi*>(m_pSpecial_Plate)->Set_Render(false);
 
 		if (!m_bYflip)
@@ -246,8 +258,7 @@ void CFlip::State_Change()
 			;
 		static_cast<CGui*>(m_pSpecial_Reload_Bar)->Set_Action(false);
 		static_cast<CGui*>(m_pSpecial_Reload_Glitch)->Set_Action(false);
-
-		static_cast<CGui*>(m_pSpecial_Reload_Bar)->Select_Frame(0.f);
+		
 		static_cast<CUi*>(m_pSpecial_Reload_Glitch)->Select_Frame(0.f);
 
 		if (!m_bYflip)

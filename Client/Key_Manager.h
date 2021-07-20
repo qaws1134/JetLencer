@@ -26,6 +26,14 @@
 
 #define KEY_L		0x00001000
 
+#define KEY_NUM1	0x00002000
+
+#define KEY_NUM2	0x00004000
+
+#define KEY_NUM3	0x00008000
+
+#define KEY_NUM4	0x00010000
+
 class CKey_Manager
 {
 	DECLARE_SINGLETON(CKey_Manager)

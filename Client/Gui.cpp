@@ -193,12 +193,13 @@ void CGui::State_Change()
 		if (m_bStart)
 		{
 			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1;
+			m_fReloadTime = static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_Special_Reload();
 			m_bStart = false;
 		}
 		if (m_bAction)
 		{
 			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-			m_tFrame.fFrameSpeed = -(m_tFrame.fMaxFrame /static_cast<CPlayer*>( CGameObject_Manager::Get_Instance()->Get_Player())->Get_Special_Reload())*fTime * 60.f;
+			m_tFrame.fFrameSpeed = -(m_tFrame.fMaxFrame / m_fReloadTime)*fTime * 60.f;
 			m_fCenterX = 0.f;
 			m_fCenterY = (float)m_pTexInfo->tImageInfo.Height;
 		}
@@ -258,18 +259,28 @@ void CGui::State_Change()
 			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 			if (m_bGreen)
 			{
-				if (m_tColor.iRed > 0)
+				if (m_tColor.iRed > 10)
 				{
-					m_tColor.iRed -= -10.f+fTime*10.f;
-					m_tColor.iBlue -= -10.f+fTime*10.f;
+					m_tColor.iRed -= (int)(fTime*800.f);
+					m_tColor.iBlue -= (int)(fTime*800.f);
+				}
+				else
+				{
+					m_tColor.iRed = 0;
+					m_tColor.iBlue = 0;
 				}
 			}
 			if (m_bRed)
 			{
-				if (m_tColor.iGreen > 0)
+				if (m_tColor.iGreen > 10)
 				{
-					m_tColor.iGreen -= fTime*1000.f;
-					m_tColor.iBlue -= fTime*1000.f;
+					m_tColor.iGreen -= (int)(fTime*800.f);
+					m_tColor.iBlue -= (int)(fTime*800.f);
+				}
+				else
+				{
+					m_tColor.iGreen = 0;
+					m_tColor.iBlue = 0;
 				}
 			}
 			m_fTime += fTime;
@@ -277,6 +288,8 @@ void CGui::State_Change()
 			{
 				m_bRender = false;
 				m_bAction = false;
+				m_bRed = false;
+				m_bGreen = false;
 				m_fTime = 0.f;
 			}
 		}

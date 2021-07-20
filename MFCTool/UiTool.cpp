@@ -712,6 +712,8 @@ void CUiTool::OnBnClickedAdd()
 		pPlacementInfo->eRenderID = RENDERID::UI;
 	else if (strID == L"GROUND")
 		pPlacementInfo->eRenderID = RENDERID::GROUND;
+	else if (strID == L"TRUE_FACT")
+		pPlacementInfo->eRenderID = RENDERID::TRUE_FACT;
 	else if (strID == L"EFFECT")
 	{
 		CMainFrame* pMain = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
@@ -773,8 +775,12 @@ void CUiTool::OnBnClickedAdd()
 			m_KeyIndex++;
 			break;
 		}
-		else 
+		else
+		{
+			m_mapPlacementInfo[ObjName]->eRenderID = pPlacementInfo->eRenderID;
 			m_KeyIndex++;
+			break;
+		}
 	}
 	UpdateData(FALSE);
 }
@@ -1118,6 +1124,10 @@ void CUiTool::OnLbnSelchangeResultList()
 		break;
 	case RENDERID::EFFECT:
 		idx = m_ComboID.FindString(-1, L"EFFECT");
+		m_ComboID.SetCurSel(idx);
+		break;
+	case RENDERID::TRUE_FACT:
+		idx = m_ComboID.FindString(-1, L"TRUE_FACT");
 		m_ComboID.SetCurSel(idx);
 		break;
 	}
@@ -1630,7 +1640,8 @@ void CUiTool::OnBnClickedButtonUpdate()
 		iter_find->second->eRenderID = RENDERID::GROUND;
 	else if (strID == L"EFFECT")
 		iter_find->second->eRenderID = RENDERID::EFFECT;
-
+	else if (strID == L"TRUE_FACT")
+		iter_find->second->eRenderID = RENDERID::TRUE_FACT;
 
 	CString ObjKey = m_wstrObjID.GetString();
 	if (ObjKey.IsEmpty())

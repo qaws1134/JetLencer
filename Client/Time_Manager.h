@@ -7,6 +7,8 @@ public:
 	virtual ~CTime_Manager();
 public:
 	float Get_DeltaTime() { return m_fDeltaTime;  }
+	void Set_Stop(float _fStoplimit) { m_fStoplimit = _fStoplimit; m_bStop = true; }
+	
 public:
 	void Ready_Time_Manager(); 
 	void Update_Time_Manager(); 
@@ -16,7 +18,13 @@ private:
 	LARGE_INTEGER m_BeginTime; 
 	LARGE_INTEGER m_EndTime;
 
-	float m_fDeltaTime; 
+	bool m_bStop;
+	
 
+	float m_fStoplimit;
+	float m_fStopTime;
+	
+	float m_fDeltaTime; 
+	float m_fPreDeltaTime;
 };
 

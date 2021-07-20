@@ -29,7 +29,7 @@ public :
 
 
 public :
-	void			InitJet();
+	virtual void	InitJet();
 	void			JetAngleCheck();
 	virtual void	TimeCheck();
 	bool			AttackTime();

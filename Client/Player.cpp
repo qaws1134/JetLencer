@@ -41,6 +41,10 @@ CPlayer::CPlayer()
 	, m_bZoom(false)
 	,m_fSuperTime(0.f)
 	,m_fSuperSpeed(0.f)
+	, m_fSpectrumTime(0.f)
+	, m_bSpectrum(false)
+	, m_bSuperEvade(false)
+
 {
 	
 }
@@ -93,7 +97,7 @@ HRESULT CPlayer::Ready_GameObject()
 	m_fAngleSpeed = 220.f;
 	m_fAngle_per_Frame = 22.5f;
 	m_fAngleOffset = 12.5f;
-	m_fAccel = 3000.f;
+	m_fAccel = 2500.f;
 	m_fBoostAccel = 400.f;
 	m_fGravity = 200.f;
 
@@ -125,6 +129,7 @@ HRESULT CPlayer::Ready_GameObject()
 	m_fSuperSpeed = 1.f;
 	m_fSuperTime = 1.f;
 
+	m_fSpectrumTime = 1.f;
 
 	//公扁惑怕
 	wstrSubWeapon = L"Rocket";		// Rocket,bottle , HommingRocket,
@@ -227,16 +232,6 @@ int CPlayer::Update_GameObject()
 	return OBJ_NOEVENT;
 }
 
-void CPlayer::Late_Update_GameObject()
-{
-	
-	FAILED_CHECK_RETURN(Set_Texture(), );
-}
-
-void CPlayer::Render_GameObject()
-{
-	WriteMatrix();
-}
 
 void CPlayer::Release_GameObject()
 {
@@ -260,12 +255,33 @@ void CPlayer::State_Change()
 			m_fSuperTime = 0.f;
 			m_bRoll = true;
 			break;
+		case PLAYER::STOP:
+			CTime_Manager::Get_Instance()->Set_Stop(1.f);
+			break;
+		case PLAYER::EVEDE:
+			m_fSpectrumTime = 0.f;
+			m_bSpectrum = true;
+			break;
+		case PLAYER::SUPER_EVEDE:
+			static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Green(true);
+			m_fSuperSpeed = 1.f;
+			m_fSuperTime = 0.f;
+			m_bSuperEvade = false;
+			break;
 		case PLAYER::HIT:
-			m_fSuperTime = 0.f;	//公利
-			m_fSuperSpeed = 0.3f;
+			m_fSuperTime = 0.f;	//公利w
+			m_fSuperSpeed = 0.8f;
+			m_tCombatInfo.iHp -= 1;
 			static_cast<CHp*>(m_pGuiHp)->Set_State(m_eState);
 			static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
-			static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Red(true);
+			if (m_tCombatInfo.iHp <= 0)
+			{
+				DeadEffect();
+			}
+			else
+			{
+				static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Red(true);
+			}
 			break;
 		}
 		m_ePreState = m_eState;
@@ -291,6 +307,7 @@ void CPlayer::State_Change()
 			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::OVERHEAT);
 			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::OVERHEAT);
 			static_cast<CRocket_Ui*>(m_pGuiRocket)->Set_Red(true);
+			static_cast<CHp*>(m_pGuiHp)->Set_Red(true);
 			break;
 		}
 		m_ePreAfterBurnState = m_eAfterBurnState;
@@ -320,10 +337,12 @@ void CPlayer::State_Change()
 
 void CPlayer::Roll()
 {
+	
 	if (!m_bRoll)
 	{
 		m_eState = PLAYER::IDLE;
 		JetAngleCheck();
+		m_fSuperTime = 2.f;
 	}
 	else
 	{
@@ -338,10 +357,11 @@ void CPlayer::Roll()
 			{
 				m_fRollTime = 0.f;
 				m_tFrame.fStartFrame = 0;
-				m_eState = PLAYER::IDLE;
 				m_bRoll = false;
 			}
 		}
+		if (m_bSuperEvade)
+			m_eState = PLAYER::SUPER_EVEDE;
 	}
 }
 
@@ -378,6 +398,9 @@ void CPlayer::PositionRock_Check()
 	{
 		m_fMaxSpeed = 600.f;
 		Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
+
+		if(!m_bOverHeat)
+			m_eAfterBurnState = PLAYER::IDLE;
 		m_eBurnerState = BURNER::ACCEL;
 		static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::ACCEL);
 		m_fAfterBurnTime -= fTime;
@@ -400,10 +423,11 @@ void CPlayer::Key_State()
 	
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_L))
 	{
-		m_tCombatInfo.iHp -= 1;
-		m_eState = PLAYER::HIT;
-	}
+		m_eState = PLAYER::EVEDE;
 
+	}
+	if(m_bSpectrum)
+		Spectrum();
 
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	if (!m_bAuto)
@@ -453,6 +477,8 @@ void CPlayer::Key_State()
 		{
 			m_fMaxSpeed = 500.f;
 			Accel(m_vGravity, m_fGravity, m_fMaxSpeed, true);
+			if(!m_bOverHeat)
+				m_eAfterBurnState = PLAYER::IDLE;
 
 			m_eBurnerState = BURNER::IDLE;
 			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::IDLE);
@@ -467,7 +493,6 @@ void CPlayer::Key_State()
 
 	if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_RBUTTON))
 		m_eState = PLAYER::ROLL;
-	
 
 	SpawnPtFire();
 	m_pBurner->Set_Pos(m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)*0.8f));
@@ -569,7 +594,7 @@ void CPlayer::TimeCheck()
 		static_cast<CFlip*>(m_pGuiLFlip)->Set_OverHeat(false);
 		static_cast<CFlip*>(m_pGuiRFlip)->Set_OverHeat(false);
 		static_cast<CRocket_Ui*>(m_pGuiRocket)->Set_Red(false);
-
+		static_cast<CHp*>(m_pGuiHp)->Set_Red(false);
 		m_bOverHeat = false;
 		m_fAfterBurnTime = 0.f;
 	}
@@ -589,6 +614,7 @@ void CPlayer::DeadEffect()
 
 bool CPlayer::SubWeapon_Check()
 {
+
 	if (m_fChargeTime < SubWeaponDelay)
 	{
 		m_eSubWeaponState = BULLET::CHARGE_0;
@@ -617,7 +643,7 @@ void CPlayer::SubWeapon_Select()
 	switch (m_eSubWeaponState)
 	{
 	case BULLET::CHARGE_0:
-		CSpawn_Manager::Spawn(wstrSubWeapon, m_tInfo.vPos+ m_tInfo.vDir*fTime+m_vVelocity*fTime, m_fAngle, m_vVelocity);
+		CSpawn_Manager::Spawn(wstrSubWeapon, m_tInfo.vPos+ m_tInfo.vDir*fTime+m_vVelocity*2.f*fTime, m_fAngle, m_vVelocity);
 		break;
 	case BULLET::CHARGE_1: 
 	case BULLET::CHARGE_2:
@@ -628,7 +654,9 @@ void CPlayer::SubWeapon_Select()
 			static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(false);
 			static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.f);
 		}
+
 		m_eWeaponState = PLAYER::SPECIAL_RELOAD_START;
+		
 		break;
 	}
 
@@ -655,4 +683,27 @@ void CPlayer::SubWeapon_Charge()
 			m_fChargeTime += fTime;
 	}
 }
+
+void CPlayer::Spectrum()
+{
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+	_vec3 vNormalVel = m_vVelocity;
+	D3DXVec3Normalize(&vNormalVel, &vNormalVel);
+	m_fSpectrumTime += fTime;
+	m_fSpecAddNumTime += fTime;
+	if (m_fSpecAddNumTime > 0.05f)
+	{
+		m_iSpectrum++;
+		m_fSpecAddNumTime = 0.f;
+		CSpawn_Manager::Spawn(EFFECT::PLAYER, m_tInfo.vPos
+			- m_tInfo.vDir, false);
+	}
+	if (m_fSpectrumTime >1.0f)
+	{
+		m_bSpectrum = false;
+		m_iSpectrum = 0;
+	}
+	
+}
+
 

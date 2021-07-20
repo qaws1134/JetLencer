@@ -77,19 +77,17 @@ int CHp::Update_GameObject()
 		m_fRedTime += fTime;
 		if (m_fRedTime > 0.1f)
 		{
-
 			static_cast<CUi*>(m_pHp_Red)->Select_Frame(m_pHp->Get_Frame().fStartFrame);
 			static_cast<CUi*>(m_pHp_Red)->Set_Render(m_bRed);
 			static_cast<CUi*>(m_pHp_Plate_Red)->Set_Render(m_bRed);
-
-			m_bRender = m_bRed;
+			m_bRender = true;
 			m_bRed = !m_bRed;
 			m_fRedTime = 0.f;
 		}
 	}
 	else
 	{
-		static_cast<CUi*>(m_pHp_Red)->Set_Render(false);
+ 		static_cast<CUi*>(m_pHp_Red)->Set_Render(false);
 		static_cast<CUi*>(m_pHp_Plate_Red)->Set_Render(false);
 	}
 	return OBJ_NOEVENT;

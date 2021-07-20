@@ -112,12 +112,12 @@ void CRocket::DeadEffect()
 		else
 		{
 			CSpawn_Manager::Spawn(L"EffectExplosion_smoke", m_tInfo.vPos);
-			for (int i = 0; i < rand() % 5; i++)
+			for (int i = 0; i <  rand()%5+2; i++)
 			{
 				float fAngle = (float)(rand() % 360);
 				_vec3 Dir = { cosf(D3DXToRadian(fAngle)) ,-sinf(D3DXToRadian(fAngle)) ,0.f };
-				float fRad = 100.f;
-				CSpawn_Manager::Spawn(EFFECT::ROCKET_BOOM_PTFIRE, m_tInfo.vPos + Dir*fRad, fAngle, m_vVelocity);
+				float fRad = 80.f;
+				CSpawn_Manager::Spawn(EFFECT::ROCKET_BOOM_PTFIRE, m_tInfo.vPos + Dir*fRad, fAngle, Dir*3.f);
 			}
 		}
 

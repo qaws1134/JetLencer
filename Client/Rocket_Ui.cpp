@@ -84,7 +84,7 @@ int CRocket_Ui::Update_GameObject()
 				static_cast<CUi*>(m_pRocket_Red[i])->Set_Render(m_bRed);
 			}
 			static_cast<CUi*>(m_pRocket_Plate_Red)->Set_Render(m_bRed);
-			m_bRender = m_bRed;
+			m_bRender = true;
 			m_bRed = !m_bRed;
 			m_fRedTime = 0.f;
 		}
