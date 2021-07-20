@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "Jet_Enemy.h"
 #include "Player.h"
+#include "Mouse.h"
 CCollision_Manager::CCollision_Manager()
 {
 }
@@ -69,6 +70,9 @@ void CCollision_Manager::Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, l
 		{
 			if (Check_Sphere(pDst, pSrc))
 			{
+				static_cast<CMouse*>(CGameObject_Manager::Get_Instance()->Get_Mouse())->Set_MouseState(MOUSE::HIT);
+				static_cast<CMouse*>(CGameObject_Manager::Get_Instance()->Get_Mouse())->Set_HitTime();
+
 				pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
 				pDst->Get_Target()->Set_Color(MATCOLOR{ 200,0,255,255 });
 				pDst->Get_Target()->Set_ColorTime();
@@ -85,7 +89,7 @@ void CCollision_Manager::Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, l
 }
 
 //오브젝트 , 빔
-void CCollision_Manager::Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+void CCollision_Manager::Collision_PlayerBeam(list<CCollider*>& _Dst, list<CCollider*>& _Src)
 {
 	for (auto& pDst : _Dst)
 	{
@@ -93,20 +97,23 @@ void CCollision_Manager::Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>
 		{
 			if (Check_Sphere(pDst, pSrc))
 			{
-				pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
-				if (pDst->Get_CombatInfo().iHp <= 0)
+				if (!pSrc->Get_Dead())
 				{
-					pDst->Get_Target()->Set_DeadEffect(true);
-					pDst->Set_Dead(true);
+					pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
+					if (pDst->Get_CombatInfo().iHp <= 0)
+					{
+						pDst->Get_Target()->Set_DeadEffect(true);
+						pDst->Set_Dead(true);
+					}
+					pSrc->Set_Dead(true);
 				}
-				pSrc->Set_Dead(true);
 			}
 		}
 	}
 }
 
 
-void CCollision_Manager::Collision_Beam(list<CCollider*>& _Dst, list<CCollider*>& _Src, bool _bPlayer)
+void CCollision_Manager::Collision_EnemyBeam(list<CCollider*>& _Dst, list<CCollider*>& _Src)
 {
 	for (auto& pDst : _Dst)
 	{
@@ -197,26 +204,3 @@ bool CCollision_Manager::Check_Rect_Sphere(CCollider* _Dst, CCollider* _Src)
 }
 
 
-
-//플레이어서치 적비행기 
-//비행기 UI 상태 변경 
-//void CCollision_Manager::Collision_Search(list<CCollider*>& _Dst, list<CCollider*>& _Src)
-//{
-//	for (auto& pDst : _Dst)
-//	{
-//		for (auto& pSrc : _Src)
-//		{
-//			if (Check_Sphere(pDst, pSrc))
-//			{
-//				if (SearchSizeFar == pDst->Get_ColSphereSize())
-//					static_cast<CJet_Enemy*>(pSrc->Get_Target())->Set_JetState(ENEMY::DISTANS_FAR);
-//				if (SearchSizeLv0 == pDst->Get_ColSphereSize())
-//					static_cast<CJet_Enemy*>(pSrc->Get_Target())->Set_JetState(ENEMY::DISTANS_LEVEL0);
-//				if (SearchSizeLv1 == pDst->Get_ColSphereSize())
-//					static_cast<CJet_Enemy*>(pSrc->Get_Target())->Set_JetState(ENEMY::DISTANS_LEVEL1);
-//				if (SearchSizeLv2 == pDst->Get_ColSphereSize())
-//					static_cast<CJet_Enemy*>(pSrc->Get_Target())->Set_JetState(ENEMY::DISTANS_LEVLE2);
-//			}
-//		}
-//	}
-//}

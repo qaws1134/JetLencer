@@ -24,7 +24,7 @@ public:
 	bool	Get_Crash() { return m_bCrash; }
 
 protected:
-	void DeadEffect();
+	virtual void DeadEffect();
 	virtual void InitJet();
 
 	virtual void Ai_State() PURE;
@@ -44,6 +44,8 @@ protected:
 	float m_fPatternTime;
 	float m_fPatternSpeed;
 
+	float m_fSpawnTime;
+	float m_fSpawnSpeed;
 
 	int iMaxHp;
 

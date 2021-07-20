@@ -34,7 +34,7 @@ void CGameObject_Manager::Update_GameObject_Manager()
 {
 	for (int i = 0 ; i < OBJID::END; ++i)
 	{
-
+	
 		for (auto& iter = m_listGameObject[i].begin() ; iter != m_listGameObject[i].end() ; )
 		{
 			int iEvent = (*iter)->Update_GameObject(); 
@@ -81,9 +81,9 @@ void CGameObject_Manager::Update_GameObject_Manager()
 
 	CCollision_Manager::Collision_Enemy_Player_Bullet(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET]);
 
-	CCollision_Manager::Collision_Beam(m_listGameObjectCollider[COLLIDER::PLAYER], m_listGameObjectCollider[COLLIDER::ENEMY_BULLET_BEAM],true);
+	CCollision_Manager::Collision_EnemyBeam(m_listGameObjectCollider[COLLIDER::PLAYER], m_listGameObjectCollider[COLLIDER::ENEMY_BULLET_BEAM]);
 
-	CCollision_Manager::Collision_Beam(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET_BEAM]);
+	CCollision_Manager::Collision_PlayerBeam(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET_BEAM]);
 	CCollision_Manager::Collision_Search(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_SEARCH]);
 }
 
@@ -143,3 +143,27 @@ void CGameObject_Manager::Release_GameObject_Manager()
 	}
 }
 
+CGameObject* CGameObject_Manager::Get_Target(CGameObject* _pObj, OBJID::ID _eID) const
+{
+	CGameObject*pTarget = nullptr;
+
+	float fDis = 0.f;
+	_vec3 vDis = {};
+	float	fY = 0.f;
+	float	fDia = 0.f;
+
+	for (auto& pDst : m_listGameObject[_eID])
+	{
+		vDis = _pObj->Get_ObjInfo().vPos - pDst->Get_ObjInfo().vPos;
+
+		fDia = D3DXVec3Length(&vDis);
+
+		if (fDis > fDia || !pTarget)
+		{
+			pTarget = pDst;
+			fDis = fDia;
+		}
+	}
+
+	return pTarget;
+}

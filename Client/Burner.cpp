@@ -71,26 +71,7 @@ void CBurner::Render_GameObject()
 void CBurner::Release_GameObject()
 {
 }
-//void CBurner::WriteMatrix()
-//{
-//	D3DXVECTOR3 vScroll = CScroll_Manager::Get_Scroll();
-//
-//	D3DXMATRIX matScale, matTrans, matRotZ, matWorld;
-//	D3DXMatrixIdentity(&matScale);
-//	D3DXMatrixIdentity(&matTrans);
-//	D3DXMatrixIdentity(&matRotZ);
-//
-//	D3DXMatrixScaling(&matScale, m_tInfo.vSize.x, m_tInfo.vSize.y, 0.f);
-//	D3DXMatrixRotationZ(&matRotZ, -D3DXToRadian(m_fAngle));
-//	D3DXMatrixTranslation(&matTrans, m_tInfo.vPos.x + vScroll.x, m_tInfo.vPos.y + vScroll.y, 0.f);
-//
-//	matWorld = matScale *matRotZ* matTrans;
-//	float fCenterX = float(m_pTexInfo->tImageInfo.Width );
-//	float fCenterY = float(m_pTexInfo->tImageInfo.Height >>1);
-//	CGraphic_Device::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
-//	CGraphic_Device::Get_Instance()->Get_Sprite()->Draw(m_pTexInfo->pTexture, nullptr, &D3DXVECTOR3(fCenterX, fCenterY, 0.f), nullptr, D3DCOLOR_ARGB(255, 255, 255, 255));
-//	
-//}
+
 void CBurner::Frame_Change()
 {
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
@@ -140,6 +121,7 @@ void CBurner::State_Change()
 			m_tFrame.fFrameSpeed = 10.f;
 			m_tFrame.wstrStateKey = L"Aftbrn_mega";
 			m_bLoop = false;
+			CScroll_Manager::Shake(15.f, 0.5f);
 			break;
 		case BURNER::BURST:
 			if (m_ePreBurnerState == BURNER::AFTER)
@@ -147,6 +129,7 @@ void CBurner::State_Change()
 			m_tFrame.wstrStateKey= L"Aftbrn_burst";
 			m_tFrame.fFrameSpeed = 10.f;
 			m_bLoop = false;
+			CScroll_Manager::Shake(5.f, 0.4f);
 			break;
 		}
 		m_ePreBurnerState = m_eBurnerState;

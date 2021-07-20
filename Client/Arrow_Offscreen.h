@@ -27,7 +27,7 @@ public:
 	CGameObject*		m_pArrow_Offscreen2;
 	CGameObject*		m_pArrow_Offscreen_Rect;
 	CGameObject*		m_pArrow_Icon;
-
+	CGameObject*		m_pArrow_Marker_Rocket;
 	UI::ICON m_eIcon;
 
 	float m_fDis;

@@ -73,6 +73,16 @@ void CBeam::Frame_Change()
 		m_tFrame.fStartFrame = 0.f;
 	}
 }
+
+void CBeam::Late_Update_GameObject()
+{
+	//if (m_tInfo.vPos.x > Map_Width || m_tInfo.vPos.x <0
+	//	|| m_tInfo.vPos.y <0)
+	//	m_bDead = true;
+	//if (m_tInfo.vPos.y > Map_Height + 70)
+	//	m_bDeadEffect = true;
+	State_Change();
+}
 void CBeam::State_Change()
 {
 	m_fCenterX = 0.f;
@@ -119,18 +129,24 @@ void CBeam::Move()
 
 void CBeam::DeadEffect()
 {
-	for (auto& iter : m_vecCollider)
+	if (!m_vecCollider.empty())
 	{
-		iter->Set_Dead(true);
+		//for (auto& iter : m_vecCollider)
+		//{
+		//	iter->Set_Dead(true);
+		//}
+		//m_vecCollider.clear();
+		//m_vecCollider.shrink_to_fit();
 	}
-	for (auto& iter : m_vecDeadEffect)
+	if (m_bBoss)
 	{
-		iter->Set_Dead(true);
+		for (auto& iter : m_vecDeadEffect)
+		{
+			iter->Set_Dead(true);
+		}
+		m_vecDeadEffect.clear();
+		m_vecDeadEffect.shrink_to_fit();
 	}
-	m_vecCollider.clear();
-	m_vecCollider.shrink_to_fit();
-	m_vecDeadEffect.clear();
-	m_vecDeadEffect.shrink_to_fit();
 	m_bDead = true;
 }
 
@@ -141,16 +157,20 @@ void CBeam::Boss_State()
 		if (m_tInfo.vSize.y < 1.5f)
 		{
 			Frame_Change();
-			m_tInfo.vSize += _vec3{ 0.f,0.01f,0.f };
-			if (m_tInfo.vSize.y > 0.8f)
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			if (fTime != 0)
 			{
-				CGameObject_Manager::Get_Instance()->Set_AllTrueMode(true);
-				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-				m_fColSize += fTime*50.f;
-				for (auto&iter : m_vecCollider)
+				m_tInfo.vSize += _vec3{ 0.f,0.01f,0.f };
+				if (m_tInfo.vSize.y > 0.8f)
 				{
-					if(static_cast<CColSphere*>(iter)->Get_ColSphereSize() < 45.f)
-						static_cast<CColSphere*>(iter)->Set_CollisionSize(m_fColSize);
+					CGameObject_Manager::Get_Instance()->Set_AllTrueMode(true);
+					float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+					m_fColSize += fTime*50.f;
+					for (auto&iter : m_vecCollider)
+					{
+						if (static_cast<CColSphere*>(iter)->Get_ColSphereSize() < 45.f)
+							static_cast<CColSphere*>(iter)->Set_CollisionSize(m_fColSize);
+					}
 				}
 			}
 		}
@@ -192,32 +212,7 @@ void CBeam::Boss_State()
 void CBeam::InitState()
 {
 	m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
-	m_vecCollider.reserve(64);
-
- 	switch (m_eSubWeaponState)
-	{
-	case BULLET::CHARGE_1:
-		m_tFrame.fStartFrame = 0;
-		m_tCombatInfo.iAtk = 5;
-		for (int i = 0; i < 20; i++)
-			m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i+1)*40.f, 10.f, COLLIDER::PLAYER_BULLET_BEAM));
-		m_tInfo.vSize = { 1.f,1.f,0.f };
-		break;
-	case BULLET::CHARGE_2:
-		m_tFrame.fStartFrame = 1;
-		m_tCombatInfo.iAtk = 6;
-		for (int i = 0; i < 20; i++)
-			m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 15.f, COLLIDER::PLAYER_BULLET_BEAM));
-		m_tInfo.vSize = { 1.f,1.3f,0.f };
-		break;
-	case BULLET::CHARGE_3:
-		m_tFrame.fStartFrame = 2;
-		m_tCombatInfo.iAtk = 7;
-		for (int i = 0; i < 20; i++)
-			m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 20.f, COLLIDER::PLAYER_BULLET_BEAM));
-		m_tInfo.vSize = { 1.f,1.8f,0.f };
-		break;
-	}
+	m_vecCollider.reserve(80);
 
 	if (m_bBoss)
 	{
@@ -226,11 +221,11 @@ void CBeam::InitState()
 		m_tFrame.fFrameSpeed = 10.f;
 		m_tInfo.vSize = { 4.f,0.2f,0.f };
 		for (int i = 0; i < 64; i++)
-			m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 0.f, COLLIDER::ENEMY_BULLET_BEAM));
+			m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*60.f, 0.f, COLLIDER::ENEMY_BULLET_BEAM));
 		m_fRemoveSpeed= 3.f;
 		m_fRemoveTIme=  0.f;
 		m_bRemove = false;
-
+		CScroll_Manager::Shake(20.f, 1.f);
 		for (int i = 0; i < 5; i++)
 		{
 			CGameObject* pObject = CEffect::Create(EFFECT::BOSS_LASER_END);
@@ -240,5 +235,36 @@ void CBeam::InitState()
 		{
 			CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), iter);
 		}
+	}
+	else
+	{
+		switch (m_eSubWeaponState)
+		{
+		case BULLET::CHARGE_1:
+			m_tFrame.fStartFrame = 0;
+			m_tCombatInfo.iAtk = 5;
+			for (int i = 0; i < 20; i++)
+				m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 10.f, COLLIDER::PLAYER_BULLET_BEAM));
+			m_tInfo.vSize = { 1.f,1.f,0.f };
+			CScroll_Manager::Shake( 8.f, 0.5f);
+			break;
+		case BULLET::CHARGE_2:
+			m_tFrame.fStartFrame = 1;
+			m_tCombatInfo.iAtk = 6;
+			for (int i = 0; i < 20; i++)
+				m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 15.f, COLLIDER::PLAYER_BULLET_BEAM));
+			m_tInfo.vSize = { 1.f,1.3f,0.f };
+			CScroll_Manager::Shake(11.f, 0.5f);
+			break;
+		case BULLET::CHARGE_3:
+			m_tFrame.fStartFrame = 2;
+			m_tCombatInfo.iAtk = 7;
+			for (int i = 0; i < 20; i++)
+				m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 20.f, COLLIDER::PLAYER_BULLET_BEAM));
+			m_tInfo.vSize = { 1.f,1.8f,0.f };
+			CScroll_Manager::Shake(16.f, 0.5f);
+			break;
+		}
+
 	}
 }

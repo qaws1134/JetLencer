@@ -21,5 +21,8 @@ public :
 
 	void Frame_Change();
 	float m_fTime;
+
+	// CBullet을(를) 통해 상속됨
+	virtual void Late_Update_GameObject() override;
 };
 #endif // !__BOTTLE_H__

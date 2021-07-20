@@ -107,3 +107,7 @@ void CGundrone::Frame_Change()
 		m_tFrame.fStartFrame = 0.f;
 	}
 }
+
+void CGundrone::Late_Update_GameObject()
+{
+}

@@ -56,12 +56,15 @@ HRESULT CArrow_Offscreen::Ready_GameObject()
 	m_pArrow_Offscreen_Rect = CGui::Create(UI::ARROW_OFFSCREEN_RECT);
 	m_pArrow_Icon			= CGui::Create(UI::ARROW_OFFSCREEN_ICON);
 
+	m_pArrow_Marker_Rocket = CGui::Create(UI::MARKER_ROCKET);
+
+
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), this);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pArrow_Offscreen1);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pArrow_Offscreen2);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pArrow_Offscreen_Rect);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pArrow_Icon);
-
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pArrow_Marker_Rocket);
 
 	m_bRender = false;
 	static_cast<CGui*>(m_pArrow_Icon)->Select_Frame(float((int)m_eIcon));

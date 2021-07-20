@@ -35,7 +35,8 @@ HRESULT CSerpentBody::Ready_GameObject()
 	m_fAnimationStart= 0.f;
 	m_fAnimationMax = 6.f;
 	m_fAnimationSpeed = 5.f;
-
+	m_fSpawnSpeed = 0.1f;
+	m_fSpawnTime = 0.f;
 	for (int i = 0; i < 6; i++)
 	{
 		const ANIMATION* pAni = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EnemySerpent_Body_Gun"+ to_wstring(i+1));
@@ -109,6 +110,17 @@ void CSerpentBody::State_Change()
 	}
 }
 
+void CSerpentBody::DeadEffect()
+{
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+	m_fSpawnTime += fTime;
+	if (m_fSpawnTime > m_fSpawnSpeed)
+	{
+		m_fSpawnTime = 0.f;
+		RandomEffect(EFFECT::FIRE_BOSS, 3,20);
+	}
+}
+
 void CSerpentBody::Select_Armor()
 {
 	if (10 < m_vecCollider.front()->Get_CombatInfo().iHp)
@@ -127,6 +139,7 @@ void CSerpentBody::Select_Armor()
 	else
 	{
 		Animation_Change(m_AniCrash);
+		m_bDeadEffect = true;
 		m_bCrash = true;
 	}
 

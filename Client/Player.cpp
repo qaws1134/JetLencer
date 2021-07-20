@@ -44,7 +44,6 @@ CPlayer::CPlayer()
 	, m_fSpectrumTime(0.f)
 	, m_bSpectrum(false)
 	, m_bSuperEvade(false)
-
 {
 	
 }
@@ -132,9 +131,9 @@ HRESULT CPlayer::Ready_GameObject()
 	m_fSpectrumTime = 1.f;
 
 	//무기상태
-	wstrSubWeapon = L"Rocket";		// Rocket,bottle , HommingRocket,
+	wstrSubWeapon = L"Rocket_alt";		// Rocket,bottle , HommingRocket,
 	wstrChargeWeapon = L"Beam";		// Beam, GunDrone, MultiHomming,boom, 
-
+	//Rocket_alt
 
 	//빔 차지 이펙트
 	if (wstrChargeWeapon == L"Beam")
@@ -143,9 +142,6 @@ HRESULT CPlayer::Ready_GameObject()
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pChargeBeam);
 	}
 
-	//버너 생성
-
-	//ptFire = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
 	m_pBurner = CBurner::Create();
 	m_eBurnerState = BURNER::IDLE;	//START로 바꿔주자
 	m_iMax_ptFireNum = 10;
@@ -197,35 +193,19 @@ int CPlayer::Update_GameObject()
 		return OBJ_DEAD;
 	}
 
-	//TCHAR szPos1[32] = {};
-
-	//GetPrivateProfileString(L"Section", L"PosX", nullptr, szPos1, 32, L"../Test.ini");
-	//float PosX = _ttof(szPos1);
-
-	//TCHAR szPos2[32] = {};
-	//GetPrivateProfileString(L"Section", L"PosY", nullptr, szPos2, 32, L"../Test.ini");
-	//float PosY = _ttof(szPos2);
-
-	//TCHAR szPos3[32] = {};
-
-	//GetPrivateProfileString(L"Section", L"PosX1 ", nullptr, szPos3, 32, L"../Test.ini");
-	//float PosX2 = _ttof(szPos3);
-
-	//TCHAR szPos4[32] = {};
-	//GetPrivateProfileString(L"Section", L"PosY1 ", nullptr, szPos4, 32, L"../Test.ini");
-	//float PosY2 = _ttof(szPos4);
 
 	m_pTarget = CGameObject_Manager::Get_Instance()->Get_Mouse();
 
 	if (!m_pTexInfo)
 		return OBJ_NOEVENT;
-
+	
 	PositionRock_Check();
 	TargetAngle_Check();	//마우스와 각도 체크
 	TimeCheck();			//공격속도,부스트 시간 체크
 	Key_State();			//키 입력을통한 상태값 변경
 
 	State_Change();			//ROLL 상태 체크
+	static_cast<CHp*>(m_pGuiHp)->End_Super(SuperTime());
 	Roll();					//상태 체크 후 ROLL 수행
 	Keybord_OffSet();		//키보드를 통한 스크롤값 조정
 
@@ -263,14 +243,16 @@ void CPlayer::State_Change()
 			m_bSpectrum = true;
 			break;
 		case PLAYER::SUPER_EVEDE:
+			CScroll_Manager::Shake(5.f, 0.5f);
 			static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Green(true);
 			m_fSuperSpeed = 1.f;
 			m_fSuperTime = 0.f;
 			m_bSuperEvade = false;
 			break;
 		case PLAYER::HIT:
-			m_fSuperTime = 0.f;	//무적w
-			m_fSuperSpeed = 0.8f;
+			CScroll_Manager::Shake(5.f, 0.5f);
+			m_fSuperTime = 0.f;	
+			m_fSuperSpeed = 1.5f;
 			m_tCombatInfo.iHp -= 1;
 			static_cast<CHp*>(m_pGuiHp)->Set_State(m_eState);
 			static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
@@ -342,7 +324,6 @@ void CPlayer::Roll()
 	{
 		m_eState = PLAYER::IDLE;
 		JetAngleCheck();
-		m_fSuperTime = 2.f;
 	}
 	else
 	{
@@ -441,9 +422,13 @@ void CPlayer::Key_State()
 			Accel(m_tInfo.vDir, m_fAccel + m_fBoostAccel, m_fMaxSpeed, false);
 			m_eAfterBurnState = PLAYER::AFTER_BURNUR;
 			if (m_bMega)
+			{
 				m_eBurnerState = BURNER::MEGA;
+			}
 			else
+			{
 				m_eBurnerState = BURNER::BURST;
+			}
 
 			if (!m_bAccel)
 			{
@@ -499,8 +484,9 @@ void CPlayer::Key_State()
 	m_pBurner->Set_Angle(m_fAngle);
 
 	if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_LBUTTON) && AttackTime())
-		CSpawn_Manager::Spawn(L"Minigun", m_tInfo.vPos- m_vVelocity*fTime, m_fAngle,m_vVelocity);
-
+	{
+		CSpawn_Manager::Spawn(L"Minigun", m_tInfo.vPos - m_vVelocity*fTime, m_fAngle, m_vVelocity);
+	}
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_E))
 		m_fChargeTime = 0.f;
 	
@@ -526,6 +512,7 @@ void CPlayer::Keybord_OffSet()
 	{
 		CScroll_Manager::Set_Scroll(vOffSet - (m_tInfo.vPos + vScroll));
 	}
+	
 }
 
 
@@ -654,7 +641,6 @@ void CPlayer::SubWeapon_Select()
 			static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(false);
 			static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.f);
 		}
-
 		m_eWeaponState = PLAYER::SPECIAL_RELOAD_START;
 		
 		break;
@@ -668,8 +654,6 @@ void CPlayer::SubWeapon_Charge()
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	if (ChargeShotTime())
 	{
-		//요깅
-		//차지 이펙트 넣어주자
 		if (m_fChargeTime > SubWeaponDelay)
 		{
 			if (wstrChargeWeapon == L"Beam")

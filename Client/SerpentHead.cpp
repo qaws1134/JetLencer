@@ -2,7 +2,8 @@
 #include "SerpentHead.h"
 #include "Spawn_Manager.h"
 #include "Collider.h"
-
+#include "Arrow_Offscreen.h"
+#include "GameObject_Manager.h"
 CSerpentHead::CSerpentHead()
 {
 }
@@ -28,6 +29,7 @@ CGameObject* CSerpentHead::Create(const OBJECTINFO * _tObjectInfo)
 HRESULT CSerpentHead::Ready_GameObject()
 {
 	InitJet();
+	m_pArrow_Offscreen = CArrow_Offscreen::Create(UI::BOSS);
 	return S_OK;
 }
 
@@ -36,6 +38,8 @@ void CSerpentHead::Ai_State()
 
 	Select_Armor();
 	Move();
+	Ui_DistanseState(CGameObject_Manager::Get_Instance()->Get_Player());
+	Ui_DirState(CGameObject_Manager::Get_Instance()->Get_Player());
 
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	if (m_bAttack)
@@ -48,18 +52,16 @@ void CSerpentHead::Ai_State()
 }
 void CSerpentHead::State_Change()
 {
-	if (!m_bStart)
-	{
 		switch (m_eSerpentPattern)
 		{
 		case SERPENT::RAGER:
 			m_bAttack = true;
-			m_bStart = true;
+			m_eSerpentPattern = SERPENT::END;
 			break;
 		case SERPENT ::END:
 			break;
 		}
-	}
+	
 }
 
 void CSerpentHead::Select_Armor()

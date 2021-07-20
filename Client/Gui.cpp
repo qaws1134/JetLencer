@@ -5,7 +5,15 @@
 #include "Player.h"
 #include "Scroll_Manager.h"
 
-CGui::CGui():m_bLoop(false) , m_bAction(false), m_bStart(false), m_fTimer(0.f), m_fTime(0.f), m_bRed(false), m_bGreen(false)
+CGui::CGui()
+	:m_bLoop(false) 
+	, m_bAction(false)
+	, m_bStart(false)
+	, m_fTimer(0.f)
+	, m_fTime(0.f)
+	, m_bRed(false)
+	, m_bGreen(false)
+	, m_fMaxSize(0.f)
 {
 }
 
@@ -294,6 +302,89 @@ void CGui::State_Change()
 			}
 		}
 		break;
+	case UI::BOSS_HP:
+		m_tFrame.fStartFrame = 0.f;
+		m_fCenterX = 0.f;
+		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height>>1);
+		m_tInfo.vSize.x = m_fTargetSize;
+		break;
+	case UI::BOSS_HP_RED:
+		m_tFrame.fStartFrame = 1.f;
+		m_fCenterX = 0.f;
+		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height>>1);
+		if (m_tInfo.vSize.x > m_fTargetSize)
+		{
+			m_tInfo.vSize.x -= 0.01f;
+		}
+	
+		break;
+	case UI::BOSS_HP_PLATE:
+		m_tFrame.fStartFrame = 2.f;
+		m_fCenterX = 0.f;
+		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height>>1);
+		break;
+
+	case UI::MARKER_ROCKET:
+		break;
+	case UI::MARKER_ROCKET_OVERLAY:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+		Frame_Change();
+		break;
+	case UI::WORNWAY_START:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+		Frame_Change();
+		break;
+	case UI::WORNWAY_IDLE:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+		Frame_Change();
+		break;
+	case UI::WORNWAY_END:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+		Frame_Change();
+		break;
+	case UI::DANGER_START:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+			Frame_Change();
+		break;
+	case UI::DANGER_IDLE:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+			Frame_Change();
+		break;
+	case UI::DANGER_END:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+		Frame_Change();
+		break;
+	case UI::DANGER_CRIT:
+		if (m_bAction)
+		{
+			m_tFrame.fFrameSpeed = 3.5f;
+		}
+		Frame_Change();
+		break;
+
+
+
 	default:
 		break;
 	}
@@ -448,7 +539,75 @@ void CGui::InitGui()
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDamage_grid");
 		m_bRender = false;
 		break;
-	default:
+	case UI::BOSS_HP:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiBosshp_idle");
+		m_bRender = true;
+		m_bCenter = true;
+		m_fMaxSize = 1.5f;
+		m_fTargetSize = m_fMaxSize;
+		m_tInfo.vSize = { m_fMaxSize,1.f,0.f };
+		m_tInfo.vPos = {float(WINCX>>2)+10.f,float(WINCY>>3),0.f};
+		break;
+	case UI::BOSS_HP_PLATE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiBosshp_idle");
+		m_bRender = true;
+		m_bCenter = true;
+		m_fMaxSize = 1.5f;
+		m_tInfo.vSize = { m_fMaxSize,1.f,0.f };
+		m_tInfo.vPos = { float(WINCX >> 2),float(WINCY >> 3),0.f };
+		break;
+	case UI::BOSS_HP_RED:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiBosshp_idle");
+		m_bRender = true;
+		m_bCenter = true;
+		m_fMaxSize = 1.5f;
+		m_fTargetSize = m_fMaxSize;
+		m_tInfo.vSize = { m_fMaxSize,1.f,0.f };
+		m_tInfo.vPos = { float(WINCX >> 2)+9.f,float(WINCY >> 3),0.f };
+		break;
+	case UI::MOUSE_HIT:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"Mouse_Hit");
+		m_tInfo.vSize = { 1.5f,1.5f,0.f };
+		m_bRender = false;
+		break;
+	case UI::MARKER_ROCKET:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiMarker_rocket");
+		m_bRender = false;
+		break;
+	case UI::MARKER_ROCKET_OVERLAY:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiMarker_rocket_overlay");
+		m_bLoop = true;
+		m_bRender = false;
+		break;
+	case UI::WORNWAY_START:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiWornway_start");
+		m_bRender = false;
+		break;
+	case UI::WORNWAY_IDLE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_idle");
+		m_bLoop = true;
+		m_bRender = false;
+		break;
+	case UI::WORNWAY_END:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_end");
+		m_bRender = false;
+		break;
+	case UI::DANGER_START:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_start");
+		m_bRender = false;
+		break;
+	case UI::DANGER_IDLE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_idle");
+		m_bLoop = true;
+		m_bRender = false;
+		break;
+	case UI::DANGER_END:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_end");
+		m_bRender = false;
+		break;
+	case UI::DANGER_CRIT:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_crit");
+		m_bRender = false;
 		break;
 	}
 

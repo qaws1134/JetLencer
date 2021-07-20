@@ -40,8 +40,6 @@ public :
 	void				Set_State(PLAYER::STATE _eState) { m_eState = _eState; }
 	void				Spectrum();
 	void				Set_SuperEvade(bool _Superevade) { m_bSuperEvade = _Superevade; }
-	//void				Shake();	
-
 private:
 	float				m_fRocketTime[4];
 	float				m_fRocketSpeed;

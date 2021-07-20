@@ -60,8 +60,12 @@ void CBackGround::Late_Update_GameObject()
 }
 void CBackGround::WriteMatrix()
 {
-	//D3DXVECTOR3 vScroll = CScroll_Manager::Get_Scroll();
 	_vec3 vOffsetScroll = CScroll_Manager::Get_Scroll() - m_tInfo.vDir;
+
+	if (CScroll_Manager::Get_Shake())
+	{
+		vOffsetScroll -= CScroll_Manager::Get_ShakeDir()*1.2f;
+	}
 	D3DXMATRIX matScale, matTrans, matRotZ, matWorld;
 	D3DXMatrixIdentity(&matScale);
 	D3DXMatrixIdentity(&matTrans);

@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "GameObject.h"
 #include "Collider.h"
-
+#include "Spawn_Manager.h"
+#include "Scroll_Manager.h"
 CGameObject::CGameObject()
 	:m_pObjectInfo(nullptr)
 	, m_pTarget(nullptr)
@@ -30,13 +31,18 @@ CGameObject::CGameObject()
 
 CGameObject::~CGameObject()
 {
-	for (auto& iter : m_vecCollider)
-		iter->Set_Dead(true);
+	if (!m_vecCollider.empty())
+	{
+		for (auto& iter : m_vecCollider)
+			iter->Set_Dead(true);
+	}
 }
 
 
 void CGameObject::WriteMatrix()
 {
+	if (!m_pTexInfo)
+		return;
 	if (m_bTrueMod|| m_bAllTrueMod)
 	{
 		m_tColor.iRed = 0;
@@ -51,6 +57,10 @@ void CGameObject::WriteMatrix()
 	}
 
 	D3DXVECTOR3 vScroll = CScroll_Manager::Get_Scroll();
+	if (CScroll_Manager::Get_Shake())
+	{
+		vScroll += CScroll_Manager::Get_ShakeDir();
+	}
 
 	D3DXMATRIX matScale, matTrans, matRotZ, matWorld;
 	D3DXMatrixIdentity(&matScale);
@@ -64,7 +74,7 @@ void CGameObject::WriteMatrix()
 	
 	if (!m_bCenter)
 	{
- 		float fCenterX = float(m_pTexInfo->tImageInfo.Width >> 1);
+		float fCenterX = float(m_pTexInfo->tImageInfo.Width >> 1);
 		float fCenterY = float(m_pTexInfo->tImageInfo.Height >> 1);
 		m_fCenterX = fCenterX;
 		m_fCenterY = fCenterY;
@@ -94,7 +104,20 @@ void CGameObject::Set_CenterPos(_vec3 vPos)
 
 }
 
-
+void CGameObject::RandomEffect(EFFECT::TYPE _eEffType, int iNum,int iDis)
+{
+	for (int i = 0; i < rand() % iNum+1; i++)
+	{
+		float fRandomX = float(rand() % iDis);
+		float fRandomY = float(rand() % iDis);
+		if (rand() % 2 == 0)
+			fRandomX *= -1.f;
+		if (rand() % 2 == 0)
+			fRandomY *= -1.f;
+		_vec3 vRanPos = { m_tInfo.vPos.x + fRandomX,m_tInfo.vPos.y + fRandomY,0.f };
+		CSpawn_Manager::Spawn(_eEffType, vRanPos, false);
+	}
+}
 
 HRESULT CGameObject::Set_Texture(const wstring & wstrObjectKey)
 {

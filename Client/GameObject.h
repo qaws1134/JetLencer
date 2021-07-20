@@ -53,18 +53,20 @@ public:
 	CGameObject*		Get_Target() { return m_pTarget; }
 	MATCOLOR			Get_Color() { return m_tColor; }
 	const TEXINFO*		Get_Texture() const { return m_pTexInfo; }
+	bool				Get_Dead() { return m_bDead; }
+
+
 
 	bool				Get_TrueMod(){ return m_bTrueMod; }
+	void				RandomEffect(EFFECT::TYPE _eEffType, int iNum,int iDis);
 
 
 public :
 	virtual void		State_Change()PURE;
 	virtual void		WriteMatrix();
-
 	void				TargetAngle_Check();
 
 protected:
-
 	const TEXINFO*		m_pTexInfo = nullptr;
 	const OBJECTINFO*	m_pObjectInfo;
 	const PLACEMENT*	m_pPlacement;

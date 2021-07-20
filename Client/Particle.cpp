@@ -3,7 +3,7 @@
 #include "Prefab_Manager.h"
 #include "Spawn_Manager.h"
 #include "ColSphere.h"
-CParticle::CParticle() : m_fTime(0.f),m_fSpawnSpeed(0.f),m_fSpawnTime(0.f)
+CParticle::CParticle() : m_fTime(0.f),m_fSpawnSpeed(0.f),m_fSpawnTime(0.f), m_fReduceSize(0.f), m_fMinSize(0.f)
 {
 }
 
@@ -30,6 +30,7 @@ CGameObject * CParticle::Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos, fl
 	return pInstance;
 }
 
+
 HRESULT CParticle::Ready_GameObject()
 {
 	m_tInfo.vSize = { 1.1f,1.1f,0.f };
@@ -42,11 +43,8 @@ HRESULT CParticle::Ready_GameObject()
 
 	m_tFrame.fStartFrame = 0;
 	m_eRenderId = RENDERID::EFFECT;
-	m_fAccel = 1200.f;
-	m_fRegistPower = 2.f;
-	m_tFrame.fFrameSpeed = 40.f;
-	m_fSize = 0.5f;
-	m_fSpawnSpeed = 0.01f;
+	InitParticle();
+
 
 	m_vecCollider.reserve(1);
 	m_vecCollider.emplace_back(CColSphere::Create(this, 10.f, COLLIDER::EFFECT));
@@ -72,11 +70,37 @@ void CParticle::Move()
 		//파티클 꼬리 선택 후 이펙트에서 스폰 
 
 		CSpawn_Manager::Spawn(m_eEffectType, m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)) - (vNormalVel*0.2f), false, m_fSize);
-		m_fSize -= 0.05f;
-		if (m_fSize < 0.1f)
+		m_fSize -= m_fReduceSize;
+		if (m_fSize < m_fMinSize)
 			m_bDead = true;
 		m_fSpawnTime = 0.f;
 
+	}
+}
+
+void CParticle::InitParticle()
+{
+
+	switch (m_eEffectType)
+	{
+	case EFFECT::ROCKET_BOOM_PTFIRE:
+		m_fAccel = 1200.f;
+		m_fRegistPower = 2.f;
+		m_tFrame.fFrameSpeed = 40.f;
+		m_fSize = 0.5f;
+		m_fSpawnSpeed = 0.01f;
+		m_fReduceSize = 0.05f;
+		m_fMinSize = 0.1f;
+		break;
+	//case EFFECT::FIRE_BOSS:
+	//	m_fAccel = 500.f;
+	//	m_fRegistPower = 2000.f;
+	//	m_tFrame.fFrameSpeed = 40.f;
+	//	m_fReduceSize = 0.05;
+	//	m_fSize = 0.2f;
+	//	m_fSpawnSpeed = 0.03f;
+	//	m_fMinSize = 0.01f;
+	//	break;
 	}
 }
 

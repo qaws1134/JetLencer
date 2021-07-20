@@ -24,7 +24,7 @@ public:
 	void	Set_Timer(float _fTimer) { m_fTimer = _fTimer; }
 	void	Set_Red(bool _bRed) { m_bRed = _bRed; }
 	void	Set_Green(bool _bGreen) { m_bGreen = _bGreen; }
-
+	void	Set_HpSize(float _fHpRatio) { m_fTargetSize = m_fMaxSize *_fHpRatio; }
 public:
 	void	InitGui();
 	void	Frame_Change();
@@ -32,6 +32,10 @@ private:
 	float m_fTimer;
 	float m_fTime;
 	float m_fReloadTime;
+	float m_fMaxSize;
+	float m_fTargetSize;
+
+
 	UI::TYPE m_eUiType;
 	bool m_bLoop;
 	bool m_bAction;

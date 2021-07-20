@@ -72,7 +72,6 @@ void CJet_Normal::Ai_State()
 	TargetAngle_Check();
 	Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
 	m_bAccel = true;
-	SpawnPtFire();
 
 	if (m_eJetState == ENEMY::ATTACK)
 	{

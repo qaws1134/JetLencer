@@ -39,10 +39,10 @@ HRESULT CStage::Ready_Scene()
 	pObject = CMouse::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::MOUSE, pObject);
 
-	m_pOject1 = CViewText::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
-	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject1);
-	m_pOject2 = CViewText::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
-	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject2);
+	//m_pOject1 = CViewText::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
+	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject1);
+	//m_pOject2 = CViewText::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
+	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject2);
 
 	//m_pUI3 = CArrow_Offscreen::Create(UI::JET);
 	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pUI3);
@@ -70,8 +70,8 @@ void CStage::Update_Scene()
 	CSpawn_Manager::Get_Instance()->Update_MultiSpawn();
 	CGameObject_Manager::Get_Instance()->Update_GameObject_Manager(); 
 	CScroll_Manager::Scroll_Lock();
-	static_cast<CViewText*>(m_pOject1)->Set_Point(CScroll_Manager::Get_Scroll().x);
-	static_cast<CViewText*>(m_pOject2)->Set_Point(CScroll_Manager::Get_Scroll().y);
+	//static_cast<CViewText*>(m_pOject1)->Set_Point(CScroll_Manager::Get_Scroll().x);
+	//static_cast<CViewText*>(m_pOject2)->Set_Point(CScroll_Manager::Get_Scroll().y);
 
 }
 

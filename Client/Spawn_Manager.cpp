@@ -135,6 +135,13 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 		pObject = nullptr;
 	}
+	if (_wstrObjName == L"Rocket_alt")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CRocket::Create(pObjInfo, vPos, fAngle, vSpeed);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
+		pObject = nullptr;
+	}
 	if (_wstrObjName == L"Bottle")
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);

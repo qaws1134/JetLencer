@@ -14,14 +14,15 @@ public :
 	virtual HRESULT Ready_GameObject() override;
 	virtual void Ai_State() override;
 	virtual void State_Change() override;
+	virtual void Select_Armor() override;
 
-
+	virtual void DeadEffect();
 
 	vector<const ANIMATION*> m_vecBody_Gun;
 
 	bool m_bAniEnd;
 
+
 	// CSerpentObject을(를) 통해 상속됨
-	virtual void Select_Armor() override;
 };
 

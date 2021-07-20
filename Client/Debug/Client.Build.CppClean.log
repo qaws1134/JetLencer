@@ -5,7 +5,6 @@ c:\users\qaws1\desktop\jetlancer project\client\debug\stdafx.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\jet_sniper.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\key_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\mainapp.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\mouse.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\multi_texture.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\normal.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\particle.obj
@@ -14,7 +13,6 @@ c:\users\qaws1\desktop\jetlancer project\client\debug\prefab_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\rocket.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\scene.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\scene_manager.obj
-c:\users\qaws1\desktop\jetlancer project\client\debug\scroll_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\single_texture.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\spawn_manager.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\stage.obj
@@ -57,11 +55,12 @@ c:\users\qaws1\desktop\jetlancer project\client\debug\dmggrid.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\effect.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\flip.obj
 c:\users\qaws1\desktop\jetlancer project\client\debug\frame_manager.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\mouse.obj
+c:\users\qaws1\desktop\jetlancer project\client\debug\scroll_manager.obj
 c:\users\qaws1\desktop\jetlancer project\debug\client.ilk
 c:\users\qaws1\desktop\jetlancer project\debug\client.exe
 c:\users\qaws1\desktop\jetlancer project\debug\client.pdb
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.res
-c:\users\qaws1\desktop\jetlancer project\client\debug\serpentbody.obj.enc
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.tlog\cl.command.1.tlog
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.tlog\cl.read.1.tlog
 c:\users\qaws1\desktop\jetlancer project\client\debug\client.tlog\cl.write.1.tlog

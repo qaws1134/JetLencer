@@ -124,22 +124,22 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\dwrite.h(4993):
   Texture.cpp
   Terrain.cpp
   Single_Texture.cpp
+  Multi_Texture.cpp
+  Miniview.cpp
+  MFCToolView.cpp
+  MFCToolDoc.cpp
+  MFCTool.cpp
+  MapTool.cpp
+  MainFrm.cpp
+  Graphic_Device.cpp
+  Form.cpp
+  FileInfo.cpp
   ObjectTool.cpp
 c:\users\qaws1\desktop\jetlancer project\mfctool\objecttool.cpp(314): warning C4800: 'int': 'true' 또는 'false'로 bool 값을 강제하고 있습니다(성능 경고).
 c:\users\qaws1\desktop\jetlancer project\mfctool\objecttool.cpp(827): warning C4244: '인수': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\qaws1\desktop\jetlancer project\mfctool\objecttool.cpp(855): warning C4244: '인수': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\qaws1\desktop\jetlancer project\mfctool\objecttool.cpp(883): warning C4244: '인수': 'float'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\qaws1\desktop\jetlancer project\mfctool\objecttool.cpp(913): warning C4244: '인수': 'UINT'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Multi_Texture.cpp
-  Miniview.cpp
-  MapTool.cpp
-  MainFrm.cpp
-  MFCToolView.cpp
-  MFCToolDoc.cpp
-  MFCTool.cpp
-  Graphic_Device.cpp
-  Form.cpp
-  FileInfo.cpp
   AnimationTool.cpp
   코드를 생성하고 있습니다...
   MFCTool.vcxproj -> C:\Users\qaws1\Desktop\JetLancer Project\Debug\MFCTool.exe

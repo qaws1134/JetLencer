@@ -7,20 +7,26 @@
 #include "SerpentTail.h"
 #include "ColSphere.h"
 #include "Effect.h"
+#include "Gui.h"
 CSerpent::CSerpent()
 	: m_bStart(false)
 	, m_iMaxHp(0)
 	, m_iMaxBody(0)
 	, m_eSelected_Pattern(SERPENT::END)
-	,m_pHp(nullptr)
-	,m_pHp_Plate(nullptr)
-	,m_pHp_Red(nullptr)
+	, m_pBoss_Hp(nullptr)
+	,m_pBoss_Hp_Plate(nullptr)
+	,m_pBoss_Hp_Red(nullptr)
 	, m_bPattern_Start(false)
 	, m_fPatternEnd(0.f)
 	,m_fPatternTime(0.f)
 	, m_bGravity(false)
 	, m_iCircleIndex(0)
 	, m_iCircleEndIdx(0)
+	, m_bPage_Start(false)
+	, m_bCircle_Rager(false)
+	,m_fHp_RedTime(0.f)
+	,m_fHp_RedSpeed(0.f)
+	, m_iPreHp(0)
 {
 	m_vecSerpent.reserve(64);
 }
@@ -59,6 +65,9 @@ HRESULT CSerpent::Ready_GameObject()
 	m_vGravity = { 0.2f,1.f,0.f };
 	m_fAngleSpeed = 50.f;
 	m_iMaxBody = 50;
+
+	m_fHp_RedSpeed = 2.f;
+
 	m_tFrame.wstrObjKey = m_pObjectInfo->wstrIdleImage_ObjectKey;
 	m_tFrame.wstrStateKey = m_pObjectInfo->wstrIdleImage_StateKey;
 	m_tFrame.fMaxFrame = 1;
@@ -67,6 +76,19 @@ HRESULT CSerpent::Ready_GameObject()
 	pHead = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(L"Serpent_Head");
 	pBody = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(L"Serpent_Body");
 	pTail = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(L"Serpent_Tail");
+
+	m_pBoss_Hp		 = CGui::Create(UI::BOSS_HP);
+	m_pBoss_Hp_Red	 = CGui::Create(UI::BOSS_HP_RED);
+	m_pBoss_Hp_Plate = CGui::Create(UI::BOSS_HP_PLATE);
+
+
+
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp_Plate);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp_Red);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp);
+
+
+
 	Set_Texture();
 
 	for (int i = 0; i < m_iMaxBody; i++)
@@ -104,30 +126,15 @@ HRESULT CSerpent::Ready_GameObject()
 int CSerpent::Update_GameObject()
 {
 	if (m_bDeadEffect)
-	{
 		DeadEffect();
-	}
 
-	if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM1))
-	{
-		m_eSerpentPagePattern = SERPENT::PAGE2;
-	}
-	if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM2))
-	{
-		m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
-	}
-	if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM3))
-	{
-		m_eTailPattern = SERPENT::TAILGUN;
-	}
 	//if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM4))
 	//{
 	//	m_eTailPattern = SERPENT::TAILSHOTGUN;
 	//}
 
-
-
 	//패턴 선택
+	Hp_Stage();
 	Select_Page();
 	State_Change();
 	Ai_State();
@@ -155,23 +162,21 @@ void CSerpent::State_Change()
 		m_bGravity = false;
 		if (!m_bPattern_Start)
 		{
-			int iRandNum = rand() % 3;
-			if (iRandNum == 0) 
+			switch (m_eSelected_Pattern)
 			{
-
+			case SERPENT::CIRCLE_BULLET:
 				m_RandfX = float(rand() % 300);
 				m_RandfY = float(rand() % 300);
 				if (rand() % 2 == 0)
 					m_RandfX *= -1;
 				if (rand() % 2 == 0)
 					m_RandfY *= -1;
-				if (m_tInfo.vPos.y + m_RandfY < GroundY-50.f)
+				//if (m_tInfo.vPos.y + m_RandfY < GroundY - 50.f)
+				//	m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
 
-
-      			m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
 				m_vEnd_Dir = _vec3{ m_tInfo.vPos.x + m_RandfX,m_tInfo.vPos.y + m_RandfY,0.f };
-				m_fAngleSpeed = 200.f;
-				m_fAccel = 1800.f;
+				m_fAngleSpeed = 270.f;
+				m_fAccel = 5000.f;
 				m_fMaxSpeed = 700.f;
 				m_fAttackSpeed = 0.1f;
 				m_fAttackTime = 0.f;
@@ -179,12 +184,10 @@ void CSerpent::State_Change()
 				m_fPatternEnd = 3.f;
 				m_iCircleIndex = 0;
 				m_bPattern_Start = true;
+				break;
+			case SERPENT::RAGER:
+				//m_eSelected_Pattern = SERPENT::RAGER;
 
-			}
-			else  if (iRandNum == 1)
-			{
-				m_eSelected_Pattern = SERPENT::RAGER;
-		
 				m_fAngleSpeed = 30.f;
 				m_fAccel = 3000.f;
 				m_fMaxSpeed = 200.f;
@@ -200,62 +203,86 @@ void CSerpent::State_Change()
 						static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(true);
 						static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.2f);
 					}
-	
+
 					iter->Set_TrueMod(true);
 				}
-			}
-			else {
-				m_eSelected_Pattern = SERPENT::END;
+				break;
+			case SERPENT::END:
+				//m_eSelected_Pattern = SERPENT::END;
 				m_fPatternTime = 0.f;
 				m_fPatternEnd = 4.f;
 				m_fAngleSpeed = 50.f;
 				m_fAccel = 3000.f;
 				m_fMaxSpeed = 350.f;
 				m_bPattern_Start = true;
+				
+				break;
+
 			}
-			
+
+			if (m_tCombatInfo.iHp < (int)(float(m_iMaxHp) *(40.f / 100.f)))
+				m_eTailPattern = SERPENT::TAILSHOTGUN;
+			else
+				m_eTailPattern = SERPENT::TAILGUN;
+			break;
 		}
-		
-		if (m_tCombatInfo.iHp < (int)(float(m_iMaxHp) *(40.f / 100.f)))
-			m_eTailPattern = SERPENT::TAILSHOTGUN;
-		else
-			m_eTailPattern = SERPENT::TAILGUN;
+
+		switch (m_eTailPattern)
+		{
+		case SERPENT::RAGER:
+			static_cast<CSerpentObject*>(m_vecSerpent.back())->Set_Pattern(SERPENT::RAGER);
+			break;
+		case SERPENT::TAILGUN:
+			static_cast<CSerpentObject*>(m_vecSerpent.back())->Set_Pattern(SERPENT::TAILGUN);
+			break;
+		case SERPENT::TAILSHOTGUN:
+			static_cast<CSerpentObject*>(m_vecSerpent.back())->Set_Pattern(SERPENT::TAILSHOTGUN);
+			break;
+		}
 		break;
 	}
-
-
-	switch (m_eTailPattern)
-	{
-	case SERPENT::RAGER:
-		static_cast<CSerpentObject*>(m_vecSerpent.back())->Set_Pattern(SERPENT::RAGER);
-		break;
-	case SERPENT::TAILGUN:
-		static_cast<CSerpentObject*>(m_vecSerpent.back())->Set_Pattern(SERPENT::TAILGUN);
-		break;
-	case SERPENT::TAILSHOTGUN:
-		static_cast<CSerpentObject*>(m_vecSerpent.back())->Set_Pattern(SERPENT::TAILSHOTGUN);
-		break;
-	}
-
 }
 void CSerpent::DeadEffect()
 {
 
 }
-
-//패턴 선택
-void CSerpent::Select_Page()
+void CSerpent::Hp_Stage()
 {
 	int iInitHp = 0;
 	for (auto& iter : m_vecSerpent)
 	{
-		if(!static_cast<CSerpentObject*>(iter)->Get_Crash())
+		if (!static_cast<CSerpentObject*>(iter)->Get_Crash())
 			iInitHp += iter->Get_ColVec(0)->Get_CombatInfo().iHp;
 
 	}
 	m_tCombatInfo.iHp = iInitHp;
+	float fHpRatio = ((float)m_tCombatInfo.iHp / (float)m_iMaxHp);
+	static_cast<CGui*>(m_pBoss_Hp)->Set_HpSize(fHpRatio);
+	if (m_iPreHp != m_tCombatInfo.iHp)
+	{
+		m_fHp_RedTime = 0.f;
+	}
+	m_iPreHp = m_tCombatInfo.iHp;
+
+	if (Hp_RedTime())
+	{
+		static_cast<CGui*>(m_pBoss_Hp_Red)->Set_HpSize(fHpRatio);
+	}
+}
+
+//패턴 선택
+void CSerpent::Select_Page()
+{
+
 	if (m_tCombatInfo.iHp < (int)((float)(m_iMaxHp) * (80.f / 100.f)))
+	{
+		if (!m_bPage_Start)
+		{
+			m_bPage_Start = true;
+			m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
+		}
 		m_eSerpentPagePattern = SERPENT::PAGE2;
+	}
 	else
 		m_eSerpentPagePattern = SERPENT::PAGE1;
 }
@@ -295,6 +322,8 @@ void CSerpent::Ai_State()
 							{
 								m_iCircleIndex += 3;
 								static_cast<CSerpentObject*>(m_vecSerpent[m_iCircleIndex])->Set_Attack_End(false);
+								m_eSelected_Pattern = SERPENT::END;
+								m_bPattern_Start = false;
 
 							}
 						}
@@ -312,11 +341,20 @@ void CSerpent::Ai_State()
 				for (auto& iter : m_vecSerpent)
 					iter->Set_TrueMod(false);
 				m_eSelected_Pattern = SERPENT::END;
+				m_bPattern_Start = false; 
+				static_cast<CSerpentObject*>(m_vecSerpent.front())->Set_Attack_End(false);
 			}
 			break;
 		case SERPENT::END:
-			if(PatternTime())
+			if (PatternTime())
+			{
 				m_bPattern_Start = false;
+				if (!m_bCircle_Rager)
+					m_eSelected_Pattern = SERPENT::RAGER;
+				else
+					m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
+				m_bCircle_Rager = !m_bCircle_Rager;
+			}
 			break;
 	}
 
@@ -383,11 +421,24 @@ void CSerpent::Init_Hp()
 	m_tCombatInfo.iHp = m_iMaxHp;
 }
 
+
 bool CSerpent::PatternTime()
 {
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	m_fPatternTime += fTime;
 	if (m_fPatternTime > m_fPatternEnd)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CSerpent::Hp_RedTime()
+{
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+	m_fHp_RedTime += fTime;
+
+	if(m_fHp_RedTime>m_fHp_RedSpeed)
 	{
 		return true;
 	}

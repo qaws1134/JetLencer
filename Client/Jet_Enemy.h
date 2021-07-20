@@ -20,9 +20,9 @@ public:
 
 
 public:
-	void	Ui_DistanseState();
-	void	Ui_DirState();
-	//void	Distanse_Check(); ui알파값 변경 
+	void	Ui_DistanseState(CGameObject* _pUiTarget);
+	void	Ui_DirState(CGameObject* _pUiTarget);
+
 
 public :
 	void	Set_JetState(ENEMY::STATE _eJetState) { m_eJetState = _eJetState; }

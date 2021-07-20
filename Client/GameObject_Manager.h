@@ -13,9 +13,9 @@ public:
 	void Render_GameObject_Manager(); 
 	void Release_GameObject_Manager(); 
 public :
-	CGameObject* Get_Mouse() { return m_listGameObject[OBJID::MOUSE].front(); }
+	CGameObject* Get_Mouse() { if (m_listGameObject[OBJID::MOUSE].empty())return nullptr; return m_listGameObject[OBJID::MOUSE].front(); }
 	CGameObject* Get_Player() { if (m_listGameObject[OBJID::PLAYER].empty())return nullptr; return m_listGameObject[OBJID::PLAYER].front();  }
-
+	CGameObject* Get_Target(CGameObject* _pObj, OBJID::ID _eID) const;
 	void Set_AllTrueMode(bool _bTrueMod) { m_bTrueMod = _bTrueMod; }
 
 private:

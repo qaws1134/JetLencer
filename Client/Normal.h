@@ -18,5 +18,8 @@ public :
 	virtual void Move() override;
 	virtual void DeadEffect() override;
 	virtual void State_Change() override;
+
+	// CBullet을(를) 통해 상속됨
+	virtual void Late_Update_GameObject() override;
 };
 #endif // !__NORMAL_H__

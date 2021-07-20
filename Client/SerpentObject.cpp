@@ -13,6 +13,8 @@ CSerpentObject::CSerpentObject()
 	, m_bAttack_End(false)
 	, m_fPatternSpeed(0.f)
 	,m_fPatternTime(0.f)
+	, m_fSpawnTime(0.f)
+	, m_fSpawnSpeed(0.f)
 {
 
 
@@ -48,6 +50,7 @@ int CSerpentObject::Update_GameObject()
 
 void CSerpentObject::DeadEffect()
 {
+
 }
 
 void CSerpentObject::InitJet()
@@ -56,7 +59,7 @@ void CSerpentObject::InitJet()
 	m_vVelocity = { 1.f,1.f,0.f };
 
 	m_eRenderId = RENDERID::ENENY;
-	m_fAngleSpeed = 270.f;
+	m_fAngleSpeed = 300.f;
 	m_tFrame.wstrObjKey = m_pObjectInfo->wstrIdleImage_ObjectKey;
 	m_tFrame.wstrStateKey = m_pObjectInfo->wstrIdleImage_StateKey;
 	m_tFrame.fMaxFrame = 8;

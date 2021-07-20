@@ -1,9 +1,9 @@
 #pragma once
 typedef struct tagTEXINFO
 {
-	LPDIRECT3DTEXTURE9 pTexture; // HBITMAP ?? 
+	LPDIRECT3DTEXTURE9 pTexture; 
 
-	D3DXIMAGE_INFO tImageInfo; // 이미지에 대한 정보를 가지고 있을 변수 . 
+	D3DXIMAGE_INFO tImageInfo; 
 }TEXINFO;
 typedef struct tagTile
 {
@@ -15,7 +15,7 @@ typedef struct tagTile
 
 typedef struct tagUnitInfo
 {
-	// 다시한번 강조하지만 저장할 안에 포인터 있으면 어떻게 될지 다시 생각해봐. 
+	
 #ifdef _AFX
 	CString wstrName; 
 #else
@@ -39,9 +39,6 @@ typedef struct tagInfo
 
 typedef struct tagOBJECTINFO
 {
-
-	//enum OBJID { BACKGROUND, PLAYER, MONSTER, PLAYER_BULLET, ENEMY_BULLET,MOUSE, EFFECT, UI, OBJID_END };
-	//enum BULLET_TYPE { NORMAL, GUIDE, SHOTGUN, TYPE_END };
 #ifdef _AFX
 	CString cstrName;
 	CString cstrObjectImage_ObjectKey;

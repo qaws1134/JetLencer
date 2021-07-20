@@ -24,6 +24,7 @@ public:
 	void Frame_Change();
 	void Move();
 
+	void InitParticle();
 
 	EFFECT::TYPE m_eEffectType;
 	float m_fTime;
@@ -32,5 +33,8 @@ public:
 
 	float m_fSpawnTime;
 	float m_fSpawnSpeed;
+
+	float m_fReduceSize;
+	float m_fMinSize;
 };
 

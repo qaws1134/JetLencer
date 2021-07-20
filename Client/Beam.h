@@ -27,5 +27,8 @@ public:
 	float m_fColSize;
 	bool m_bEffect;
 	vector<CGameObject*> m_vecDeadEffect; 
+
+	// CBullet을(를) 통해 상속됨
+	virtual void Late_Update_GameObject() override;
 };
 

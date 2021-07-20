@@ -9,6 +9,8 @@ CEffect::CEffect()
 	, m_eEffectType(EFFECT::END)
 	, m_bLoop(false)
 	, m_fDelTime(0.f)
+	, m_fReduceTime(0.f)
+	, m_fReduceDelay(0.f)
 {
 }
 
@@ -104,14 +106,13 @@ int CEffect::Update_GameObject()
 {
 	if (m_bDead)
 		return OBJ_DEAD;
-
+	Set_Texture();
+	State_Change();
 	return OBJ_NOEVENT;
 }
 
 void CEffect::Late_Update_GameObject()
 {
-	FAILED_CHECK_RETURN(Set_Texture(), );
-	State_Change();
 }
 
 void CEffect::Render_GameObject()
@@ -162,9 +163,9 @@ void CEffect::State_Change()
 		Frame_Change();
 		break;
 	case EFFECT::JET_PTFIRE:
-		if (m_bFrameStart)
-			Frame_Change();
-		else
+		//if (m_bFrameStart)
+		//	Frame_Change();
+		//else
 			Size_Reduce();
 		break;
 	case EFFECT::CHAGE_BEAM:
@@ -207,27 +208,39 @@ void CEffect::State_Change()
 	case EFFECT::BOSS_CHAGE_BEAM:
 		if (m_bFrameStart)
 		{
-			if (m_tInfo.vSize.x > 1.5f)
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			if (fTime != 0)
 			{
-				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-				m_fReduceTime += fTime;
-				if (m_fReduceTime > m_fReduceDelay)
-					m_fReduce = 0.04f;
-				else
-					m_fReduce = 0.f;
-			}
+				if (m_tInfo.vSize.x > 1.5f)
+				{
+					m_fReduceTime += fTime;
+					if (m_fReduceTime > m_fReduceDelay)
+						m_fReduce = 0.04f;
+					else
+						m_fReduce = 0.f;
+				}
 
-			m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
-			if (m_tInfo.vSize.y < 0.f)
-				m_tInfo.vSize = _vec3{ 0.f,0.f,0.f };
+				m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
+				if (m_tInfo.vSize.y < 0.f)
+					m_tInfo.vSize = _vec3{ 0.f,0.f,0.f };
+				Frame_Change();
+			}
 		}
 		else
 		{
-			if (m_tInfo.vSize.x < 0.2f)
-				m_fSize = 0.f;
-			m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			if (fTime != 0)
+			{
+				if (m_tInfo.vSize.x <= 0.f)
+				{
+					m_fSize = 0.f;
+					m_fReduce = -0.01f;
+				}
+				m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+
+			Frame_Change();
+			}
 		}
-		Frame_Change();
 		if ((int)m_tFrame.fStartFrame == 1)
 		{
 			m_tFrame.fStartFrame = 2.f;
@@ -287,6 +300,7 @@ void CEffect::InitEffect()
 	case EFFECT::JET_PTFIRE:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
 		Set_Frame(m_pAnimation);
+
 		m_fSize = float((rand() % 6) + 4) * 0.05f;
 		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
 		m_fReduce = float((rand() % 10) + 6) * 0.001f;
@@ -354,7 +368,7 @@ void CEffect::InitEffect()
 	case EFFECT::OBJECT_IMPACT:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectBullet_impact");
 		Set_Frame(m_pAnimation);
-		m_fSize = float((rand() % 20 + 20)*0.25f);
+		m_fSize = float((rand() % 10 + 10)*0.2f);
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
 		m_tFrame.fFrameSpeed = 30.f;
 		break;
@@ -382,8 +396,9 @@ void CEffect::InitEffect()
 	case EFFECT::FIRE_BOSS:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectFire_boss");
 		Set_Frame(m_pAnimation);
-		m_fSize = 1.f;
-		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_fSize = float((rand() % 6) + 4) * 0.15f;
+		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
+		m_fReduce = float((rand() % 10) + 6) * 0.01f;
 		m_tFrame.fFrameSpeed = 30.f;
 		break;
 	default:
@@ -393,4 +408,5 @@ void CEffect::InitEffect()
 		m_tFrame.fFrameSpeed = 25.f;
 		break;
 	}
+	Set_Texture();
 }

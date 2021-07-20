@@ -78,12 +78,15 @@ void CDmgGrid::State_Change()
 {
 	if (m_bUiGreen)
 	{
+
 		for (auto& iter : m_vecGrid)
-			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
+		{
+			if (iter->Get_Color().iRed > 0)
+				iter->Set_Color(MATCOLOR{ 255,255,255,255 });
+		}
 		for (auto& iter : m_vecGrid)
 		{
 			static_cast<CUi*>(iter)->Set_Render(true);
-			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
 			static_cast<CGui*>(iter)->Set_Green(true);
 
 			iter->Set_Alpha(rand() % 150+20);
@@ -101,8 +104,10 @@ void CDmgGrid::State_Change()
 	else if (m_bUiRed)
 	{
 		for (auto& iter : m_vecGrid)
-			iter->Set_Color(MATCOLOR{ 255,255,255,255 });
-		
+		{
+			if (iter->Get_Color().iGreen > 0)
+				iter->Set_Color(MATCOLOR{ 255,255,255,255 });
+		}
 		//들어왔을때 값 초기화
 		for (auto& iter : m_vecGrid)
 		{

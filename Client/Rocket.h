@@ -18,5 +18,16 @@ public:
 	virtual void State_Change() override;
 	virtual void Move() override;
 	virtual void DeadEffect() override;
+
+	// CBullet을(를) 통해 상속됨
+	virtual void Late_Update_GameObject() override;
+	void Accel(_vec3 vDir, float _fAccel, float _fMaxSpeed, bool bGravity);
+
+
+
+	CGameObject* m_pTargetUi;
+	float m_fTargetTime;
+	float m_fTargetSpeed;
+
 };
 #endif // !__ROCKET_H__

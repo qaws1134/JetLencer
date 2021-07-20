@@ -5,6 +5,7 @@
 #include "GameObject.h"
 class CMouse final	:public CGameObject
 {
+
 public:
 	explicit CMouse();
 	virtual ~CMouse();
@@ -22,9 +23,27 @@ public :
 	_vec3 Get_MousePos();
 	virtual void State_Change() override;
 	virtual void WriteMatrix();
-private:
-	_vec3 m_vMouse;
+	void	 Set_MouseState(MOUSE::STATE _eMouse) { m_eMouse = _eMouse; }
+	void	Set_HitTime() { m_fHitTime = 0.f; }
 
+private:
+	
+	bool IdleTime();
+	void SizeCheck();
+	_vec3 m_vMouse;
+	MOUSE::STATE m_eMouse;
+	MOUSE::STATE m_ePreMouse;
+
+	float m_fSizeCheckTime;
+	float m_fSizeCheckSpeed;
+
+	float m_fHitTime;
+	float m_fHitSpeed;
+
+
+
+	_vec3 m_vPrePos;
+	CGameObject* pHit;
 	// CGameObject을(를) 통해 상속됨
 };
 

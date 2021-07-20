@@ -77,6 +77,16 @@ void CNormal::State_Change()
 	}
 }
 
+void CNormal::Late_Update_GameObject()
+{
+	if (m_tInfo.vPos.x > Map_Width || m_tInfo.vPos.x <0
+		|| m_tInfo.vPos.y <0)
+		m_bDead = true;
+	if (m_tInfo.vPos.y > Map_Height + 70)
+		m_bDeadEffect = true;
+	State_Change();
+}
+
 void CNormal::Move()
 {
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)

@@ -3,6 +3,7 @@
 #include "Effect.h"
 #include "Prefab_Manager.h"
 #include "Collider.h"
+#include "Spawn_Manager.h"
 CBullet::CBullet() 
 	: m_fRemoveTIme(0.f)
 	, m_fRemoveSpeed(0.f)
@@ -28,20 +29,9 @@ int CBullet::Update_GameObject()
 		return OBJ_DEAD;
 	}
 
-
+	Set_Texture();
 	Move();
 	return OBJ_NOEVENT;
-}
-
-void CBullet::Late_Update_GameObject()
-{
-	if (m_tInfo.vPos.x > Map_Width || m_tInfo.vPos.x <0
-		|| m_tInfo.vPos.y <0)
-		m_bDead = true;
-	if (m_tInfo.vPos.y > Map_Height+70)
-		m_bDeadEffect = true;
-	FAILED_CHECK_RETURN(Set_Texture(), );
-	State_Change();
 }
 
 
@@ -54,4 +44,3 @@ void CBullet::Release_GameObject()
 {
 
 }
-

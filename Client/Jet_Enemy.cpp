@@ -29,7 +29,7 @@ void CJet_Enemy::DeadEffect()
 	m_bDead = true;
 }
 
-void CJet_Enemy::Ui_DistanseState()
+void CJet_Enemy::Ui_DistanseState(CGameObject* _pUiTarget)
 {
 	switch (m_eUiState)
 	{
@@ -49,15 +49,15 @@ void CJet_Enemy::Ui_DistanseState()
 		static_cast<CArrow_Offscreen*>(m_pArrow_Offscreen)->Set_ArrowState(ARROW::END);
 		break;
 	}
-	static_cast<CArrow_Offscreen*>(m_pArrow_Offscreen)->Set_Distance(D3DXVec3Length(&(m_pTarget->Get_ObjInfo().vPos - m_tInfo.vPos)));
+	static_cast<CArrow_Offscreen*>(m_pArrow_Offscreen)->Set_Distance(D3DXVec3Length(&(_pUiTarget->Get_ObjInfo().vPos - m_tInfo.vPos)));
 }
 
-void CJet_Enemy::Ui_DirState()
+void CJet_Enemy::Ui_DirState(CGameObject* _pUiTarget)
 {
 	_vec3 vScroll =CScroll_Manager::Get_Scroll();
 
 	//플레이어에서 몬스터 방향 
-	_vec3 vRevDir = m_tInfo.vPos- m_pTarget->Get_ObjInfo().vPos;
+	_vec3 vRevDir = m_tInfo.vPos- _pUiTarget->Get_ObjInfo().vPos;
 	D3DXVec3Normalize(&vRevDir, &vRevDir);
 
 	float fCos = D3DXVec3Dot(&vRevDir, &_vec3(1.f, 0.f, 0.f));
@@ -114,8 +114,8 @@ int CJet_Enemy::Update_GameObject()
 	if (!m_pTexInfo)
 		return OBJ_NOEVENT;
 	m_pTarget = CGameObject_Manager::Get_Instance()->Get_Player();
-	Ui_DistanseState();
-	Ui_DirState();
+	Ui_DistanseState(m_pTarget);
+	Ui_DirState(m_pTarget);
 
 	State_Change();
 	TimeCheck();
