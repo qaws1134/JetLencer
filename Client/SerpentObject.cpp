@@ -2,7 +2,7 @@
 #include "SerpentObject.h"
 #include "Prefab_Manager.h"
 #include "ColSphere.h"
-
+#include "Spawn_Manager.h"
 CSerpentObject::CSerpentObject() 
 	: m_bBreak(false) 
 	, m_bAnimation(false)
@@ -15,6 +15,9 @@ CSerpentObject::CSerpentObject()
 	,m_fPatternTime(0.f)
 	, m_fSpawnTime(0.f)
 	, m_fSpawnSpeed(0.f)
+	, m_bDeadStart(false)
+	,m_fDeadEffectTime(0.f)
+	,m_fDeadEffectSpeed(0.f)
 {
 
 
@@ -38,19 +41,29 @@ int CSerpentObject::Update_GameObject()
 	if (!m_pTarget)
 		return OBJ_NOEVENT;
 
-	//float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-	//m_vTarget_Dir = m_pTarget->Get_ObjInfo().vPos - m_tInfo.vPos;
-	//TargetAngle_Check();
 	Ai_State();
 	State_Change();
 	JetAngleCheck();
 	return OBJ_NOEVENT;
 }
 
-
 void CSerpentObject::DeadEffect()
 {
-
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+	if (m_bDeadStart)
+	{
+		m_fDeadEffectTime += fTime;
+		if (m_fDeadEffectTime > m_fDeadEffectSpeed)
+		{
+			m_fDeadEffectTime = 0.f;
+			CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
+			RandomEffect(EFFECT::EXPLOSION1, 3, 60);
+			RandomEffect(EFFECT::EXPLOSION2, 3, 60);
+			RandomEffect(EFFECT::EXPLOSION3, 3, 60);
+			m_bDead = true;
+			m_bDeadStart = false;
+		}
+	}
 }
 
 void CSerpentObject::InitJet()

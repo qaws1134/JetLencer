@@ -17,11 +17,14 @@ public:
 public:
 	COMBAT	Get_CombatInfo() { return m_tCombatInfo; }
 	bool	Get_Break(){return m_bBreak;}
+	bool	Get_Attack_End() { return m_bAttack_End; }
+	bool	Get_Crash() { return m_bCrash; }
+
 	void	Set_Pattern(SERPENT::PATTERN _ePattern) { m_eSerpentPattern = _ePattern; }
 	void	Set_AniStart() { m_fAnimationStart = 0.f; }
 	void	Set_Attack_End(bool _Attack_end) { m_bAttack_End = _Attack_end; }
-	bool	Get_Attack_End() { return m_bAttack_End; }
-	bool	Get_Crash() { return m_bCrash; }
+	void	Set_DeadEffSpeed(float _fDeadEffSpeed) { m_fDeadEffectSpeed = _fDeadEffSpeed; }
+	void	Set_DeadStart(bool _bDeadStart) { m_bDeadStart = _bDeadStart; }
 
 protected:
 	virtual void DeadEffect();
@@ -30,7 +33,7 @@ protected:
 	virtual void Ai_State() PURE;
 	void Animation_Change(const ANIMATION* _pAnimation);
 	void Move();
-
+	
 
 	bool m_bCrash;
 	bool m_bBreak;
@@ -52,6 +55,15 @@ protected:
 	bool m_bAnimation;
 	bool m_bAttack;
 	bool m_bAttack_End;
+
+	bool m_bDeadStart;
+
+
+	float m_fDeadEffectTime;
+	float m_fDeadEffectSpeed;
+
+
+
 
 	const ANIMATION* m_AniCrash;
 	const ANIMATION* m_AniFrame;

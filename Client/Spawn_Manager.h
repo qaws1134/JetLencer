@@ -12,6 +12,7 @@ public:
 	static void Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameStart, float _fSize);
 	static void Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle, _vec3 vSpeed, CGameObject* pTarget);
 	static void Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameStart);
+	static void Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos);
 	static void Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle, _vec3 vSpeed);
 	static void Spawn(const wstring _wstrObjName, _vec3 vPos);
 

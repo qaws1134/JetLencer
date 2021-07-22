@@ -8,6 +8,7 @@ private:
 public:
 	virtual ~CEffect();
 public:
+	static	CGameObject* Create(EFFECT::TYPE _eEffectType,_vec3 _vPos);
 	static	CGameObject* Create(EFFECT::TYPE _eEffectType);
 	static	CGameObject* Create(const ANIMATION* _tAnimation, D3DXVECTOR3 _vPos);
 	static	CGameObject* Create(const PLACEMENT*	_tPlacementInfo, D3DXVECTOR3 _vPos );

@@ -29,6 +29,7 @@ CCollision_Manager::~CCollision_Manager()
 //}
 
 
+
 void CCollision_Manager::Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
 {
 	for (auto& pDst : _Dst)
@@ -52,6 +53,36 @@ void CCollision_Manager::Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, l
 		}
 	}
 }
+
+void CCollision_Manager::Collision_Boss_Player_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+{
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pDst, pSrc))
+			{
+				static_cast<CMouse*>(CGameObject_Manager::Get_Instance()->Get_Mouse())->Set_MouseState(MOUSE::HIT);
+				static_cast<CMouse*>(CGameObject_Manager::Get_Instance()->Get_Mouse())->Set_HitTime();
+
+				pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
+				pDst->Get_Target()->Set_Color(MATCOLOR{ 200,0,255,255 });
+				pDst->Get_Target()->Set_ColorTime();
+				if (pDst->Get_CombatInfo().iHp <= 0)
+				{
+					pDst->Get_Target()->Set_DeadEffect(true);
+					pDst->Set_Dead(true);
+				}
+				pSrc->Get_Target()->Set_DeadEffect(true);
+				pSrc->Set_Dead(true);
+			}
+		}
+	}
+
+}
+
+
+
 //오브젝트, 총알
 void CCollision_Manager::Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
 {
@@ -198,7 +229,6 @@ void CCollision_Manager::Collision_Rocket_Search(list<CCollider*>& _Dst, list<CC
 		}
 	}
 }
-
 
 
 

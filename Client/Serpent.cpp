@@ -55,7 +55,7 @@ HRESULT CSerpent::Ready_GameObject()
 {
 
 	m_vecCollider.reserve(1);
-	m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 25.f, COLLIDER::ENEMY));
+	m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 25.f, COLLIDER::EFFECT));
 
 	m_fAccel = 3000.f;
 	m_fMaxSpeed = 500.f;
@@ -65,7 +65,7 @@ HRESULT CSerpent::Ready_GameObject()
 	m_vGravity = { 0.2f,1.f,0.f };
 	m_fAngleSpeed = 50.f;
 	m_iMaxBody = 50;
-
+	m_iHpOffset = 500;
 	m_fHp_RedSpeed = 2.f;
 
 	m_tFrame.wstrObjKey = m_pObjectInfo->wstrIdleImage_ObjectKey;
@@ -82,12 +82,9 @@ HRESULT CSerpent::Ready_GameObject()
 	m_pBoss_Hp_Plate = CGui::Create(UI::BOSS_HP_PLATE);
 
 
-
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp_Plate);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp_Red);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp);
-
-
 
 	Set_Texture();
 
@@ -125,13 +122,10 @@ HRESULT CSerpent::Ready_GameObject()
 
 int CSerpent::Update_GameObject()
 {
+	if (m_bDead)
+		return OBJ_NOEVENT;
 	if (m_bDeadEffect)
 		DeadEffect();
-
-	//if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM4))
-	//{
-	//	m_eTailPattern = SERPENT::TAILSHOTGUN;
-	//}
 
 	//패턴 선택
 	Hp_Stage();
@@ -202,6 +196,7 @@ void CSerpent::State_Change()
 						static_cast<CSerpentHead*>(iter)->Set_Pattern(SERPENT::RAGER);
 						static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(true);
 						static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.2f);
+						static_cast<CEffect*>(m_pChargeBeam)->Set_ReduceTime(-0.01f);
 					}
 
 					iter->Set_TrueMod(true);
@@ -210,7 +205,7 @@ void CSerpent::State_Change()
 			case SERPENT::END:
 				//m_eSelected_Pattern = SERPENT::END;
 				m_fPatternTime = 0.f;
-				m_fPatternEnd = 4.f;
+				m_fPatternEnd = 7.f;
 				m_fAngleSpeed = 50.f;
 				m_fAccel = 3000.f;
 				m_fMaxSpeed = 350.f;
@@ -244,18 +239,37 @@ void CSerpent::State_Change()
 }
 void CSerpent::DeadEffect()
 {
+	for (auto& iter : m_vecSerpent)
+	{
+
+		iter->Set_Target(nullptr);
+		static_cast<CSerpentObject*>(iter)->Set_DeadEffSpeed((float(rand() % 20) + 20)*0.1f);
+		static_cast<CSerpentObject*>(iter)->Set_DeadStart(true);
+		iter->Set_DeadEffect(true);
+		m_bDead = true;
+	}
+	m_pBoss_Hp->Set_Dead(true);
+	m_pBoss_Hp_Red->Set_Dead(true);
+	m_pBoss_Hp_Plate->Set_Dead(true);
+
+
 
 }
 void CSerpent::Hp_Stage()
 {
-	int iInitHp = 0;
+	int iInitHp = -m_iHpOffset;
+
 	for (auto& iter : m_vecSerpent)
 	{
 		if (!static_cast<CSerpentObject*>(iter)->Get_Crash())
 			iInitHp += iter->Get_ColVec(0)->Get_CombatInfo().iHp;
-
 	}
 	m_tCombatInfo.iHp = iInitHp;
+	if (m_tCombatInfo.iHp <= 0)
+	{
+		m_tCombatInfo.iHp = 0;
+		m_bDeadEffect = true;
+	}
 	float fHpRatio = ((float)m_tCombatInfo.iHp / (float)m_iMaxHp);
 	static_cast<CGui*>(m_pBoss_Hp)->Set_HpSize(fHpRatio);
 	if (m_iPreHp != m_tCombatInfo.iHp)
@@ -335,14 +349,17 @@ void CSerpent::Ai_State()
 			(m_pChargeBeam)->Set_Pos(m_tInfo.vPos+m_tInfo.vDir*3.f);
 			if (static_cast<CSerpentObject*>(m_vecSerpent.front())->Get_Attack_End())
 			{
-				static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(false);
-				static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.f);
-				static_cast<CEffect*>(m_pChargeBeam)->Set_ReduceTime(0.f);
 				for (auto& iter : m_vecSerpent)
 					iter->Set_TrueMod(false);
-				m_eSelected_Pattern = SERPENT::END;
-				m_bPattern_Start = false; 
-				static_cast<CSerpentObject*>(m_vecSerpent.front())->Set_Attack_End(false);
+				if (PatternTime())
+				{
+					static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(false);
+					static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.f);
+					static_cast<CEffect*>(m_pChargeBeam)->Set_ReduceTime(0.f);
+					m_eSelected_Pattern = SERPENT::END;
+					m_bPattern_Start = false;
+					static_cast<CSerpentObject*>(m_vecSerpent.front())->Set_Attack_End(false);
+				}
 			}
 			break;
 		case SERPENT::END:
@@ -417,7 +434,7 @@ void CSerpent::Init_Hp()
 		m_iMaxHp += static_cast<CSerpentObject*>(*iter)->Get_CombatInfo().iHp;
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), *iter);
 	}
-
+	m_iMaxHp -= m_iHpOffset;
 	m_tCombatInfo.iHp = m_iMaxHp;
 }
 

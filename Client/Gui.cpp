@@ -329,6 +329,15 @@ void CGui::State_Change()
 		if (m_bAction)
 		{
 			m_tFrame.fFrameSpeed = 20.f;
+			if (m_tFrame.fStartFrame == m_tFrame.fMaxFrame - 1)
+			{
+				m_bStart = true;
+				m_bAction = false;
+			}
+		}
+		else
+		{
+			m_tFrame.fStartFrame = 0.f;
 		}
 		Frame_Change();
 		break;
@@ -336,15 +345,25 @@ void CGui::State_Change()
 		if (m_bAction)
 		{
 			m_tFrame.fFrameSpeed = 20.f;
+			Frame_Change();
 		}
-		Frame_Change();
 		break;
 	case UI::WORNWAY_END:
 		if (m_bAction)
 		{
 			m_tFrame.fFrameSpeed = 20.f;
+			if (m_tFrame.fStartFrame == m_tFrame.fMaxFrame - 1)
+			{
+				m_bStart = true;
+				m_bAction = false;
+			}
+			Frame_Change();
 		}
-		Frame_Change();
+		else
+		{
+			m_tFrame.fStartFrame = 0.f;
+			m_bStart = false;
+		}
 		break;
 	case UI::DANGER_START:
 		if (m_bAction)
@@ -380,7 +399,7 @@ void CGui::State_Change()
 		}
 		else
 		{
-			m_tFrame.fStartFrame = 0.f;
+			//m_tFrame.fStartFrame = 0.f;
 			m_bStart = false;
 		}
 		break;
@@ -576,22 +595,17 @@ void CGui::InitGui()
 		m_tInfo.vSize = { 1.5f,1.5f,0.f };
 		m_bRender = false;
 		break;
-	//case UI::MARKER_ROCKET_OVERLAY:
-	//	m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiMarker_rocket_overlay");
-	//	m_bLoop = true;
-	//	m_bRender = false;
-	//	break;
 	case UI::WORNWAY_START:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiWornway_start");
 		m_bRender = false;
 		break;
 	case UI::WORNWAY_IDLE:
-		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_idle");
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiWornway_idle");
 		m_bLoop = true;
 		m_bRender = false;
 		break;
 	case UI::WORNWAY_END:
-		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_end");
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiWornway_end");
 		m_bRender = false;
 		break;
 	case UI::DANGER_START:

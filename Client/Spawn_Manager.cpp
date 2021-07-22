@@ -179,6 +179,15 @@ void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos,bool _FrameStar
 	pEffect = nullptr;
 }
 
+void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos)
+{
+	CGameObject* pEffect = nullptr;
+
+	pEffect = CEffect::Create(_eEffectType, vPos);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pEffect);
+	pEffect = nullptr;
+}
+
 void CSpawn_Manager::Spawn(EFFECT::TYPE _eEffectType, _vec3 vPos, bool _FrameStart,float _fSize)
 {
 	CGameObject* pEffect = nullptr;

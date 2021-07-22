@@ -140,7 +140,7 @@ void CJet::SpawnPtFire()
 	if (m_bAccel)
 	{
 		for (int i = 0; i < m_iMax_ptFireNum; i++)
-			CSpawn_Manager::Spawn(EFFECT::JET_PTFIRE, m_tInfo.vPos- m_tInfo.vDir*32.f*0.8f - (vNormalVel*((float)i)), false);
+			CSpawn_Manager::Spawn(EFFECT::JET_PTFIRE, m_tInfo.vPos- m_tInfo.vDir*32.f*0.8f - (vNormalVel*((float)i)));
 	}
 
 }

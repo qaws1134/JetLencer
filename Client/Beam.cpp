@@ -96,7 +96,7 @@ void CBeam::State_Change()
 	else
 	{
 		m_tInfo.vSize -= _vec3{ 0.f,0.02f,0.f };
-		if (m_tInfo.vSize.y < 0)
+		if (m_tInfo.vSize.y <= 0)
 		{
 			m_bDeadEffect = true;
 		}
@@ -180,7 +180,7 @@ void CBeam::Boss_State()
 			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 			m_fRemoveTIme += fTime;
 
-			if (m_fRemoveTIme > m_fRemoveSpeed)
+			if (m_fRemoveTIme >= m_fRemoveSpeed)
 				m_bRemove = true;
 		}
 	}
@@ -201,7 +201,7 @@ void CBeam::Boss_State()
 
 		if (m_tInfo.vSize.y < 0.4f)
 			CGameObject_Manager::Get_Instance()->Set_AllTrueMode(false);
-		if (m_tInfo.vSize.y < 0)
+		if (m_tInfo.vSize.y <= 0)
 		{
 			static_cast<CSerpentObject*>(static_cast<CSerpent*>(m_pTarget)->Get_SerpentObj().front())->Set_Attack_End(true);	
 			m_bDeadEffect = true;

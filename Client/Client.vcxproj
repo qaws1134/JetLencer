@@ -213,6 +213,7 @@
     <ClInclude Include="Texture_Manager.h" />
     <ClInclude Include="Time_Manager.h" />
     <ClInclude Include="ViewText.h" />
+    <ClInclude Include="WorngWay.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Arrow_Offscreen.cpp" />
@@ -278,6 +279,7 @@
     <ClCompile Include="Texture_Manager.cpp" />
     <ClCompile Include="Time_Manager.cpp" />
     <ClCompile Include="ViewText.cpp" />
+    <ClCompile Include="WorngWay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

@@ -128,3 +128,4 @@ void CSerpentTail::Select_Armor()
 		m_bCrash = true;
 	}
 }
+

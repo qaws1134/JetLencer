@@ -61,11 +61,11 @@ void CStage::Update_Scene()
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_P))
 	{
 		//º¸½º »Ç¤³±â
-		//CGameObject*pObject = nullptr;
-		//pObject = CSerpent::Create(_vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
+		CGameObject*pObject = nullptr;
+		pObject = CSerpent::Create(_vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
 		//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
 		//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
-		CSpawn_Manager::Spawn(L"Jet_Rocket", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
+		//CSpawn_Manager::Spawn(L"Jet_Rocket", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
 	}
 
 	CSpawn_Manager::Get_Instance()->Update_MultiSpawn();

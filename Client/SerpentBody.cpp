@@ -34,7 +34,7 @@ HRESULT CSerpentBody::Ready_GameObject()
 
 	m_fAnimationStart= 0.f;
 	m_fAnimationMax = 6.f;
-	m_fAnimationSpeed = 5.f;
+	m_fAnimationSpeed = 2.f;
 	m_fSpawnSpeed = 0.1f;
 	m_fSpawnTime = 0.f;
 	for (int i = 0; i < 6; i++)
@@ -47,9 +47,9 @@ HRESULT CSerpentBody::Ready_GameObject()
 
 void CSerpentBody::Ai_State()
 {
+	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 
 	Select_Armor();
-	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 
 	//애니메이션 시작
 	if (m_bAnimation)
@@ -64,7 +64,8 @@ void CSerpentBody::Ai_State()
 		}
 		else
 		{
-			if((int)m_fAnimationStart < 6)
+
+			if ((int)m_fAnimationStart < 6)
 				Animation_Change(m_vecBody_Gun[(int)m_fAnimationStart]);
 		}
 	}
@@ -82,11 +83,14 @@ void CSerpentBody::Ai_State()
 
 	if (m_bAniEnd)
 	{
-		m_fAnimationStart -= m_fAnimationSpeed*fTime;
-		if (m_fAnimationStart < 0)
+		if (!m_bBreak)
 		{
-			m_fAnimationStart = 0;
-			Animation_Change(m_vecBody_Gun[(int)m_fAnimationStart]);
+			m_fAnimationStart -= m_fAnimationSpeed*fTime;
+			if (m_fAnimationStart <= 0)
+			{
+				m_fAnimationStart = 0;
+				Animation_Change(m_vecBody_Gun[(int)m_fAnimationStart]);
+			}
 		}
 	}
 	
@@ -113,11 +117,35 @@ void CSerpentBody::State_Change()
 void CSerpentBody::DeadEffect()
 {
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-	m_fSpawnTime += fTime;
-	if (m_fSpawnTime > m_fSpawnSpeed)
+	if (m_bDeadStart)
 	{
-		m_fSpawnTime = 0.f;
-		RandomEffect(EFFECT::FIRE_BOSS, 3,20);
+		m_fDeadEffectTime += fTime;
+		if (m_fDeadEffectTime > m_fDeadEffectSpeed)
+		{
+			m_fDeadEffectTime = 0.f;
+			CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
+			RandomEffect(EFFECT::EXPLOSION1, 3, 60);
+			RandomEffect(EFFECT::EXPLOSION2, 3, 60);
+			RandomEffect(EFFECT::EXPLOSION3, 3, 60);
+			for (auto& iter : m_vecBody_Gun)
+			{
+				iter = nullptr;
+			}
+			m_vecBody_Gun.clear();
+
+			m_bDead = true;
+			m_bDeadStart = false;
+		}
+
+	}
+	else 
+	{
+		m_fSpawnTime += fTime;
+		if (m_fSpawnTime > m_fSpawnSpeed)
+		{
+			m_fSpawnTime = 0.f;
+			RandomEffect(EFFECT::FIRE_BOSS, 3, 20);
+		}
 	}
 }
 
@@ -139,7 +167,6 @@ void CSerpentBody::Select_Armor()
 	else
 	{
 		Animation_Change(m_AniCrash);
-		m_bDeadEffect = true;
 		m_bCrash = true;
 	}
 

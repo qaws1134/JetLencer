@@ -55,6 +55,9 @@ private:
 	int m_iMaxHp;
 	int m_iPreHp;
 	int m_iMaxBody;
+	int m_iHpOffset;
+
+
 	bool m_bStart;
 	bool m_bPattern_Start;
 	bool m_bPage_Start;

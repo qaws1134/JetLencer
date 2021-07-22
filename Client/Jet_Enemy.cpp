@@ -22,7 +22,10 @@ CJet_Enemy::~CJet_Enemy()
 
 void CJet_Enemy::DeadEffect()
 {
-	CSpawn_Manager::Spawn(L"Dead_Explosion1", m_tInfo.vPos);
+	CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
+	RandomEffect(EFFECT::EXPLOSION1, 3, 60);
+	RandomEffect(EFFECT::EXPLOSION2, 3, 60);
+	RandomEffect(EFFECT::EXPLOSION3, 3, 60);
 	m_pBurner->Set_Dead(true);
 	m_pArrow_Offscreen->Set_Dead(true);
 	m_pBurner = nullptr;

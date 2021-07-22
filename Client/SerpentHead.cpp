@@ -11,6 +11,7 @@ CSerpentHead::CSerpentHead()
 
 CSerpentHead::~CSerpentHead()
 {
+	m_pArrow_Offscreen->Set_Dead(true);
 }
 
 CGameObject* CSerpentHead::Create(const OBJECTINFO * _tObjectInfo)

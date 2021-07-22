@@ -14,7 +14,7 @@
 #include "Hp.h"
 #include "DmgGrid.h"
 #include "Danger.h"
-
+#include "WorngWay.h"
 
 
 #define SubWeaponDelay 1.f
@@ -50,6 +50,9 @@ CPlayer::CPlayer()
 	, m_eDangerState(DANGER::END)
 	, m_ePreDangerState(DANGER::END)
 	, m_iRocketNum(0)
+	, m_bLWorn(false)
+	, m_bRWorn(false)
+
 {
 	
 }
@@ -165,7 +168,6 @@ HRESULT CPlayer::Ready_GameObject()
 	m_vecCollider.emplace_back(CColSphere::Create(this,m_tCombatInfo, PlayerColliderSize, COLLIDER::PLAYER));
 	for (int i = 0; i < 4; i++)
 		m_vecCollider.emplace_back(CColRect::Create(this, (float)WINCX*(i+1),(float)WINCY*(i+1), COLLIDER::PLAYER_SEARCH));
-	m_vecCollider.emplace_back(CColSphere::Create(this, 100.f, COLLIDER::ROCKET_SEARCH));
 
 
 
@@ -173,22 +175,27 @@ HRESULT CPlayer::Ready_GameObject()
 
 	_vec3 vLOffset = { 0.3f,0.7f,0.f };
 	_vec3 vROffset = { 0.7f,0.7f,0.f };
-	m_pGuiLFlip = CFlip::Create(_vec3{ float(WINCX)*vLOffset.x,float(WINCY)*vLOffset.y,0.f },false);
-	m_pGuiRFlip = CFlip::Create(_vec3{ float(WINCX)*vROffset.x,float(WINCY)*vROffset.y,0.f }, true);
 
-	m_pGuiRocket = CRocket_Ui::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 160.f,0.f });
-
-	m_pGuiHp = CHp::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 200.f,0.f });
-	static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
-	m_pGuiDamageGrid = CDmgGrid::Create();
-
+	m_pGuiLFlip		= CFlip::Create(_vec3{ float(WINCX)*vLOffset.x,float(WINCY)*vLOffset.y,0.f },false);
+	m_pGuiRFlip		= CFlip::Create(_vec3{ float(WINCX)*vROffset.x,float(WINCY)*vROffset.y,0.f }, true);
+	m_pGuiRocket	= CRocket_Ui::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 160.f,0.f });
+	m_pGuiHp		= CHp::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 200.f,0.f });
+	m_pGuiDamageGrid= CDmgGrid::Create();
 	m_pEffectHitVfx = CEffect::Create(EFFECT::PLAYER_HIT_VFX);
+
+
+	static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
 	m_pEffectHitVfx->Set_Target(this);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pEffectHitVfx);
 
 	m_pGuiDanger = CDanger::Create(_vec3{float(WINCX>>1),float(WINCY >> 1)-250.f,0.f });
 
+	m_pWornWayLeft = CWorngWay::Create(_vec3{ float(WINCX) *0.15f ,float(WINCY>>1),0.f},false);
+	m_pWornWayRight= CWorngWay::Create(_vec3{ float(WINCX) *0.85f ,float(WINCY >> 1),0.f },true);
 
+
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pWornWayLeft);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pWornWayRight);
 	return S_OK;
 }
 
@@ -231,6 +238,13 @@ void CPlayer::Release_GameObject()
 
 void CPlayer::State_Change()
 {
+
+	if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM4))
+	{
+		m_eState = PLAYER::HIT;
+	}
+
+
 	if (m_eState != m_ePreState)
 	{
 		switch (m_eState)
@@ -414,6 +428,40 @@ void CPlayer::PositionRock_Check()
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 
 	_vec3 NextPos = m_tInfo.vPos + m_vVelocity*50.f*fTime;
+
+
+	_vec3 vWornScroll = -CScroll_Manager::Get_Scroll();
+
+
+	if (vWornScroll.x < float(WINCX>>4) && vWornScroll.x != 0.f)
+	{
+		static_cast<CWorngWay*>(m_pWornWayLeft)->Set_WornWayState(WORNWAY::WORNWAY_START);
+		m_bLWorn = true;
+	}
+	if (m_bLWorn)
+	{
+		if (vWornScroll.x > float(WINCX>>4))
+		{
+			m_bLWorn = false;
+			static_cast<CWorngWay*>(m_pWornWayLeft)->Set_WornWayState(WORNWAY::WORNWAY_END);
+			
+		}
+	}
+	if (vWornScroll.x >= float(Map_Width - (WINCX)))
+	{
+		static_cast<CWorngWay*>(m_pWornWayRight)->Set_WornWayState(WORNWAY::WORNWAY_START);
+		m_bRWorn = true;
+	}
+	if (m_bRWorn)
+	{
+		if (vWornScroll.x < float(Map_Width - (WINCX)-10))
+		{
+			m_bRWorn = false;
+			static_cast<CWorngWay*>(m_pWornWayRight)->Set_WornWayState(WORNWAY::WORNWAY_END);
+		}
+	}
+
+
 
 	if (0 > NextPos.x|| Map_Width<NextPos.x)
 	{
@@ -655,7 +703,10 @@ void CPlayer::TimeCheck()
 
 void CPlayer::DeadEffect()
 {
-	CSpawn_Manager::Spawn(L"Dead_Explosion1", m_tInfo.vPos);
+	CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
+	RandomEffect(EFFECT::EXPLOSION1, 3, 60);
+	RandomEffect(EFFECT::EXPLOSION2, 3, 60);
+	RandomEffect(EFFECT::EXPLOSION3, 3, 60);
 }
 
 bool CPlayer::SubWeapon_Check()

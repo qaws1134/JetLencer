@@ -80,6 +80,7 @@ void CGameObject_Manager::Update_GameObject_Manager()
 	CCollision_Manager::Collision_Player_Enemy_Bullet(m_listGameObjectCollider[COLLIDER::PLAYER], m_listGameObjectCollider[COLLIDER::ENEMY_BULLET]);
 
 	CCollision_Manager::Collision_Enemy_Player_Bullet(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET]);
+	CCollision_Manager::Collision_Boss_Player_Bullet(m_listGameObjectCollider[COLLIDER::ENEMY_BOSS], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET]);
 
 	CCollision_Manager::Collision_EnemyBeam(m_listGameObjectCollider[COLLIDER::PLAYER], m_listGameObjectCollider[COLLIDER::ENEMY_BULLET_BEAM]);
 
@@ -97,10 +98,6 @@ void CGameObject_Manager::Render_GameObject_Manager()
 
 		for (auto& pGameObject : m_listGameObjectRender[i])
 		{
-			if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM4))
-			{
-				m_bTrueMod = !m_bTrueMod;
-			}
 			pGameObject->Set_AllTrueMod(m_bTrueMod);
 			//if (pGameObject->Get_ObjInfo().vPos.x< -500 
 			//	|| pGameObject->Get_ObjInfo().vPos.x>(WINCX + 500)

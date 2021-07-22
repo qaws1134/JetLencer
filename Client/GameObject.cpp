@@ -23,9 +23,11 @@ CGameObject::CGameObject()
 	, m_fColorSpeed(0.1f)
 	, m_bTrueMod(false)
 	, m_bAllTrueMod(false)
+	, m_bColor(false)
 {
 	ZeroMemory(&m_tInfo, sizeof(INFO)); 
 	m_tColor = {255,255,255,255};
+	m_vecCollider.reserve(4);
 }
 
 
@@ -51,9 +53,12 @@ void CGameObject::WriteMatrix()
 	}
 	else
 	{
-		m_tColor.iRed = 255;
-		m_tColor.iGreen = 255;
-		m_tColor.iBlue = 255;
+		if (!m_bColor)
+		{
+			m_tColor.iRed = 255;
+			m_tColor.iGreen = 255;
+			m_tColor.iBlue = 255;
+		}
 	}
 
 	D3DXVECTOR3 vScroll = CScroll_Manager::Get_Scroll();
@@ -103,6 +108,15 @@ void CGameObject::Set_CenterPos(_vec3 vPos)
 	m_bCenter = true;
 
 }
+
+CCollider * CGameObject::Get_ColVec(int i)
+{
+	if (m_vecCollider.empty())
+		return nullptr; 
+	vector<CCollider*>::iterator iter = m_vecCollider.begin(); 
+	return iter[i];
+}
+
 
 void CGameObject::RandomEffect(EFFECT::TYPE _eEffType, int iNum,int iDis)
 {

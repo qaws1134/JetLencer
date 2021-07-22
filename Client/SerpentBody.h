@@ -16,7 +16,7 @@ public :
 	virtual void State_Change() override;
 	virtual void Select_Armor() override;
 
-	virtual void DeadEffect();
+	virtual void DeadEffect() override;
 
 	vector<const ANIMATION*> m_vecBody_Gun;
 

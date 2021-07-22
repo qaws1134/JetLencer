@@ -19,6 +19,7 @@ CEffect::CEffect()
 
 CEffect::~CEffect()
 {
+
 }
 
 CGameObject * CEffect::Create(const ANIMATION * _tAnimationInfo, D3DXVECTOR3 _vPos)
@@ -28,6 +29,19 @@ CGameObject * CEffect::Create(const ANIMATION * _tAnimationInfo, D3DXVECTOR3 _vP
 	static_cast<CEffect*>(pInstance)->Set_Prefab(_tAnimationInfo);
 	static_cast<CEffect*>(pInstance)->Set_Frame(_tAnimationInfo);
 
+	if (FAILED(pInstance->Ready_GameObject()))
+	{
+		delete pInstance;
+		pInstance = nullptr;
+		return pInstance;
+	}
+	return pInstance;
+}
+CGameObject * CEffect::Create(EFFECT::TYPE _eEffectType, _vec3 _vPos)
+{
+	CGameObject* pInstance = new CEffect;
+	pInstance->Set_Pos(_vPos);
+	static_cast<CEffect*>(pInstance)->Set_EffectType(_eEffectType);
 	if (FAILED(pInstance->Ready_GameObject()))
 	{
 		delete pInstance;
@@ -165,15 +179,12 @@ void CEffect::State_Change()
 		Frame_Change();
 		break;
 	case EFFECT::JET_PTFIRE:
-		//if (m_bFrameStart)
-		//	Frame_Change();
-		//else
-			Size_Reduce();
+		Size_Reduce();
 		break;
 	case EFFECT::CHAGE_BEAM:
 		if (m_bFrameStart)
 		{
-			if (m_tInfo.vSize.x > 0.8f)
+			if (m_tInfo.vSize.x >= 0.8f)
 				m_fReduce = 0.f;
 			m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
 			Frame_Change();
@@ -200,7 +211,7 @@ void CEffect::State_Change()
 		break;
 	case EFFECT::PLAYER:
 		m_fDelTime += fTime;
-		if (m_fDelTime > 0.1f)
+		if (m_fDelTime >= 0.1f)
 			m_bDead = true;
 		break;
 	case EFFECT::BOSS_LASER_END:
@@ -251,21 +262,22 @@ void CEffect::State_Change()
 	case EFFECT::PLAYER_HIT_VFX:
 		if (m_bFrameStart)
 		{
-			m_tInfo.vSize = { 1.5f,1.5f,0.f };
+			m_tInfo.vSize = { 1.3f,1.3f,0.f };
 
 			m_tInfo.vPos = m_pTarget->Get_ObjInfo().vPos;
 
 			Frame_Change();
 
 			if (!m_bRed)
-				m_tColor = { 180,0,255,0 };
+				m_tColor = { 120,0,255,0 };
 			else
-				m_tColor = { 180,255,0,0 };
+				m_tColor = { 120,255,0,0 };
 		}
 		else
 		{
 			m_tInfo.vSize = { 0.f,0.f,0.f };
-			m_tFrame.fStartFrame = 0.f;
+			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1.f;
+			//m_tFrame.fStartFrame = 0.f;
 		}
 		break;
 	case EFFECT::MARKER_ROCKET_OVERLAY:
@@ -291,7 +303,7 @@ void CEffect::State_Change()
 void CEffect::Size_Reduce()
 {
 	m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
-	if (m_tInfo.vSize.x < 0.f)
+	if (m_tInfo.vSize.x <= 0.f)
 		m_bDead = true;
 	m_tFrame.fStartFrame = 0;
 }
@@ -309,6 +321,19 @@ void CEffect::Frame_Change()
 		{
 			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1;
 			if(!m_bFrameEndNoDead)
+				m_bDead = true;
+			else
+				m_bFrameStart = false;
+		}
+	}
+	else if (m_tFrame.fStartFrame <= 0.f)
+	{
+		if (m_bLoop)
+			m_tFrame.fStartFrame = 0.f;
+		else
+		{
+			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1;
+			if (!m_bFrameEndNoDead)
 				m_bDead = true;
 			else
 				m_bFrameStart = false;
@@ -405,7 +430,7 @@ void CEffect::InitEffect()
 	case EFFECT::OBJECT_IMPACT:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectBullet_impact");
 		Set_Frame(m_pAnimation);
-		m_fSize = float((rand() % 10 + 10)*0.2f);
+		m_fSize = float((rand() % 10 + 20)*0.2f);
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
 		m_tFrame.fFrameSpeed = 30.f;
 		break;
@@ -441,15 +466,17 @@ void CEffect::InitEffect()
 	case EFFECT::PLAYER_HIT_VFX:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"PlayerHit_vfx");
 		Set_Frame(m_pAnimation);
-		m_fSize = 1.f;
+		m_fSize = 1.3f;
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
-		m_tFrame.fFrameSpeed = 30.f;
+		m_tFrame.fFrameSpeed = -15.f;
+		m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1.f;
+		m_bColor = true;
 		m_bFrameEndNoDead = true;
 		break;
 	case EFFECT::MARKER_ROCKET_OVERLAY:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiMarker_rocket_overlay");
 		Set_Frame(m_pAnimation);
-		m_fSize = 1.f;
+		m_fSize = 1.2f;
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
 		m_tFrame.fFrameSpeed = 10.f;
 		m_bLoop = true;

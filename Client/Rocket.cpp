@@ -55,7 +55,6 @@ HRESULT CRocket::Ready_GameObject()
 	m_tFrame.fStartFrame = 0;
 	m_eRenderId = RENDERID::BULLET;
 	
-	m_vecCollider.reserve(1);
 	
 	m_vVelocity = { 1.f,1.f,0.f };
 	m_vGravity = { 0.f,1.f,0.f };
@@ -72,7 +71,7 @@ HRESULT CRocket::Ready_GameObject()
 		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 15.f, COLLIDER::PLAYER_BULLET));
 		m_tInfo.vSize = { 1.3f,1.3f,0.f };
 	}
-	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
+	else if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
 		m_fMaxSpeed = 750.f;
 		m_tCombatInfo.iAtk = 2;
@@ -92,9 +91,6 @@ HRESULT CRocket::Ready_GameObject()
 
 		static_cast<CPlayer*>(m_pTarget)->Set_DangerState(DANGER::DANGER_START);
 		static_cast<CPlayer*>(m_pTarget)->Add_IsRocket(1);
-
-
-
 	}
 
 

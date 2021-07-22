@@ -45,7 +45,7 @@ public:
 	const INFO&			Get_ObjInfo()const { return m_tInfo; }
 		  FRAME&		Get_Frame() { return m_tFrame; }
 	const RENDERID::ID&	Get_RenderId() const { return m_eRenderId; }
-	CCollider*			Get_ColVec(int i) {vector<CCollider*>::iterator iter =  m_vecCollider.begin(); return iter[i];}
+	CCollider*			Get_ColVec(int i);
 
 	int					GetColSize() { return m_vecCollider.size(); }
 	_vec3				Get_Velocity() { return m_vVelocity; }
@@ -78,7 +78,7 @@ protected:
 
 	float				m_fColorTime;
 	float				m_fColorSpeed;
-
+	bool				m_bColor;
 
 	float				m_fCenterX;
 	float				m_fCenterY;

@@ -44,9 +44,10 @@ HRESULT CGundrone::Ready_GameObject()
 	m_tFrame.fFrameSpeed = 30.f;
 
 
-	//1. 서치 컬라이더
-	//2. 몸체 컬라이더
 
+
+	//1. 서치 컬라이더
+	
 
 
 	return S_OK;

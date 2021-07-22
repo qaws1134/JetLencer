@@ -112,6 +112,12 @@ private:
 	CGameObject*		m_pEffectHitVfx;
 
 	CGameObject*		m_pGuiDanger;
+
+	CGameObject*		m_pWornWayLeft;
+	CGameObject*		m_pWornWayRight;
+	bool				m_bLWorn;
+	bool				m_bRWorn;
+
 	float				m_fDangerLength;
 	int					m_iRocketNum;
 

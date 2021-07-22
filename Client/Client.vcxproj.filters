@@ -187,6 +187,9 @@
     <Filter Include="01.GameObject\05.Gui\00.Arrow_Offscreen\00.Arrow_Offscreen_Jet">
       <UniqueIdentifier>{3e8eb2ba-9ebe-4fcc-b46f-1efb5973d812}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameObject\05.Gui\07.WorngWay">
+      <UniqueIdentifier>{7af9422e-059d-4c46-b98e-592cf4fd34d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -369,6 +372,9 @@
     <ClInclude Include="Arrow_Offscreen_Rocket.h">
       <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen\01.Arrow_Offscreen_Rocket</Filter>
     </ClInclude>
+    <ClInclude Include="WorngWay.h">
+      <Filter>01.GameObject\05.Gui\07.WorngWay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -544,6 +550,9 @@
     </ClCompile>
     <ClCompile Include="Arrow_Offscreen_Rocket.cpp">
       <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen\01.Arrow_Offscreen_Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="WorngWay.cpp">
+      <Filter>01.GameObject\05.Gui\07.WorngWay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
