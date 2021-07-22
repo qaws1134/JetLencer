@@ -9,14 +9,14 @@ public:
 	virtual ~CArrow_Offscreen();
 
 	static	CGameObject* Create(UI::ICON _eIcon);
-	// CGui을(를) 통해 상속됨
+
 	virtual HRESULT Ready_GameObject() override;
 	virtual void State_Change() override;
+
 	void				Set_Icon(UI::ICON _eIcon) { m_eIcon = _eIcon; }
 	void				Set_ArrowState(ARROW::UI _eArrowState) { m_eArrowState = _eArrowState; }
 	void				Set_Distance(float _fDis) { m_fDis = _fDis; }
-	
-	
+
 	void				ArrowDir_Change();
 	void				ArrowDistance_Change();
 	void				ArrowPosition_Change();
@@ -36,7 +36,9 @@ public:
 	ARROW::UI m_eArrowState;
 	ARROW::UI m_ePreArrowState;
 
-
+	float m_fColorTime;
+	float m_fColorSpeed;
+	bool  m_bColorChange;
 	_vec3 m_vecArrow;
 	_vec3 m_vecRect;
 

@@ -84,7 +84,8 @@ void CGameObject_Manager::Update_GameObject_Manager()
 	CCollision_Manager::Collision_EnemyBeam(m_listGameObjectCollider[COLLIDER::PLAYER], m_listGameObjectCollider[COLLIDER::ENEMY_BULLET_BEAM]);
 
 	CCollision_Manager::Collision_PlayerBeam(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_BULLET_BEAM]);
-	CCollision_Manager::Collision_Search(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_SEARCH]);
+	CCollision_Manager::Collision_Enemy_Search(m_listGameObjectCollider[COLLIDER::ENEMY], m_listGameObjectCollider[COLLIDER::PLAYER_SEARCH]);
+	CCollision_Manager::Collision_Rocket_Search(m_listGameObjectCollider[COLLIDER::ENEMY_BULLET], m_listGameObjectCollider[COLLIDER::PLAYER_SEARCH]);
 }
 
 void CGameObject_Manager::Render_GameObject_Manager()

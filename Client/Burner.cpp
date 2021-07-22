@@ -121,7 +121,7 @@ void CBurner::State_Change()
 			m_tFrame.fFrameSpeed = 10.f;
 			m_tFrame.wstrStateKey = L"Aftbrn_mega";
 			m_bLoop = false;
-			CScroll_Manager::Shake(15.f, 0.5f);
+			CScroll_Manager::Shake(12.f, 0.5f);
 			break;
 		case BURNER::BURST:
 			if (m_ePreBurnerState == BURNER::AFTER)

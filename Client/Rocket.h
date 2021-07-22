@@ -13,21 +13,30 @@ public:
 
 public:
 	static CGameObject* Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos, float _fAngle, _vec3 _vSpeed);
-
+	
 	virtual HRESULT Ready_GameObject() override;
 	virtual void State_Change() override;
 	virtual void Move() override;
 	virtual void DeadEffect() override;
-
-	// CBullet을(를) 통해 상속됨
 	virtual void Late_Update_GameObject() override;
-	void Accel(_vec3 vDir, float _fAccel, float _fMaxSpeed, bool bGravity);
+
+public :
+	void	Accel(_vec3 vDir, float _fAccel, float _fMaxSpeed, bool bGravity);
+	bool	Get_TargetOn() { return m_bTargetOn; }
+
+	void	Set_UiState(ARROW::UI _eUiState) { m_eUiState = _eUiState; }
+	void	Ui_DistanseState(CGameObject* _pUiTarget);
+	void	Ui_DirState(CGameObject* _pUiTarget);
+
+	ARROW::UI m_eUiState;
+	CGameObject* m_pArrow_Offscreen;
 
 
-
-	CGameObject* m_pTargetUi;
+private:
+	CGameObject* m_pMarkerOveray;
 	float m_fTargetTime;
 	float m_fTargetSpeed;
+	bool m_bTargetOn;
 
 };
 #endif // !__ROCKET_H__

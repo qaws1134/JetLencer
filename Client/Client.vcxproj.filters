@@ -178,6 +178,15 @@
     <Filter Include="01.GameObject\00.Object\01.Enemy\02.Tank">
       <UniqueIdentifier>{80563522-3284-454c-a79f-cd88364f5441}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameObject\05.Gui\06.Danger">
+      <UniqueIdentifier>{ef515d42-b1b0-473f-97d9-174e156160f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\00.Arrow_Offscreen\01.Arrow_Offscreen_Rocket">
+      <UniqueIdentifier>{1a9cafe9-48a8-486a-b44f-141d79392995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\00.Arrow_Offscreen\00.Arrow_Offscreen_Jet">
+      <UniqueIdentifier>{3e8eb2ba-9ebe-4fcc-b46f-1efb5973d812}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -312,9 +321,6 @@
     <ClInclude Include="Particle.h">
       <Filter>01.GameObject\08.Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Arrow_Offscreen.h">
-      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen</Filter>
-    </ClInclude>
     <ClInclude Include="ViewText.h">
       <Filter>01.GameObject\05.Gui\99.ViewText</Filter>
     </ClInclude>
@@ -353,6 +359,15 @@
     </ClInclude>
     <ClInclude Include="Jet_Enemy.h">
       <Filter>01.GameObject\00.Object\01.Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Danger.h">
+      <Filter>01.GameObject\05.Gui\06.Danger</Filter>
+    </ClInclude>
+    <ClInclude Include="Arrow_Offscreen.h">
+      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen\00.Arrow_Offscreen_Jet</Filter>
+    </ClInclude>
+    <ClInclude Include="Arrow_Offscreen_Rocket.h">
+      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen\01.Arrow_Offscreen_Rocket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -482,9 +497,6 @@
     <ClCompile Include="Particle.cpp">
       <Filter>01.GameObject\08.Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Arrow_Offscreen.cpp">
-      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen</Filter>
-    </ClCompile>
     <ClCompile Include="ViewText.cpp">
       <Filter>01.GameObject\05.Gui\99.ViewText</Filter>
     </ClCompile>
@@ -523,6 +535,15 @@
     </ClCompile>
     <ClCompile Include="Jet_Enemy.cpp">
       <Filter>01.GameObject\00.Object\01.Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Danger.cpp">
+      <Filter>01.GameObject\05.Gui\06.Danger</Filter>
+    </ClCompile>
+    <ClCompile Include="Arrow_Offscreen.cpp">
+      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen\00.Arrow_Offscreen_Jet</Filter>
+    </ClCompile>
+    <ClCompile Include="Arrow_Offscreen_Rocket.cpp">
+      <Filter>01.GameObject\05.Gui\00.Arrow_Offscreen\01.Arrow_Offscreen_Rocket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

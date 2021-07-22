@@ -142,6 +142,13 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 		pObject = nullptr;
 	}
+	if (_wstrObjName == L"EnemyRocket")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CRocket::Create(pObjInfo, vPos, fAngle, vSpeed);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
+		pObject = nullptr;
+	}
 	if (_wstrObjName == L"Bottle")
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
@@ -199,17 +206,24 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 {
 	CGameObject* pObject = nullptr;
 
-	if (L"Player" == _wstrObjName)
-	{
-		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
-		pObject = CJet_Normal::Create(pObjInfo, vPos);
-		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER), pObject);
-		pObject = nullptr;
-	}
+	//if (L"Player" == _wstrObjName)
+	//{
+	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+	//	pObject = CJet_Normal::Create(pObjInfo, vPos);
+	//	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER), pObject);
+	//	pObject = nullptr;
+	//}
 	if (L"Jet_Normal" == _wstrObjName)
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
 		pObject = CJet_Normal::Create(pObjInfo, vPos);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), pObject);
+		pObject = nullptr;
+	}
+	if (L"Jet_Rocket" == _wstrObjName)
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CJet_Rocket::Create(pObjInfo, vPos);
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), pObject);
 		pObject = nullptr;
 	}
@@ -232,13 +246,6 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pObject);
 		pObject = nullptr;
 	}
-	//if (L"Jet_Rocket" == _wstrObjName)
-	//{
-	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
-	//	pObject = CJet_Rocket::Create(pObjInfo, vPos);
-	//	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
-	//	pObject = nullptr;
-	//}
 	//if (L"Jet_Rush" == _wstrObjName)
 	//{
 	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);

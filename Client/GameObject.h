@@ -54,7 +54,7 @@ public:
 	MATCOLOR			Get_Color() { return m_tColor; }
 	const TEXINFO*		Get_Texture() const { return m_pTexInfo; }
 	bool				Get_Dead() { return m_bDead; }
-
+	const OBJECTINFO*	Get_Prefab() { return m_pObjectInfo; }
 
 
 	bool				Get_TrueMod(){ return m_bTrueMod; }

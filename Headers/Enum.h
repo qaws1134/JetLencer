@@ -9,7 +9,7 @@ namespace OBJID
 {
 	enum ID 
 	{ 
-		BACKGROUND, 
+		BACKGROUND,
 		PLAYER, 
 		ENEMY, 
 		PLAYER_BULLET, 
@@ -47,6 +47,7 @@ namespace COLLIDER
 	{
 		PLAYER,
 		PLAYER_SEARCH,
+		ROCKET_SEARCH,
 		ENEMY,
 		PLAYER_BULLET,
 		PLAYER_BULLET_BEAM,
@@ -110,7 +111,17 @@ namespace SERPENT
 	};
 }
 
-
+namespace DANGER
+{
+	enum STATE
+	{
+		DANGER_START,
+		DANGER_IDLE,
+		DANGER_END,
+		DANGER_CRIT,
+		END
+	};
+}
 
 namespace ARROW
 {
@@ -120,6 +131,7 @@ namespace ARROW
 		DISTANS_LEVEL0,		//Èò»ö0Ä­
 		DISTANS_LEVEL1,		//Èò»ö1Ä­
 		DISTANS_LEVEL2,		//Èò»ö2Ä­
+		ROCKET_MARKER,
 		END
 	};
 }
@@ -181,8 +193,8 @@ namespace UI
 
 		MOUSE_HIT,
 
-		MARKER_ROCKET,
-		MARKER_ROCKET_OVERLAY,
+		//MARKER_ROCKET,
+		//MARKER_ROCKET_OVERLAY,
 
 		WORNWAY_START,
 		WORNWAY_IDLE,
@@ -208,6 +220,7 @@ namespace UI
 		TANK,
 		HACKER_JET,
 		BOSS,
+		MARKER_ROCKET
 	};
 }
 
@@ -237,7 +250,8 @@ namespace EFFECT
 		EXPLOSION1,
 		EXPLOSION2,
 		EXPLOSION3,
-
+		PLAYER_HIT_VFX,
+		MARKER_ROCKET_OVERLAY,
 
 		END
 	};

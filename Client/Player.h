@@ -37,9 +37,16 @@ public :
 	bool				Get_Zoom() { return m_bZoom; }
 	float				Get_Special_Reload() { return m_fChargeTime; }
 	PLAYER::STATE		Get_State() { return m_eState; }
+
+
 	void				Set_State(PLAYER::STATE _eState) { m_eState = _eState; }
-	void				Spectrum();
 	void				Set_SuperEvade(bool _Superevade) { m_bSuperEvade = _Superevade; }
+	void				Set_DangerState(DANGER::STATE _eDangerState) { m_eDangerState = _eDangerState; }
+	void				Add_IsRocket(int _iRocketNum) { m_iRocketNum += _iRocketNum; }
+	void				Set_DangerLength(float _fDangerLength) { if (m_fDangerLength < 150.f)m_fDangerLength = 0; if (m_fDangerLength == 0)m_fDangerLength = _fDangerLength;   if (m_fDangerLength > _fDangerLength) m_fDangerLength = _fDangerLength; }
+
+
+	void				Spectrum();
 private:
 	float				m_fRocketTime[4];
 	float				m_fRocketSpeed;
@@ -88,8 +95,8 @@ private:
 	PLAYER::STATE		m_eWeaponState;
 	PLAYER::STATE		m_ePreWeaponState;
 
-
-
+	DANGER::STATE		m_eDangerState;
+	DANGER::STATE		m_ePreDangerState;
 
 	BULLET::SUBWEAPON	m_eSubWeaponState;
 	
@@ -102,6 +109,11 @@ private:
 	CGameObject*		m_pGuiHp;
 	CGameObject*		m_pGuiDamageGrid;
 
+	CGameObject*		m_pEffectHitVfx;
+
+	CGameObject*		m_pGuiDanger;
+	float				m_fDangerLength;
+	int					m_iRocketNum;
 
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;

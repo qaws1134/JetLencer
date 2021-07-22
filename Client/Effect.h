@@ -32,7 +32,7 @@ public :
 	void Set_Frame(FRAME& _tFrame);
 	void Set_Loop(bool _bLoop) { m_bLoop = _bLoop; }
 	void Set_ReduceTime(float _fTime) { m_fReduceTime = _fTime; }
-
+	void Set_Red(bool _bRed) { m_bRed = _bRed; }
 
 public :
 	virtual void State_Change() override;
@@ -50,9 +50,11 @@ protected:
 	EFFECT::TYPE		m_eEffectType;
 	bool				m_bFrameStart;
 	bool				m_bLoop;
+
+	bool				m_bFrameEndNoDead;
 	float				m_fSize;
 	float				m_fReduce;
-
+	bool				m_bRed;
 
 	float				m_fReduceTime;
 	float				m_fReduceDelay;

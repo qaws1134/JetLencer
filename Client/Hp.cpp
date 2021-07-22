@@ -98,33 +98,12 @@ void CHp::State_Change()
 	switch (m_eState)
 	{
 	case PLAYER::IDLE:
-
 		break;
 	case PLAYER::HIT:
 		static_cast<CUi*>(m_pHp_Glitch)->Set_Render(true);
 		static_cast<CGui*>(m_pHp_Glitch)->Set_Action(true);
-
-
 		break;
 	}
-	//if (!m_bSuper)
-	//{
-	//	static_cast<CGui*>(m_pHp_Glitch)->Set_Action(false);
-	//}
-	//if (m_iPreHp != m_iHp)
-	//{
-	//	static_cast<CUi*>(m_pHp_Glitch)->Set_Render(true);
-	//	static_cast<CGui*>(m_pHp_Glitch)->Set_Action(true);
-	//	if (m_iHp < 0)
-	//		m_iHp = 0;
-	//	static_cast<CGui*>(m_pHp)->Select_Frame((float)m_iHp);
-
-	//	m_iPreHp = m_iHp;
-	//}
-
-	//무적타임 끝나면 글리치 false
-
-
 }
 
 void CHp::Update_Pos()

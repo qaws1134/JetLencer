@@ -25,6 +25,9 @@ public:
 	void	Set_Red(bool _bRed) { m_bRed = _bRed; }
 	void	Set_Green(bool _bGreen) { m_bGreen = _bGreen; }
 	void	Set_HpSize(float _fHpRatio) { m_fTargetSize = m_fMaxSize *_fHpRatio; }
+
+public :
+	bool	Get_Start() { return m_bStart; }
 public:
 	void	InitGui();
 	void	Frame_Change();

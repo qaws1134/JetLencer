@@ -20,13 +20,13 @@ CBullet::~CBullet()
 
 int CBullet::Update_GameObject()
 {
-	if (m_bDeadEffect)
-	{
-		DeadEffect();
-	}
 	if (m_bDead)
 	{
 		return OBJ_DEAD;
+	}
+	if (m_bDeadEffect)
+	{
+		DeadEffect();
 	}
 
 	Set_Texture();

@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrow_Offscreen.h" />
+    <ClInclude Include="Arrow_Offscreen_Rocket.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Beam.h" />
     <ClInclude Include="Bottle.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Collision_Manager.h" />
     <ClInclude Include="ColRect.h" />
     <ClInclude Include="ColSphere.h" />
+    <ClInclude Include="Danger.h" />
     <ClInclude Include="DmgGrid.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Flip.h" />
@@ -214,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Arrow_Offscreen.cpp" />
+    <ClCompile Include="Arrow_Offscreen_Rocket.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Beam.cpp" />
     <ClCompile Include="Bottle.cpp" />
@@ -224,6 +227,7 @@
     <ClCompile Include="Collision_Manager.cpp" />
     <ClCompile Include="ColRect.cpp" />
     <ClCompile Include="ColSphere.cpp" />
+    <ClCompile Include="Danger.cpp" />
     <ClCompile Include="DmgGrid.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Flip.cpp" />

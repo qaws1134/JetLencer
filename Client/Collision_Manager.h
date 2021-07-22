@@ -9,13 +9,14 @@ public:
 public:
 	//static bool Check_Sphere(CGameObject* _Dst, CGameObject* _Src);
 	static bool Check_Sphere(CCollider* _Dst, CCollider* _Src);
+	static bool Check_Sphere(CCollider* _Dst, CCollider* _Src,float * _fDis);
 	static bool Check_Rect_Sphere(CCollider* _Dst, CCollider* _Src);
 
 	static void Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src);
 	static void Collision_Enemy_Player_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src);
 	static void Collision_PlayerBeam(list<CCollider*>& _Dst, list<CCollider*>& _Src);
 	static void Collision_EnemyBeam(list<CCollider*>& _Dst, list<CCollider*>& _Src);
-	static void Collision_Search(list<CCollider*>& _Dst, list<CCollider*>& _Src);
-
+	static void Collision_Enemy_Search(list<CCollider*>& _Dst, list<CCollider*>& _Src);
+	static void Collision_Rocket_Search(list<CCollider*>& _Dst, list<CCollider*>& _Src);
 };
 

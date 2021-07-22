@@ -11,6 +11,8 @@ CEffect::CEffect()
 	, m_fDelTime(0.f)
 	, m_fReduceTime(0.f)
 	, m_fReduceDelay(0.f)
+	, m_bFrameEndNoDead(false)
+	, m_bRed(false)
 {
 }
 
@@ -246,6 +248,38 @@ void CEffect::State_Change()
 			m_tFrame.fStartFrame = 2.f;
 		}
 		break;
+	case EFFECT::PLAYER_HIT_VFX:
+		if (m_bFrameStart)
+		{
+			m_tInfo.vSize = { 1.5f,1.5f,0.f };
+
+			m_tInfo.vPos = m_pTarget->Get_ObjInfo().vPos;
+
+			Frame_Change();
+
+			if (!m_bRed)
+				m_tColor = { 180,0,255,0 };
+			else
+				m_tColor = { 180,255,0,0 };
+		}
+		else
+		{
+			m_tInfo.vSize = { 0.f,0.f,0.f };
+			m_tFrame.fStartFrame = 0.f;
+		}
+		break;
+	case EFFECT::MARKER_ROCKET_OVERLAY:
+		if (m_bFrameStart)
+		{
+			m_tInfo.vSize = { 1.3f,1.3f,0.f };
+			Frame_Change();
+		}
+		else
+		{
+			m_tInfo.vSize = { 0.f,0.f,0.f };
+			m_tFrame.fStartFrame = 0.f;
+		}
+
 	default:
 		Frame_Change();
 		break;
@@ -274,7 +308,10 @@ void CEffect::Frame_Change()
 		else
 		{
 			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1;
-			m_bDead = true;
+			if(!m_bFrameEndNoDead)
+				m_bDead = true;
+			else
+				m_bFrameStart = false;
 		}
 	}
 } 
@@ -400,6 +437,22 @@ void CEffect::InitEffect()
 		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
 		m_fReduce = float((rand() % 10) + 6) * 0.01f;
 		m_tFrame.fFrameSpeed = 30.f;
+		break;
+	case EFFECT::PLAYER_HIT_VFX:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"PlayerHit_vfx");
+		Set_Frame(m_pAnimation);
+		m_fSize = 1.f;
+		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 30.f;
+		m_bFrameEndNoDead = true;
+		break;
+	case EFFECT::MARKER_ROCKET_OVERLAY:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiMarker_rocket_overlay");
+		Set_Frame(m_pAnimation);
+		m_fSize = 1.f;
+		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 10.f;
+		m_bLoop = true;
 		break;
 	default:
 		m_fSize = 1.f;

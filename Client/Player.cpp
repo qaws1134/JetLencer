@@ -13,6 +13,9 @@
 #include "Rocket_Ui.h"
 #include "Hp.h"
 #include "DmgGrid.h"
+#include "Danger.h"
+
+
 
 #define SubWeaponDelay 1.f
 #define ChargeWeaponDelayLV1 2.5f
@@ -44,6 +47,9 @@ CPlayer::CPlayer()
 	, m_fSpectrumTime(0.f)
 	, m_bSpectrum(false)
 	, m_bSuperEvade(false)
+	, m_eDangerState(DANGER::END)
+	, m_ePreDangerState(DANGER::END)
+	, m_iRocketNum(0)
 {
 	
 }
@@ -153,15 +159,13 @@ HRESULT CPlayer::Ready_GameObject()
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pBurner);
 
 
-
-
-
 	//컬라이더
 #define PlayerColliderSize	10.f
 	m_vecCollider.reserve(8);
 	m_vecCollider.emplace_back(CColSphere::Create(this,m_tCombatInfo, PlayerColliderSize, COLLIDER::PLAYER));
 	for (int i = 0; i < 4; i++)
 		m_vecCollider.emplace_back(CColRect::Create(this, (float)WINCX*(i+1),(float)WINCY*(i+1), COLLIDER::PLAYER_SEARCH));
+	m_vecCollider.emplace_back(CColSphere::Create(this, 100.f, COLLIDER::ROCKET_SEARCH));
 
 
 
@@ -177,6 +181,13 @@ HRESULT CPlayer::Ready_GameObject()
 	m_pGuiHp = CHp::Create(_vec3{ float(WINCX >> 1),float(WINCY >> 1) + 200.f,0.f });
 	static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
 	m_pGuiDamageGrid = CDmgGrid::Create();
+
+	m_pEffectHitVfx = CEffect::Create(EFFECT::PLAYER_HIT_VFX);
+	m_pEffectHitVfx->Set_Target(this);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pEffectHitVfx);
+
+	m_pGuiDanger = CDanger::Create(_vec3{float(WINCX>>1),float(WINCY >> 1)-250.f,0.f });
+
 
 	return S_OK;
 }
@@ -218,7 +229,6 @@ void CPlayer::Release_GameObject()
 }
 
 
-
 void CPlayer::State_Change()
 {
 	if (m_eState != m_ePreState)
@@ -245,6 +255,8 @@ void CPlayer::State_Change()
 		case PLAYER::SUPER_EVEDE:
 			CScroll_Manager::Shake(5.f, 0.5f);
 			static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Green(true);
+			static_cast<CEffect*>(m_pEffectHitVfx)->Set_Red(false);
+			static_cast<CEffect*>(m_pEffectHitVfx)->Set_FrameStart(true);
 			m_fSuperSpeed = 1.f;
 			m_fSuperTime = 0.f;
 			m_bSuperEvade = false;
@@ -256,6 +268,9 @@ void CPlayer::State_Change()
 			m_tCombatInfo.iHp -= 1;
 			static_cast<CHp*>(m_pGuiHp)->Set_State(m_eState);
 			static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
+			static_cast<CEffect*>(m_pEffectHitVfx)->Set_Red(true);
+			static_cast<CEffect*>(m_pEffectHitVfx)->Set_FrameStart(true);
+
 			if (m_tCombatInfo.iHp <= 0)
 			{
 				DeadEffect();
@@ -315,11 +330,55 @@ void CPlayer::State_Change()
 		}
 		m_ePreWeaponState = m_eWeaponState;
 	}
+
+
+	//if (m_ePreDangerState != m_eDangerState)
+	//{
+		switch (m_eDangerState)
+		{
+		case DANGER::DANGER_START:
+			//처음 들어왔을 때 
+			if (m_iRocketNum == 1)
+				static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::DANGER_START);
+			else
+				m_eDangerState = DANGER::DANGER_IDLE;
+			break;
+		case DANGER::DANGER_IDLE:
+			static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::DANGER_IDLE);
+
+			break;
+		case DANGER::DANGER_END:
+			if (m_iRocketNum == 0)
+			{
+				static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::DANGER_END);
+				if (static_cast<CDanger*>(m_pGuiDanger)->Get_Danger_End())
+				{
+					m_eDangerState = DANGER::END;
+				}
+				break;
+			}
+		case DANGER::END:
+			if (m_iRocketNum == 0)
+			{
+				static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::END);
+				break;
+			}
+		}
+		m_ePreDangerState = m_eDangerState;
+	//}
+	if (m_ePreDangerState != DANGER::DANGER_END)
+	{
+		if (m_iRocketNum == 0)
+		{
+			static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::END);
+		}
+	}
+
+	static_cast<CDanger*>(m_pGuiDanger)->Set_FrameSpeed(m_fDangerLength);
 }
 
 void CPlayer::Roll()
 {
-	
 	if (!m_bRoll)
 	{
 		m_eState = PLAYER::IDLE;
