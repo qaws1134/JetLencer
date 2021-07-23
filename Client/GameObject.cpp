@@ -149,7 +149,7 @@ void CGameObject::TargetAngle_Check()
 	m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)),-sinf(D3DXToRadian(m_fAngle)),0.f };
 
 	float fCos = D3DXVec3Dot(&m_vTarget_Dir, &m_tInfo.vDir);
-	if (fCos > 0.99)
+	if (fCos > 0.999)
 		return;
 	float fAngle = D3DXToDegree(acosf(fCos));
 	m_vCross = {};

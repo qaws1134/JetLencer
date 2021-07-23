@@ -117,9 +117,13 @@ private:
 	CGameObject*		m_pWornWayRight;
 	bool				m_bLWorn;
 	bool				m_bRWorn;
-
+	
 	float				m_fDangerLength;
 	int					m_iRocketNum;
+
+	bool				m_bGroundAuto;
+	float				m_fAfterBurnModule;
+	float				m_fChargeTimeModule;
 
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;

@@ -16,12 +16,6 @@
     <Filter Include="03.Scene">
       <UniqueIdentifier>{cc28ea39-33b8-4be9-b9d4-3f923c8790ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Scene\Manager">
-      <UniqueIdentifier>{91d0214f-76a8-470f-b353-31d34f099666}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Scene\Stage">
-      <UniqueIdentifier>{cc673da7-6c2c-431a-ab2b-d0b69c800f5e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Texture">
       <UniqueIdentifier>{cf0024f2-9b27-474b-9937-45a630bccf5b}</UniqueIdentifier>
     </Filter>
@@ -190,6 +184,33 @@
     <Filter Include="01.GameObject\05.Gui\07.WorngWay">
       <UniqueIdentifier>{7af9422e-059d-4c46-b98e-592cf4fd34d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.GameObject\09.Button">
+      <UniqueIdentifier>{e9fb52d6-8263-4a80-ae03-35e06f2d10b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\10.Cloude">
+      <UniqueIdentifier>{c09bf150-c7d8-459f-bb7b-af6c65b19d91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\Manager">
+      <UniqueIdentifier>{91d0214f-76a8-470f-b353-31d34f099666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\00.Stage">
+      <UniqueIdentifier>{cc673da7-6c2c-431a-ab2b-d0b69c800f5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\01.LoadOut">
+      <UniqueIdentifier>{4efa57a7-6afb-4e3e-815b-f922fcc695ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\02.Menu">
+      <UniqueIdentifier>{7475faf9-aa67-4d87-9362-541ffbbf67da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\00.Stage\00.Stage1">
+      <UniqueIdentifier>{62867b83-6915-42d5-adca-e6f47178afe8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\00.Stage\02.StageBoss">
+      <UniqueIdentifier>{fd6d1acd-56f2-4d2d-a2a6-8801d51e50e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\00.Stage\01.Stage2">
+      <UniqueIdentifier>{fccaa4fa-183c-4cdd-b92d-8fd8771356b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -233,9 +254,6 @@
     </ClInclude>
     <ClInclude Include="Scene_Manager.h">
       <Filter>03.Scene\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage.h">
-      <Filter>03.Scene\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Scroll_Manager.h">
       <Filter>Manager\06.Scroll_Manager</Filter>
@@ -375,6 +393,15 @@
     <ClInclude Include="WorngWay.h">
       <Filter>01.GameObject\05.Gui\07.WorngWay</Filter>
     </ClInclude>
+    <ClInclude Include="LoadOut.h">
+      <Filter>03.Scene\01.LoadOut</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMenu.h">
+      <Filter>03.Scene\02.Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>03.Scene\00.Stage\00.Stage1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -412,9 +439,6 @@
     </ClCompile>
     <ClCompile Include="Scene_Manager.cpp">
       <Filter>03.Scene\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>03.Scene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Scroll_Manager.cpp">
       <Filter>Manager\06.Scroll_Manager</Filter>
@@ -553,6 +577,15 @@
     </ClCompile>
     <ClCompile Include="WorngWay.cpp">
       <Filter>01.GameObject\05.Gui\07.WorngWay</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadOut.cpp">
+      <Filter>03.Scene\01.LoadOut</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMenu.cpp">
+      <Filter>03.Scene\02.Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>03.Scene\00.Stage\00.Stage1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

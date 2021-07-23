@@ -13,6 +13,8 @@ public:
 	LPD3DXLINE			Get_Line()		{ return m_pLine;	}
 	LPD3DXSPRITE		Get_Sprite()	{ return m_pSprite;  }
 	LPD3DXFONT			Get_Font()		{ return m_pFont;  }
+	LPD3DXFONT			Get_BigFont() { return m_pBigFont; }
+	LPD3DXFONT			Get_SmallFont() { return m_pSmallFont; }
 	LPDIRECT3DDEVICE9	Get_Device()	{ return m_pDevice; }
 public:
 	HRESULT Ready_Graphic_Device(MODE eID = MODE_WIN ); 
@@ -35,6 +37,8 @@ private:
 	LPDIRECT3DDEVICE9	m_pDevice; // 애가 실질적으로 장치를 제어할 컴객체야. 
 	LPD3DXSPRITE		m_pSprite; 
 	LPD3DXFONT			m_pFont; 
+	LPD3DXFONT			m_pBigFont;
+	LPD3DXFONT			m_pSmallFont;
 	LPD3DXLINE			m_pLine; 
 };
 

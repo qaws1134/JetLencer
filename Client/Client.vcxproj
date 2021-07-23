@@ -175,7 +175,10 @@
     <ClInclude Include="Graphic_Device.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="Hp.h" />
+    <ClInclude Include="LoadOut.h" />
+    <ClInclude Include="MyMenu.h" />
     <ClInclude Include="Rocket_Ui.h" />
+    <ClInclude Include="SelectStage.h" />
     <ClInclude Include="Serpent.h" />
     <ClInclude Include="SerpentBody.h" />
     <ClInclude Include="SerpentHead.h" />
@@ -238,7 +241,10 @@
     <ClCompile Include="Graphic_Device.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="Hp.cpp" />
+    <ClCompile Include="LoadOut.cpp" />
+    <ClCompile Include="MyMenu.cpp" />
     <ClCompile Include="Rocket_Ui.cpp" />
+    <ClCompile Include="SelectStage.cpp" />
     <ClCompile Include="Serpent.cpp" />
     <ClCompile Include="SerpentBody.cpp" />
     <ClCompile Include="SerpentHead.cpp" />

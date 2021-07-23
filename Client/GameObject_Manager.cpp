@@ -141,6 +141,20 @@ void CGameObject_Manager::Release_GameObject_Manager()
 	}
 }
 
+void CGameObject_Manager::DeleteID_GameObject_Manager(OBJID::ID eID)
+{
+	for (int i = 0; i < OBJID::END; ++i)
+	{
+		if (i != eID)
+			continue;
+		for (auto& pObject : m_listGameObject[i])
+		{
+			Safe_Delete(pObject);
+		}
+		m_listGameObject[i].clear();
+	}
+}
+
 CGameObject* CGameObject_Manager::Get_Target(CGameObject* _pObj, OBJID::ID _eID) const
 {
 	CGameObject*pTarget = nullptr;

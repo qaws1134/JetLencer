@@ -31,6 +31,8 @@ void CUi::Set_Frame(const ANIMATION * _tAnimationInfo)
 
 void CUi::WriteMatrix()
 {
+	if (!m_pTexInfo)
+		return;
 	D3DXMATRIX matScale, matTrans, matRotZ, matWorld;
 	D3DXMatrixIdentity(&matScale);
 	D3DXMatrixIdentity(&matTrans);
@@ -64,9 +66,5 @@ void CUi::Render_GameObject()
 }
 
 void CUi::Release_GameObject()
-{
-}
-
-void CUi::State_Change()
 {
 }

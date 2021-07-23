@@ -51,8 +51,14 @@ void CKey_Manager::Key_Update()
 		m_dwKey |= KEY_NUM3;
 	if (GetAsyncKeyState(VK_NUMPAD4) & 0x8000)
 		m_dwKey |= KEY_NUM4;
-
-
+	if (GetAsyncKeyState('S') & 0x8000)
+		m_dwKey |= KEY_S;
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+		m_dwKey |= KEY_ESC;
+	if (GetAsyncKeyState('A') & 0x8000)
+		m_dwKey |= KEY_A;
+	if (GetAsyncKeyState('D') & 0x8000)
+		m_dwKey |= KEY_D;
 }
 
 bool CKey_Manager::Key_Up(DWORD dwKey)

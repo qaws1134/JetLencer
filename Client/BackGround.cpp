@@ -149,23 +149,27 @@ void CBackGround::Render_GameObject()
 
 		if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height) - 100.f < m_pTarget->Get_ObjInfo().vPos.y)
 		{
-			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-			m_fSplashTime += fTime;
-
-			//땅과 플레이어의 y값 차
-			float fYGap = (m_pTarget->Get_ObjInfo().vPos.y) - (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height) - 100.f);
-			float fYNormalGap = fYGap* 0.01f;
-
-			//최대 크기
-			if (fYNormalGap > 1.5f)
-				fYNormalGap = 1.5f;
-
-			if (m_fSplashTime > 0.015f)
+			if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height) + 50.f > m_pTarget->Get_ObjInfo().vPos.y)
 			{
-				CSpawn_Manager::Spawn(EFFECT::GROUND_WATERSPLASH_FAST, _vec3(m_pTarget->Get_ObjInfo().vPos.x - m_pTarget->Get_Velocity().x*fTime, m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)*0.5f, 0.f), false, fYNormalGap);
-				m_fSplashTime = 0.f;
+				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+				m_fSplashTime += fTime;
+
+				//땅과 플레이어의 y값 차
+				float fYGap = (m_pTarget->Get_ObjInfo().vPos.y) - (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height) - 100.f);
+				float fYNormalGap = fYGap* 0.01f;
+
+				//최대 크기
+				if (fYNormalGap > 1.5f)
+					fYNormalGap = 1.5f;
+
+				if (m_fSplashTime > 0.015f)
+				{
+					CSpawn_Manager::Spawn(EFFECT::GROUND_WATERSPLASH_FAST, _vec3(m_pTarget->Get_ObjInfo().vPos.x - m_pTarget->Get_Velocity().x*fTime, m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)*0.5f, 0.f), false, fYNormalGap);
+					m_fSplashTime = 0.f;
+				}
 			}
 		}
+
 	}
 	if (m_eRenderId == RENDERID::BACKGROUND)
 	{

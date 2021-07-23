@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Scene_Manager.h"
 #include "Stage.h"
+#include "MyMenu.h"
+#include "LoadOut.h"
 IMPLEMENT_SINGLETON(CScene_Manager)
 CScene_Manager::CScene_Manager()
 	:m_eCurScene(END)
@@ -23,11 +25,22 @@ HRESULT CScene_Manager::Change_Scene_Manager(const ID eID)
 		Safe_Delete(m_pScene); 
 		switch (m_eNextScene)
 		{
-		case CScene_Manager::SCENE_LOADING:
+		case CScene_Manager::SCENE_MENU:
+			m_pScene = CMyMenu::Create();
+			break;
+		case CScene_Manager::SCENE_LOADOUT:
+			m_pScene = CLoadOut::Create();
 			break;
 		case CScene_Manager::SCENE_STAGE:
 			m_pScene = CStage::Create(); 
 			break;
+		case CScene_Manager::SCENE_STAGE2:
+			//m_pScene = CState2::Create();
+			break;
+		case CScene_Manager::SCENE_BOSS:
+			//m_pScene = CStageBoss::Create();
+			break;
+
 		case CScene_Manager::END:
 			break;
 		default:

@@ -18,8 +18,8 @@
 
 
 #define SubWeaponDelay 1.f
-#define ChargeWeaponDelayLV1 2.5f
-#define ChargeWeaponDelayLV2 5.9f
+#define ChargeWeaponDelayLV1 4.5f
+#define ChargeWeaponDelayLV2 6.9f
 
 CPlayer::CPlayer()
 	: m_fRocketSpeed(0.f)
@@ -52,7 +52,9 @@ CPlayer::CPlayer()
 	, m_iRocketNum(0)
 	, m_bLWorn(false)
 	, m_bRWorn(false)
-
+	, m_bGroundAuto(false)
+	, m_fAfterBurnModule(0.f)
+	, m_fChargeTimeModule(0.f)
 {
 	
 }
@@ -79,6 +81,48 @@ CGameObject * CPlayer::Create()
 HRESULT CPlayer::Ready_GameObject()
 {
 	
+	list<LOADOUT::INDEX> eLoadOutDate = CGameObject_Manager::Get_Instance()->Get_LoadOutData();
+	
+	for (auto& iter : eLoadOutDate)
+	{
+		switch (iter)
+		{
+		case LOADOUT::HOMING_ROCKET:
+			wstrSubWeapon = L"Rocket_alt";
+			break;
+		case LOADOUT::ROCKET:
+			wstrSubWeapon = L"Rocket";
+			break;
+		case LOADOUT::BOTTLE:
+			wstrSubWeapon = L"Bottle";
+			break;
+		case LOADOUT::MULTI_HOMING:
+			wstrChargeWeapon = L"Multi_Homing";
+			break;
+		case LOADOUT::BEAM:
+			wstrChargeWeapon = L"Beam";
+			break;
+		case LOADOUT::GUNDRONE :
+			wstrChargeWeapon = L"GunDrone";
+			break;
+		case LOADOUT::AUTO_GUIDE :
+			m_bGroundAuto = true;
+			break;
+		case LOADOUT::AFTERBURN_UP :
+			m_fAfterBurnModule = 2.f;
+			break;
+		case LOADOUT::CHARGE_UP:
+			m_fChargeTimeModule = -1.f;
+			break;
+		}
+	}
+
+
+	if(wstrSubWeapon==L"")
+		wstrSubWeapon = L"Rocket";
+	if(wstrChargeWeapon==L"")
+		wstrChargeWeapon = L"Beam";
+
 	//m_tInfo
 	m_tInfo.vPos.x = float(Map_Width>>1);
 	m_tInfo.vPos.y = float(Map_Height>>1);
@@ -140,8 +184,8 @@ HRESULT CPlayer::Ready_GameObject()
 	m_fSpectrumTime = 1.f;
 
 	//¹«±â»óÅÂ
-	wstrSubWeapon = L"Rocket_alt";		// Rocket,bottle , HommingRocket,
-	wstrChargeWeapon = L"Beam";		// Beam, GunDrone, MultiHomming,boom, 
+	//wstrSubWeapon = L"Rocket_alt";		// Rocket,bottle , HommingRocket,
+	//wstrChargeWeapon = L"Beam";		// Beam, GunDrone, MultiHomming,boom, 
 	//Rocket_alt
 
 	//ºö Â÷Áö ÀÌÆåÆ®
@@ -156,7 +200,7 @@ HRESULT CPlayer::Ready_GameObject()
 	m_iMax_ptFireNum = 10;
 
 	m_fAfterBurnTime = 0.f;
-	m_fAfterBurnlimit = 4.f;
+	m_fAfterBurnlimit = 4.f+ m_fAfterBurnModule;
 	m_fReduceAccelRate = 0.08f;
 
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pBurner);
@@ -427,7 +471,7 @@ void CPlayer::PositionRock_Check()
 	_vec3 vMouseResult = vMouse;
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 
-	_vec3 NextPos = m_tInfo.vPos + m_vVelocity*50.f*fTime;
+	_vec3 NextPos = m_tInfo.vPos + m_vVelocity*47.f*fTime;
 
 
 	_vec3 vWornScroll = -CScroll_Manager::Get_Scroll();
@@ -461,17 +505,27 @@ void CPlayer::PositionRock_Check()
 		}
 	}
 
-
-
 	if (0 > NextPos.x|| Map_Width<NextPos.x)
 	{
 		vMouseResult.x = WINCX >> 1;
 		m_bAuto = true;
 	}
-	if (0 > NextPos.y||Map_Height<NextPos.y)
+	if (0 > NextPos.y)
 	{
 		vMouseResult.y = WINCY >> 1;
 		m_bAuto = true;
+	}
+	if (Map_Height < NextPos.y)
+	{
+		if (m_bGroundAuto)
+		{
+			vMouseResult.y = WINCY >> 1;
+			m_bAuto = true;
+		}
+	}
+	if (Map_Height < m_tInfo.vPos.y)
+	{
+		m_eState = PLAYER::HIT;
 	}
 
 	if (!CScroll_Manager::Get_ScrollLock(SCROLL::LEFT)
@@ -717,9 +771,9 @@ bool CPlayer::SubWeapon_Check()
 		m_eSubWeaponState = BULLET::CHARGE_0;
 		return RocketTime();
 	}
-	else if (m_fChargeTime < ChargeWeaponDelayLV1)
+	else if (m_fChargeTime < ChargeWeaponDelayLV1 + m_fChargeTimeModule)
 		m_eSubWeaponState = BULLET::CHARGE_1;
-	else if (m_fChargeTime < ChargeWeaponDelayLV2)
+	else if (m_fChargeTime < ChargeWeaponDelayLV2+ m_fChargeTimeModule)
 		m_eSubWeaponState = BULLET::CHARGE_2;
 	else 
 		m_eSubWeaponState = BULLET::CHARGE_3;

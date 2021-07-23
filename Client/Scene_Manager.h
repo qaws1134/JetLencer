@@ -4,7 +4,8 @@ class CScene_Manager
 {
 	DECLARE_SINGLETON(CScene_Manager)
 public:
-	enum ID {SCENE_LOADING, SCENE_STAGE, END};
+	enum ID {SCENE_LOADING, SCENE_MENU, SCENE_STAGE_SEL,SCENE_LOADOUT, SCENE_STAGE, SCENE_STAGE2, SCENE_BOSS, END};
+
 private:
 	CScene_Manager();
 	~CScene_Manager();

@@ -47,6 +47,7 @@ private:
 	bool m_bGreen;
 	_vec3 m_vTargetPos;
 	float m_fIncrease;
+	float m_fSizeIncrease;
 	// CUi을(를) 통해 상속됨
 };
 

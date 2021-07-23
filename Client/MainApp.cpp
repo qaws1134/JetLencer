@@ -26,7 +26,7 @@ HRESULT CMainApp::Ready_MainApp()
 	if (FAILED(CPrefab_Manager::Get_Instance()->Ready_Prefab_Manager()))
 		goto ERR;
 
-	CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_STAGE);
+	CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_MENU);
 	return S_OK;
 
 ERR:

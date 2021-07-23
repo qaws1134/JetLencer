@@ -12,11 +12,24 @@
 
 CStage::CStage()
 {
+
 }
 
 
 CStage::~CStage()
 {
+
+}
+
+CScene * CStage::Create()
+{
+	CScene* pInstance = new CStage;
+	if (FAILED(pInstance->Ready_Scene()))
+	{
+		Safe_Delete(pInstance);
+		return pInstance;
+	}
+	return pInstance;
 }
 
 HRESULT CStage::Ready_Scene()
@@ -58,6 +71,15 @@ HRESULT CStage::Ready_Scene()
 void CStage::Update_Scene()
 {
 
+
+	if (CKey_Manager::Get_Instance()->Key_Down(KEY_ESC))
+	{
+		CGameObject_Manager::Get_Instance()->Release_GameObject_Manager();
+	
+		CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_MENU);
+	}
+
+
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_P))
 	{
 		//º¸½º »Ç¤³±â
@@ -71,9 +93,6 @@ void CStage::Update_Scene()
 	CSpawn_Manager::Get_Instance()->Update_MultiSpawn();
 	CGameObject_Manager::Get_Instance()->Update_GameObject_Manager(); 
 	CScroll_Manager::Scroll_Lock();
-	//static_cast<CViewText*>(m_pOject1)->Set_Point(CScroll_Manager::Get_Scroll().x);
-	//static_cast<CViewText*>(m_pOject2)->Set_Point(CScroll_Manager::Get_Scroll().y);
-
 }
 
 void CStage::Render_Scene()
@@ -84,15 +103,4 @@ void CStage::Render_Scene()
 void CStage::Release_Scene()
 {
 	CSpawn_Manager::Destroy_Instance();
-}
-
-CScene * CStage::Create()
-{
-	CScene* pInstance = new CStage; 
-	if (FAILED(pInstance->Ready_Scene()))
-	{
-		Safe_Delete(pInstance);
-		return pInstance;
-	}
-	return pInstance;
 }

@@ -7,6 +7,7 @@ CGraphic_Device::CGraphic_Device()
 	,m_pSDK(nullptr)
 	,m_pSprite(nullptr)
 	,m_pFont(nullptr)
+	,m_pBigFont(nullptr)
 {
 }
 
@@ -69,13 +70,41 @@ HRESULT CGraphic_Device::Ready_Graphic_Device(MODE eID /*= MODE_WIN*/)
 	D3DXFONT_DESCW tFontDesc ;
 	ZeroMemory(&tFontDesc, sizeof(D3DXFONT_DESCW)); 
 	
-	tFontDesc.Height = 20; 
-	tFontDesc.Width = 10;
-	tFontDesc.Weight = FW_HEAVY; 
+	tFontDesc.Height = 30; 
+	tFontDesc.Width = 20;
+	tFontDesc.Weight = FW_NORMAL; 
+
 	tFontDesc.CharSet = HANGEUL_CHARSET; 
-	lstrcpy(tFontDesc.FaceName, L"CookieRun Black");
+	lstrcpy(tFontDesc.FaceName, L"CookieRun Bold");
 	if (FAILED(D3DXCreateFontIndirectW(m_pDevice, &tFontDesc, &m_pFont)))
 		goto ERR; 
+
+
+	D3DXFONT_DESCW tBigFontDesc;
+	ZeroMemory(&tBigFontDesc, sizeof(D3DXFONT_DESCW));
+
+	tBigFontDesc.Height = 60;
+	tBigFontDesc.Width = 40;
+	tBigFontDesc.Weight = FW_NORMAL;
+
+	tBigFontDesc.CharSet = HANGEUL_CHARSET;
+	lstrcpy(tBigFontDesc.FaceName, L"CookieRun Regular");
+	if (FAILED(D3DXCreateFontIndirectW(m_pDevice, &tBigFontDesc, &m_pBigFont)))
+		goto ERR;
+
+	D3DXFONT_DESCW tSmallFontDesc;
+	ZeroMemory(&tSmallFontDesc, sizeof(D3DXFONT_DESCW));
+
+	tSmallFontDesc.Height = 25;
+	tSmallFontDesc.Width = 18;
+	tBigFontDesc.Weight = FW_NORMAL;
+
+	tSmallFontDesc.CharSet = HANGEUL_CHARSET;
+	lstrcpy(tSmallFontDesc.FaceName, L"CookieRun Regular");
+	if (FAILED(D3DXCreateFontIndirectW(m_pDevice, &tSmallFontDesc, &m_pSmallFont)))
+		goto ERR;
+
+
 
 	if (FAILED(D3DXCreateLine(m_pDevice, &m_pLine)))
 		goto ERR;
@@ -93,6 +122,12 @@ void CGraphic_Device::Release_Graphic_Device()
 
 	if (m_pFont)
 		m_pFont->Release(); 
+
+	if (m_pBigFont)
+		m_pBigFont->Release();
+
+	if (m_pSmallFont)
+		m_pBigFont->Release();
 
 	if (m_pSprite)
 		m_pSprite->Release(); 

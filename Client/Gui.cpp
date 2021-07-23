@@ -14,6 +14,8 @@ CGui::CGui()
 	, m_bRed(false)
 	, m_bGreen(false)
 	, m_fMaxSize(0.f)
+	, m_fSizeIncrease(0.f)
+	,m_fIncrease(0.f)
 {
 }
 
@@ -410,6 +412,57 @@ void CGui::State_Change()
 			Frame_Change();
 		}
 		break;
+	case UI::CLOUDE:
+
+		if (m_bAction)
+		{
+			m_fIncrease += 0.03f;
+			m_fSizeIncrease += 0.003f;
+
+			m_vVelocity += _vec3{ 0.f,m_fIncrease,0.f };
+			m_tInfo.vPos += m_vVelocity;
+
+			m_tInfo.vSize += _vec3{ m_fSizeIncrease,0.f,0.f };
+
+			if (m_tInfo.vPos.y > WINCY + 100.f)
+			{
+				m_bDead = true;
+			}
+		}
+		break;
+	case UI::LOGO:
+		break;
+	case UI::SCREENBLACK:
+		break;
+	case UI::BUTTON:
+		break;
+	case UI::FRAMEBACK:
+		break;
+	case UI::MARKER_SHINE:
+		break;
+	case UI::STAGEGUIDE:
+		break;
+	case UI::STAGEICON:
+		break;
+
+	case UI::LO_BACKPLATE:
+		break;
+	case UI::LO_CHARGEWEAPONE:
+		break;
+	case UI::LO_FRAME:
+		break;
+	case UI::LO_POINTER:
+		m_tFrame.fFrameSpeed = 10.f;
+		Frame_Change();
+		break;
+	case UI::LO_SUBWEAPON:
+		break;
+	case UI::LO_TEXTLINERED:
+
+		break;
+	case UI::LO_TEXTLINEYELLO:
+		break;
+
 	default:
 		break;
 	}
@@ -620,12 +673,79 @@ void CGui::InitGui()
 	case UI::DANGER_END:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_end");
 		m_bRender = false;
-
 		break;
 	case UI::DANGER_CRIT:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiDanger_crit");
 		m_bRender = false;
 		break;
+
+	case UI::MENUBACKGROUND:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuBackground");
+		m_tInfo.vSize = { 1.3f,1.f,0.f };
+		m_tInfo.vPos = { float(WINCX >> 1),float(WINCY >> 1) - 150.f,0.f };
+		m_eRenderId = RENDERID::BACKGROUND;
+		break;
+	case UI::CLOUDE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuCloude");
+		m_tInfo.vSize = { 1.3f,0.7f,0.f };
+		m_vVelocity = { 0.f,0.f,0.f };
+		m_fIncrease = 0.f;
+
+		m_eRenderId = RENDERID::MOVE_BACKGROUND1;
+		break;
+	case UI::LOGO:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuLogo");
+		break;
+	case UI::SCREENBLACK:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuScreenBlack");
+		break;
+	case UI::BUTTON:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuButton");
+		m_tInfo.vSize = { 1.f,1.5f,0.f };
+		break;
+	case UI::FRAMEBACK:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuFrameBack");
+		break;
+	case UI::MARKER_SHINE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuMarker_Shine");
+		break;
+	case UI::STAGEGUIDE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuStageGuide");
+		break;
+	case UI::STAGEICON:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuStageIcon");
+		break;
+
+	case UI::LO_BACKPLATE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutBackplate");
+		break;
+	case UI::LO_CHARGEWEAPONE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutChargeWeapon");
+		break;
+	case UI::LO_FRAME:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutFrame");
+		break;
+	case UI::LO_POINTER:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutPonter");
+		m_bLoop = true;
+		break;
+	case UI::LO_SUBWEAPON:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutSubWeapon");
+
+		break;
+	case UI::LO_MODULE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutModule");
+		break;
+	case UI::LO_TEXTLINERED:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutTextLineRed");
+		break;
+	case UI::LO_TEXTLINEYELLO:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutTextLineYellow");
+		break;
+	case UI::LO_BACKGROUND:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutBackGround");
+		break;
+
 	}
 
 }
