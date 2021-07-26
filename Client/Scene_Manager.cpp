@@ -3,6 +3,10 @@
 #include "Stage.h"
 #include "MyMenu.h"
 #include "LoadOut.h"
+#include "SelectStage.h"
+#include "Stage2.h"
+#include "Stage3.h"
+#include "StageBoss.h"
 IMPLEMENT_SINGLETON(CScene_Manager)
 CScene_Manager::CScene_Manager()
 	:m_eCurScene(END)
@@ -31,14 +35,20 @@ HRESULT CScene_Manager::Change_Scene_Manager(const ID eID)
 		case CScene_Manager::SCENE_LOADOUT:
 			m_pScene = CLoadOut::Create();
 			break;
-		case CScene_Manager::SCENE_STAGE:
-			m_pScene = CStage::Create(); 
+		case CScene_Manager::SCENE_STAGE_SEL:
+			m_pScene = CSelectStage::Create();
+			break;
+		case CScene_Manager::SCENE_STAGE_EMPTY:
+			m_pScene = CStage::Create();
+			break;
+		case CScene_Manager::SCENE_STAGE1:
+			m_pScene = CStage2::Create(); 
 			break;
 		case CScene_Manager::SCENE_STAGE2:
-			//m_pScene = CState2::Create();
+			m_pScene = CStage3::Create();
 			break;
 		case CScene_Manager::SCENE_BOSS:
-			//m_pScene = CStageBoss::Create();
+			m_pScene = CStageBoss::Create();
 			break;
 
 		case CScene_Manager::END:

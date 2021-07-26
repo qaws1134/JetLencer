@@ -34,7 +34,11 @@ public :
 	void Set_Loop(bool _bLoop) { m_bLoop = _bLoop; }
 	void Set_ReduceTime(float _fTime) { m_fReduceTime = _fTime; }
 	void Set_Red(bool _bRed) { m_bRed = _bRed; }
+	void Set_OffsetDir(_vec3 _vOffset) { m_vOffsetDir = _vOffset; }
+	void Set_End(bool _bEnd) { m_bEnd = false; }
 
+	bool Get_End() { return m_bEnd; }
+	bool Get_FrameStart() { return m_bFrameStart; }
 public :
 	virtual void State_Change() override;
 	void Frame_Change();
@@ -51,12 +55,14 @@ protected:
 	EFFECT::TYPE		m_eEffectType;
 	bool				m_bFrameStart;
 	bool				m_bLoop;
-
+	_vec3				m_vOffsetDir;
 	bool				m_bFrameEndNoDead;
 	float				m_fSize;
 	float				m_fReduce;
 	bool				m_bRed;
 
+	bool				m_bEnd;
+	bool				m_bStart;
 	float				m_fReduceTime;
 	float				m_fReduceDelay;
 	// CGameObject을(를) 통해 상속됨

@@ -107,7 +107,9 @@ void CGui::State_Change()
 	case UI::AFTERBURNER:
 		if (m_bAction)
 		{
-			m_tFrame.fFrameSpeed = 3.5f;
+			float fAfterBurn = static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_AfterburnLimit();
+
+			m_tFrame.fFrameSpeed = (fAfterBurn-11.f)*3.f*-1.f*0.20f;
 			m_fCenterX = 0;
 			m_fCenterY = m_pTexInfo->tImageInfo.Height*0.5f;
 		}
@@ -116,7 +118,7 @@ void CGui::State_Change()
 			m_tFrame.fFrameSpeed = -5.f;
 		}
 		Frame_Change();
-		
+
 		break;
 	case UI::AFTERBURNER_RED:
 		break;
@@ -129,7 +131,7 @@ void CGui::State_Change()
 	case UI::FLIP_VERTSPEED:
 		m_bRender = true;
 
-		if ( m_tFrame.fStartFrame<m_fOffset)		//화면의 몇분의 몇지점 
+		if (m_tFrame.fStartFrame < m_fOffset)		//화면의 몇분의 몇지점 
 		{
 			m_tFrame.fFrameSpeed = 15.f;
 		}
@@ -138,7 +140,7 @@ void CGui::State_Change()
 			m_tFrame.fFrameSpeed = -15.f;
 		}
 		Frame_Change();
-	
+
 		break;
 	case UI::FLIP_VERTSPEED_RED:
 		break;
@@ -173,8 +175,10 @@ void CGui::State_Change()
 	case UI::SPECIAL_CHARGE:
 		if (m_bAction)
 		{
+			float fChargeTime = static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_ChargeTime();
+
 			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-			m_tFrame.fFrameSpeed = 10.f*60.f*fTime;
+			m_tFrame.fFrameSpeed = (fChargeTime-10)*-1 * 120.f*fTime;		
 			m_fCenterX = 0.f;
 			m_fCenterY = (float)m_pTexInfo->tImageInfo.Height;
 		}
@@ -308,23 +312,23 @@ void CGui::State_Change()
 	case UI::BOSS_HP:
 		m_tFrame.fStartFrame = 0.f;
 		m_fCenterX = 0.f;
-		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height>>1);
+		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height >> 1);
 		m_tInfo.vSize.x = m_fTargetSize;
 		break;
 	case UI::BOSS_HP_RED:
 		m_tFrame.fStartFrame = 1.f;
 		m_fCenterX = 0.f;
-		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height>>1);
+		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height >> 1);
 		if (m_tInfo.vSize.x > m_fTargetSize)
 		{
 			m_tInfo.vSize.x -= 0.01f;
 		}
-	
+
 		break;
 	case UI::BOSS_HP_PLATE:
 		m_tFrame.fStartFrame = 2.f;
 		m_fCenterX = 0.f;
-		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height>>1);
+		m_fCenterY = (float)(m_pTexInfo->tImageInfo.Height >> 1);
 		break;
 
 	case UI::WORNWAY_START:
@@ -462,7 +466,111 @@ void CGui::State_Change()
 		break;
 	case UI::LO_TEXTLINEYELLO:
 		break;
+	case UI::FLASH:
+		if (m_bAction)
+		{
+			m_bRender = true;
+			m_tColor.iAlpha += int(m_fIncrease);
+			if (m_tColor.iAlpha <= 10)
+			{
+				m_bAction = false;
+			}
+		}
+		else
+		{
+			m_bRender = false;
+			m_tColor.iAlpha = 255;
+		}
+		break;
+	case UI::STAGE_START_END:
+		//끝
+		if (m_bAction)
+		{
+			m_fIncrease = 10;
+			m_bStart = true;
+			m_bRender = true;
+		}
+		//시작
+		if (m_bStart)
+		{
+			if (!m_bAction)
+			{
+				m_bRender = true;
+				m_tColor.iAlpha += int(m_fIncrease);
+				if (m_tColor.iAlpha <= 10)
+				{
+					m_tColor.iAlpha = 0;
+					m_bStart = false;
+					m_bRender = false;
+					m_bAction = false;
+				}
+			}
+			else
+			{
+				m_tColor.iAlpha += int(m_fIncrease);
+				if (m_tColor.iAlpha >= 235)
+				{
+					m_tColor.iAlpha = 255;
+					m_bStart = false;
+					m_bAction = false;
+				}
+			}
+		}
+		break;
+	case UI::START_COUNT1:
+	case UI::START_COUNT2:
+	case UI::START_COUNT3:
+		if (m_bAction)
+		{
+			m_bRender = true;
+			m_tFrame.fFrameSpeed = 20.f;
+			Frame_Change();
+			if (m_tFrame.fStartFrame >= m_tFrame.fMaxFrame - 1)
+			{
+				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+				m_fTimer += fTime;
+				if (m_fTimer > 0.5f)
+				{
+					m_bRender = false;
+					m_bStart = true;
+					m_bAction = false;
+				}
+			}
+		}
+		break;
+	case UI::STAGE_ENGAGE:
+		if (m_bAction)
+		{
+			m_bRender = true;
+			m_tFrame.fFrameSpeed = 20.f;
+			Frame_Change();
+			if (m_tFrame.fStartFrame >= m_tFrame.fMaxFrame - 1)
+			{
+				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+				m_fTimer += fTime;
 
+				m_bRender = false;
+				m_bStart = true;
+				m_bAction = false;
+			}
+		}
+		break;
+	case UI::STAGE_VICTORY:
+		if (m_bAction)
+		{
+			m_bRender = true;
+			m_tFrame.fFrameSpeed = 20.f;
+			Frame_Change();
+			if (m_tFrame.fStartFrame >= m_tFrame.fMaxFrame - 1)
+			{
+
+				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+				m_fTimer += fTime;
+				m_bStart = true;
+				m_bAction = false;
+			}
+		}
+		break;
 	default:
 		break;
 	}
@@ -715,7 +823,9 @@ void CGui::InitGui()
 	case UI::STAGEICON:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuStageIcon");
 		break;
-
+	case UI::STAGEBG:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"MenuStageBg");
+		break;
 	case UI::LO_BACKPLATE:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutBackplate");
 		break;
@@ -745,7 +855,41 @@ void CGui::InitGui()
 	case UI::LO_BACKGROUND:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"LoadOutBackGround");
 		break;
-
+	case UI::FLASH:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"PlayerFlash");
+		m_tInfo.vPos = { float(WINCX >> 1),float(WINCY >> 1),0.f };
+		m_tInfo.vSize = { 4.f,4.f,0.f };
+		m_fIncrease = -10.f;
+		m_bRender = false;
+		break;
+	case UI::STAGE_START_END:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"PlayerFlash");
+		m_tInfo.vPos = { float(WINCX >> 1),float(WINCY >> 1),0.f };
+		m_tInfo.vSize = { 4.f,4.f,0.f };
+		m_tColor = { 244,0,0,0 };
+		m_fIncrease = -10.f;
+		m_bRender = false;
+		break;
+	case UI::START_COUNT1:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiStage_start_number1");
+		m_bRender = false;
+		break;
+	case UI::START_COUNT2:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiStage_start_number2");
+		m_bRender = false; 
+		break;
+	case UI::START_COUNT3:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiStage_start_number3");
+		m_bRender = false;
+		break;
+	case UI::STAGE_ENGAGE:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiStage_start_engage");
+		m_bRender = false;
+		break;
+	case UI::STAGE_VICTORY:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"GuiStage_victory");
+		m_bRender = false;
+		break;
 	}
 
 }
@@ -756,3 +900,4 @@ int CGui::Update_GameObject()
 		return OBJ_DEAD;
 	return OBJ_NOEVENT;
 }
+

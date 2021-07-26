@@ -3,6 +3,9 @@
 #include "Burner.h"
 #include "Arrow_Offscreen.h"
 #include "Spawn_Manager.h"
+#include "Particle.h"
+#include "SoundMgr.h"
+
 CJet_Enemy::CJet_Enemy()
 	:m_fOffsetAngle(0.f)
 	, m_fTargetAngle(0.f)
@@ -22,10 +25,23 @@ CJet_Enemy::~CJet_Enemy()
 
 void CJet_Enemy::DeadEffect()
 {
-	CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
+	CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT_BOOM2);
+	CSoundMgr::Get_Instance()->PlaySound(L"Explosion2.mp3", CSoundMgr::EFFECT_BOOM2);
+
+	CGameObject* pObject = nullptr;
+	pObject = CParticle::Create(m_pObjectInfo, m_tInfo.vPos, m_fAngle, m_vVelocity, EFFECT::JET_PTFIRE_RED);
+	CGameObject_Manager::Get_Instance()-> Add_GameObject_Manager(OBJID::EFFECT, pObject);
 	RandomEffect(EFFECT::EXPLOSION1, 3, 60);
 	RandomEffect(EFFECT::EXPLOSION2, 3, 60);
 	RandomEffect(EFFECT::EXPLOSION3, 3, 60);
+	for (int i = 0; i < rand() % 5 + 3; i++)
+	{
+		float fAngle = (float)(rand() % 360);
+		_vec3 Dir = { cosf(D3DXToRadian(fAngle)) ,-sinf(D3DXToRadian(fAngle)) ,0.f };
+		float fRad = 80.f;
+		CSpawn_Manager::Spawn(EFFECT::ROCKET_BOOM_PTFIRE_RED, m_tInfo.vPos + Dir*fRad, fAngle, Dir*3.f);
+	}
+	CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
 	m_pBurner->Set_Dead(true);
 	m_pArrow_Offscreen->Set_Dead(true);
 	m_pBurner = nullptr;

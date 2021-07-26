@@ -63,6 +63,7 @@ void CSerpentObject::DeadEffect()
 			m_bDead = true;
 			m_bDeadStart = false;
 		}
+		m_vecCollider.swap(vector<CCollider*>());
 	}
 }
 
@@ -118,9 +119,9 @@ void CSerpentObject::Move()
 	{
 		m_tInfo.vPos = m_pTarget->Get_ObjInfo().vPos - m_vTarget_Dir*40.f;
 		if(m_eSerpentPattern == SERPENT::CIRCLE_BULLET)
-			m_tInfo.vPos += m_tInfo.vDir*8.5f;
+			m_tInfo.vPos += m_tInfo.vDir*5.5f;
 		else
-			m_tInfo.vPos += m_tInfo.vDir*3.f;
+			m_tInfo.vPos += m_tInfo.vDir*5.f;
 	}
 }
 

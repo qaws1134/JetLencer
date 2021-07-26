@@ -35,7 +35,7 @@ HRESULT CJet_Rocket::Ready_GameObject()
 	m_tCombatInfo.iHp = 5;
 
 	m_fAttackTime = 5.f;
-	m_fAttackSpeed = 5.f;
+	m_fAttackSpeed = float(rand()%4+5);
 
 	m_fAccel = 1800.f;
 	m_fMaxSpeed = 500.f;
@@ -44,7 +44,7 @@ HRESULT CJet_Rocket::Ready_GameObject()
 	m_fAngle_per_Frame = 45.f;
 	m_fAngleOffset = -22.5f;
 	m_vecCollider.reserve(1);
-	m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 15.f, COLLIDER::ENEMY));
+	m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 30.f, COLLIDER::ENEMY));
 
 	m_pArrow_Offscreen = CArrow_Offscreen::Create(UI::JET);
 	return S_OK;

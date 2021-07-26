@@ -14,13 +14,13 @@ public:
 public:
 	static CGameObject*	Create();
 
-public :
+public:
 	virtual void		State_Change();
 	void				Roll();
 
 	void				PositionRock_Check();
 	void				Key_State();
- 	void				Keybord_OffSet();
+	void				Keybord_OffSet();
 
 	bool				RocketTime();
 	bool				ChargeShotTime();
@@ -37,6 +37,8 @@ public :
 	bool				Get_Zoom() { return m_bZoom; }
 	float				Get_Special_Reload() { return m_fChargeTime; }
 	PLAYER::STATE		Get_State() { return m_eState; }
+	float				Get_ChargeTime(){return 5.9f + m_fChargeTimeModule;}
+	float				Get_AfterburnLimit() { return m_fAfterBurnlimit + m_fAfterBurnModule; }
 
 
 	void				Set_State(PLAYER::STATE _eState) { m_eState = _eState; }
@@ -44,10 +46,14 @@ public :
 	void				Set_DangerState(DANGER::STATE _eDangerState) { m_eDangerState = _eDangerState; }
 	void				Add_IsRocket(int _iRocketNum) { m_iRocketNum += _iRocketNum; }
 	void				Set_DangerLength(float _fDangerLength) { if (m_fDangerLength < 150.f)m_fDangerLength = 0; if (m_fDangerLength == 0)m_fDangerLength = _fDangerLength;   if (m_fDangerLength > _fDangerLength) m_fDangerLength = _fDangerLength; }
-
+	void				Set_Start(bool _bStart) { m_bStart = _bStart; }
 
 	void				Spectrum();
 private:
+
+	bool				m_bStart;
+	bool				m_bPlay;
+
 	float				m_fRocketTime[4];
 	float				m_fRocketSpeed;
 	int					m_iMaxRocket;
@@ -115,6 +121,10 @@ private:
 
 	CGameObject*		m_pWornWayLeft;
 	CGameObject*		m_pWornWayRight;
+
+	CGameObject*		m_pFlash;
+
+
 	bool				m_bLWorn;
 	bool				m_bRWorn;
 	
@@ -124,6 +134,9 @@ private:
 	bool				m_bGroundAuto;
 	float				m_fAfterBurnModule;
 	float				m_fChargeTimeModule;
+
+	float				m_fBeepTime;
+
 
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;

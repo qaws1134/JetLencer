@@ -5,7 +5,8 @@
 #include "GameObject_Manager.h"
 #include "ColSphere.h"
 #include "Spawn_Manager.h"
-CNormal::CNormal()
+#include "SoundMgr.h"
+CNormal::CNormal() :m_bDron(false), m_bSound(false)
 {
 }
 
@@ -54,10 +55,16 @@ HRESULT CNormal::Ready_GameObject()
 	{
 		m_tCombatInfo.iAtk = 1;
 		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 13.f, COLLIDER::ENEMY_BULLET));
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::ENEMY_NORMAL);
+		CSoundMgr::Get_Instance()->PlaySound(L"Enemy_Bullet.mp3", CSoundMgr::ENEMY_NORMAL);
 	}
 	if (m_tFrame.wstrStateKey == L"Serpent_Bullet")
 	{
-		m_fRemoveSpeed = 5.f;
+		m_fRemoveSpeed = 5.f;		
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::SERPENT_BULLET);
+		CSoundMgr::Get_Instance()->PlaySound(L"Boss_Bullet.mp3", CSoundMgr::SERPENT_BULLET);
+
+
 	}
 	return S_OK;
 }
@@ -91,12 +98,23 @@ void CNormal::Move()
 {
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
 	{
+		if (!m_bAllTrueMod)
+		{
+			if (!m_bSound)
+			{
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_BULLET);
+				CSoundMgr::Get_Instance()->PlaySound(L"Player_Bullet.wav", CSoundMgr::PLAYER_BULLET);
+				m_bSound = true;
+			}
+		}
 		float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 		m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
 
 		m_tInfo.vDir *= 850.f*fTime;
-		m_tInfo.vDir += CGameObject_Manager::Get_Instance()->Get_Player()->Get_Velocity()*fTime;
-
+		if (!m_bDron)
+			m_tInfo.vDir += CGameObject_Manager::Get_Instance()->Get_Player()->Get_Velocity()*fTime;
+		else
+			m_tInfo.vDir += m_vVelocity*fTime;
 	}
 	else if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
@@ -111,6 +129,10 @@ void CNormal::Move()
 			{
 				m_bDead = true;
 			}
+		}
+		else if (m_tFrame.wstrStateKey == L"SniperBullet")
+		{
+			m_tInfo.vDir *= 2500.f*fTime;
 		}
 		else
 			m_tInfo.vDir *= 850.f*fTime;

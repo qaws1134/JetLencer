@@ -21,11 +21,18 @@ public :
 public :
 	virtual void		State_Change() override;
 	void				Set_BurnerState(BURNER::STATE _eState) { m_eBurnerState = _eState; }
+	bool				Get_StateEnd() { return m_bAniEnd; }
+
 	void				Frame_Change();
+
 public :
 	bool				m_bRender;
+	bool				m_bAniEnd;
 	bool				m_bLoop;
+	float				m_fOffsetX;
 	BURNER::STATE		m_eBurnerState;
 	BURNER::STATE		m_ePreBurnerState;
+	float				m_fSpawnTime;
+	
 };
 

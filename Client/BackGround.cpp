@@ -60,6 +60,9 @@ void CBackGround::Late_Update_GameObject()
 }
 void CBackGround::WriteMatrix()
 {
+	if (!m_pTexInfo)
+		return;
+
 	_vec3 vOffsetScroll = CScroll_Manager::Get_Scroll() - m_tInfo.vDir;
 
 	if (CScroll_Manager::Get_Shake())
@@ -133,23 +136,43 @@ void CBackGround::Render_GameObject()
 	}
 	if (m_eRenderId == RENDERID::MOVE_BACKGROUND2)
 	{
-		m_tInfo.vDir = _vec3{CScroll_Manager::Get_Scroll().x*0.8f,CScroll_Manager::Get_Scroll().y,0.f };
-
+		m_tInfo.vDir = _vec3{CScroll_Manager::Get_Scroll().x*0.93f,CScroll_Manager::Get_Scroll().y,0.f };
+		if (static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_Zoom())
+		{
+			if (D3DXVec3Length(&vMaxScale) > D3DXVec3Length(&m_tInfo.vSize))
+				m_tInfo.vSize += m_tInfo.vSize*0.003f;
+			else
+				static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Set_Zoom(false);
+		}
+		else
+		{
+			if (D3DXVec3Length(&vMinScale) < D3DXVec3Length(&m_tInfo.vSize))
+				m_tInfo.vSize -= vMinScale*0.001f;
+		}
 	}
 	if (m_eRenderId == RENDERID::MOVE_BACKGROUND3)
 	{
-		m_tInfo.vDir = _vec3{CScroll_Manager::Get_Scroll().x*0.7f,CScroll_Manager::Get_Scroll().y,0.f };
-		m_fCenterY = float(m_pTexInfo->tImageInfo.Height);
-		m_fCenterX = float(m_pTexInfo->tImageInfo.Width>>1);
-
+		m_tInfo.vDir = _vec3{CScroll_Manager::Get_Scroll().x*0.95f,CScroll_Manager::Get_Scroll().y,0.f };
+		if (static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_Zoom())
+		{
+			if (D3DXVec3Length(&vMaxScale) > D3DXVec3Length(&m_tInfo.vSize))
+				m_tInfo.vSize += m_tInfo.vSize*0.003f;
+			else
+				static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Set_Zoom(false);
+		}
+		else
+		{
+			if (D3DXVec3Length(&vMinScale) < D3DXVec3Length(&m_tInfo.vSize))
+				m_tInfo.vSize -= vMinScale*0.001f;
+		}
 	}
 	if (m_eRenderId == RENDERID::GROUND)
 	{
 		m_tInfo.vDir = _vec3{ CScroll_Manager::Get_Scroll().x,0.f,0.f };
 
-		if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height) - 100.f < m_pTarget->Get_ObjInfo().vPos.y)
+		if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)-150.f < m_pTarget->Get_ObjInfo().vPos.y)
 		{
-			if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height) + 50.f > m_pTarget->Get_ObjInfo().vPos.y)
+			if (m_tInfo.vPos.y - float(m_pTexInfo->tImageInfo.Height)+200.f > m_pTarget->Get_ObjInfo().vPos.y)
 			{
 				float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 				m_fSplashTime += fTime;

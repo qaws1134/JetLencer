@@ -38,6 +38,7 @@ CGameObject::~CGameObject()
 		for (auto& iter : m_vecCollider)
 			iter->Set_Dead(true);
 	}
+	m_vecCollider.swap(vector<CCollider*>());
 }
 
 
@@ -149,13 +150,13 @@ void CGameObject::TargetAngle_Check()
 	m_tInfo.vDir = { cosf(D3DXToRadian(m_fAngle)),-sinf(D3DXToRadian(m_fAngle)),0.f };
 
 	float fCos = D3DXVec3Dot(&m_vTarget_Dir, &m_tInfo.vDir);
-	if (fCos > 0.999)
+	if (fCos > 0.99)
 		return;
 	float fAngle = D3DXToDegree(acosf(fCos));
 	m_vCross = {};
 	D3DXVec3Cross(&m_vCross, &m_vTarget_Dir, &m_tInfo.vDir);
 
-	if (m_vCross.z > 0)
+	if (m_vCross.z >= 0)
 		m_fAngle += m_fAngleSpeed*fTime;
 	else if(m_vCross.z<0)
 		m_fAngle -= m_fAngleSpeed*fTime;

@@ -9,10 +9,11 @@
 #include "ViewText.h"
 #include "Arrow_Offscreen.h"
 #include "Serpent.h"
+#include "SoundMgr.h"
 
-CStage::CStage()
+CStage::CStage():m_iStageUiIndex(0),m_fStartSpeed(0.f),m_fStartTime(0.f)
 {
-
+	m_vecStageStart.reserve(10);
 }
 
 
@@ -34,58 +35,76 @@ CScene * CStage::Create()
 
 HRESULT CStage::Ready_Scene()
 {
-	//pObject =	CTerrain::Create();
-	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJECTINFO::BACKGROUND, pObject);
-	//pObject = nullptr
-	CPrefab_Manager::Get_Instance()->SpawnObjectbyScene(CScene_Manager::SCENE_STAGE);
 
-
-	
+	CPrefab_Manager::Get_Instance()->SpawnObjectbyScene(CScene_Manager::SCENE_STAGE_EMPTY);
 
 	CGameObject* pObject = nullptr;
-
-
 
 	pObject = CPlayer::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::PLAYER, pObject);
 
 	pObject = CMouse::Create();
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::MOUSE, pObject);
+	
+	
 
-	//m_pOject1 = CViewText::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
-	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject1);
-	//m_pOject2 = CViewText::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
-	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject2);
+	m_fStartSpeed = 0.5f;
 
-	//m_pUI3 = CArrow_Offscreen::Create(UI::JET);
-	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pUI3);
+	pObject = CGui::Create(UI::START_COUNT3);
+	m_vecStageStart.emplace_back(pObject);
+	pObject = CGui::Create(UI::START_COUNT2);
+	m_vecStageStart.emplace_back(pObject);
+	pObject = CGui::Create(UI::START_COUNT1);
+	m_vecStageStart.emplace_back(pObject);
+	pObject = CGui::Create(UI::STAGE_ENGAGE);
+	m_vecStageStart.emplace_back(pObject);
+	pObject = CGui::Create(UI::STAGE_VICTORY);
+	m_vecStageStart.emplace_back(pObject);
 
-
-
-	//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+float(Map_Width>>1),100.f+ float(Map_Height>>1),0.f });
-	//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f+ float(Map_Width>>1),200.f+ float(Map_Height>>1),0.f });
-
+	for (auto& iter : m_vecStageStart)
+	{
+		iter->Set_Pos(_vec3{ float(WINCX>>1),float(WINCY>>1)-200.f,0.f });
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, iter);
+	}
 	return S_OK;
 }
 
 void CStage::Update_Scene()
 {
 
-
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_ESC))
 	{
+		CSpawn_Manager::Destroy_Instance();
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 		CGameObject_Manager::Get_Instance()->Release_GameObject_Manager();
-	
 		CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_MENU);
+		return;
 	}
+
+
+	if (m_iStageUiIndex < 4)
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"Stage_CountDown.wav", CSoundMgr::STAGE_COUNT);
+		static_cast<CGui*>(m_vecStageStart[m_iStageUiIndex])->Set_Action(true);
+		if (static_cast<CGui*>(m_vecStageStart[m_iStageUiIndex])->Get_Start())
+		{
+			m_iStageUiIndex++;
+		}
+	}
+	else
+	{
+		static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Set_Start(true);
+	}
+	
+
 
 
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_P))
 	{
 		//º¸½º »Ç¤³±â
-		CGameObject*pObject = nullptr;
-		pObject = CSerpent::Create(_vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
-		//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
+		//CGameObject*pObject = nullptr;
+		//pObject = CSerpent::Create(_vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
+		CSpawn_Manager::Spawn(L"Jet_BulletSplash", _vec3{ 400.f + float(Map_Width >> 1),100.f + float(Map_Height >> 1),0.f });
 		//CSpawn_Manager::Spawn(L"Jet_Normal", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
 		//CSpawn_Manager::Spawn(L"Jet_Rocket", _vec3{ 400.f + float(Map_Width >> 1),200.f + float(Map_Height >> 1),0.f });
 	}
@@ -97,6 +116,7 @@ void CStage::Update_Scene()
 
 void CStage::Render_Scene()
 {
+
 	CGameObject_Manager::Get_Instance()->Render_GameObject_Manager();
 }
 

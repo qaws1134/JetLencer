@@ -17,7 +17,6 @@ public :
 	virtual void State_Change() override;
 	virtual void Select_Armor() override;
 
-
 	bool m_bStart;
 
 

@@ -4,7 +4,7 @@
 
 IMPLEMENT_SINGLETON(CPrefab_Manager)
 CPrefab_Manager::CPrefab_Manager() 
-	//:m_wstrPlacementPath(L"../Data/Placement%d.dat")
+	:m_wstrPlacementPath(L"../Data/BackgroundStage_%d.dat")
 {
 }
 
@@ -47,9 +47,8 @@ HRESULT CPrefab_Manager::Ready_Prefab_Manager()
 		return E_FAIL;
 	if (FAILED(LoadMultiPlacementPrefab(L"../Data/EffectPlace.dat")))
 		return E_FAIL;
-	if (FAILED(LoadPlacementPrefab(L"../Data/BackgroundStage2.dat")))
-		return E_FAIL;
-
+	//if (FAILED(LoadPlacementPrefab(L"../Data/BackgroundStage_4.dat")))
+	//	return E_FAIL;
 
 
 	return S_OK;
@@ -240,9 +239,9 @@ HRESULT CPrefab_Manager::LoadPlacementPrefab(const wstring & _path)
 		return E_FAIL;
 	}
 
-	//for (auto& rPair : m_mapPlacementPrefab)
-	//	Safe_Delete(rPair.second);
-	//m_mapPlacementPrefab.clear();
+	for (auto& rPair : m_mapPlacementPrefab)
+		Safe_Delete(rPair.second);
+	m_mapPlacementPrefab.clear();
 
 	DWORD dwbyte = 0;
 	DWORD dwStringSize = 0;
@@ -467,7 +466,7 @@ HRESULT CPrefab_Manager::SpawnObjectbyScene(const CScene_Manager::ID & _id)
 {
 	TCHAR szFilePath[MAX_PATH] = L"";
 	swprintf_s(szFilePath, m_wstrPlacementPath.c_str(), (int)_id);
-	//LoadPlacementPrefab(szFilePath);
+	LoadPlacementPrefab(szFilePath);
 
 	//placement Ãâ·Â 
 	PLACEMENT* pPlacement = nullptr;

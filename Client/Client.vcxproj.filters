@@ -205,11 +205,20 @@
     <Filter Include="03.Scene\00.Stage\00.Stage1">
       <UniqueIdentifier>{62867b83-6915-42d5-adca-e6f47178afe8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Scene\00.Stage\02.StageBoss">
-      <UniqueIdentifier>{fd6d1acd-56f2-4d2d-a2a6-8801d51e50e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Scene\00.Stage\01.Stage2">
       <UniqueIdentifier>{fccaa4fa-183c-4cdd-b92d-8fd8771356b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\00.Stage\02.Stage3">
+      <UniqueIdentifier>{3fdd4fe7-0570-4f26-9306-659e99ce17bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Scene\00.Stage\03.StageBoss">
+      <UniqueIdentifier>{fd6d1acd-56f2-4d2d-a2a6-8801d51e50e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\08.Sound_Manager">
+      <UniqueIdentifier>{969a1cff-bb41-4dca-8c91-aac19e14ed8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.GameObject\05.Gui\08.StartUi">
+      <UniqueIdentifier>{05cf7d38-60c9-4012-97d1-5415bb686743}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -402,6 +411,22 @@
     <ClInclude Include="Stage.h">
       <Filter>03.Scene\00.Stage\00.Stage1</Filter>
     </ClInclude>
+    <ClInclude Include="SelectStage.h">
+      <Filter>03.Scene\00.Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2.h">
+      <Filter>03.Scene\00.Stage\01.Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3.h">
+      <Filter>03.Scene\00.Stage\02.Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="StageBoss.h">
+      <Filter>03.Scene\00.Stage\03.StageBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>Manager\08.Sound_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="StartUi.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -587,6 +612,22 @@
     <ClCompile Include="Stage.cpp">
       <Filter>03.Scene\00.Stage\00.Stage1</Filter>
     </ClCompile>
+    <ClCompile Include="SelectStage.cpp">
+      <Filter>03.Scene\00.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2.cpp">
+      <Filter>03.Scene\00.Stage\01.Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3.cpp">
+      <Filter>03.Scene\00.Stage\02.Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="StageBoss.cpp">
+      <Filter>03.Scene\00.Stage\03.StageBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>Manager\08.Sound_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="StartUi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

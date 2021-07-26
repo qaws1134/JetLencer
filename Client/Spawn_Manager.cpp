@@ -11,21 +11,19 @@
 #include "Bottle.h"
 #include "Time_Manager.h"
 #include "Beam.h"
-
+#include "Gundrone.h"
 #include "Jet_Normal.h"
 #include "Jet_BulletSplash.h"
 #include "Jet_Homming.h"
 #include "Jet_Rocket.h"
 #include "Jet_Rush.h"
 #include "Jet_Sniper.h"
-
 #include "Particle.h"
 #include "Serpent.h"
 
-IMPLEMENT_SINGLETON(CSpawn_Manager)
-list<_vec3> CSpawn_Manager:: m_listPos;
-list<MULTIPLACE*> CSpawn_Manager::m_listWaitPlacement;
 
+IMPLEMENT_SINGLETON(CSpawn_Manager);
+list<CGameObject*>CSpawn_Manager::m_listWaitObject;
 CSpawn_Manager::CSpawn_Manager(): m_fWaitSpeed(1.f)
 {
 
@@ -34,7 +32,7 @@ CSpawn_Manager::CSpawn_Manager(): m_fWaitSpeed(1.f)
 
 CSpawn_Manager::~CSpawn_Manager()
 {
-	for (auto& iter : m_listWaitPlacement)
+	for (auto& iter : m_listWaitObject)
 		Safe_Delete(iter);
 }
 
@@ -85,13 +83,45 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName,_vec3 vPos, float fAngle,_
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 		pObject = nullptr;
 	}
-	if (_wstrObjName == L"Gundrone")
+	if (_wstrObjName == L"GundroneSpawn")
 	{
-		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
-		pObject = CRocket::Create(pObjInfo, vPos, fAngle, vSpeed);
-		static_cast<CBullet*>(pObject)->Set_SubWeaponState(eSubState);
-		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
-		pObject = nullptr;
+		switch (eSubState)
+		{
+		case BULLET::CHARGE_1:
+			CSpawn_Manager::Spawn(L"Gundrone", vPos, 0.f, vSpeed);
+			break;							  
+		case BULLET::CHARGE_2:				  
+			CSpawn_Manager::Spawn(L"Gundrone", vPos, 0.f, vSpeed);
+			CSpawn_Manager::Spawn(L"Gundrone", vPos, 180.f, vSpeed);
+			break;							   
+		case BULLET::CHARGE_3:				  
+			CSpawn_Manager::Spawn(L"Gundrone", vPos, 90.f, vSpeed);
+			CSpawn_Manager::Spawn(L"Gundrone", vPos, 210.f, vSpeed);
+			CSpawn_Manager::Spawn(L"Gundrone", vPos, 330.f, vSpeed);
+			break;
+		}
+	}
+	if (_wstrObjName == L"Multi_Homing")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(L"Rocket_alt");
+		int iRocketNum = 0;
+		switch (eSubState)
+		{
+		case BULLET::CHARGE_1:
+			iRocketNum = 4;
+			break;
+		case BULLET::CHARGE_2:
+			iRocketNum = 8;
+			break;
+		case BULLET::CHARGE_3:
+			iRocketNum = 12;
+			break;
+		}
+		for (int i = 0; i < iRocketNum; i++)
+		{
+			pObject = CRocket::Create(pObjInfo, vPos, ((fAngle - 30.f)+(60.f/float(i))), vSpeed,true);
+			m_listWaitObject.emplace_back(pObject);
+		}
 	}
 }
 
@@ -114,6 +144,13 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 		pObject = nullptr;
 	}
+	if (_wstrObjName == L"Gundrone")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CGundrone::Create(pObjInfo, vPos, fAngle, vSpeed);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
+		pObject = nullptr;
+	}
 	if (_wstrObjName == L"EnemyBullet")
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
@@ -125,6 +162,14 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
 		pObject = CNormal::Create(pObjInfo, vPos, fAngle, vSpeed);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
+		pObject = nullptr;
+	}
+	if (_wstrObjName == L"EnemySniperBullet")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CNormal::Create(pObjInfo, vPos, fAngle, vSpeed);
+		//pObject
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
 		pObject = nullptr;
 	}
@@ -161,6 +206,19 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 		pObject = nullptr;
 
 		pObject = CBottle::Create(pObjInfo, vPos, fAngle, vSpeed);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
+		pObject = nullptr;
+	}
+}
+
+void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle, _vec3 vSpeed, bool _bBool)
+{
+	CGameObject* pObject = nullptr;
+	if (_wstrObjName == L"Minigun")
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CNormal::Create(pObjInfo, vPos, fAngle, vSpeed);
+		static_cast<CNormal*>(pObject)->Set_Dron();
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 		pObject = nullptr;
 	}
@@ -207,6 +265,8 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos, float fAngle,
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY_BULLET), pObject);
 		pObject = nullptr;
 	}
+
+
 }
 
 
@@ -215,13 +275,6 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 {
 	CGameObject* pObject = nullptr;
 
-	//if (L"Player" == _wstrObjName)
-	//{
-	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
-	//	pObject = CJet_Normal::Create(pObjInfo, vPos);
-	//	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER), pObject);
-	//	pObject = nullptr;
-	//}
 	if (L"Jet_Normal" == _wstrObjName)
 	{
 		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
@@ -236,23 +289,18 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), pObject);
 		pObject = nullptr;
 	}
-	if (L"Dead_Explosion1"==_wstrObjName)
-	{
-		MULTIPLACE* pMultiPlaceInfo = new MULTIPLACE(*CPrefab_Manager::Get_Instance()->Get_MultiPlacementPrefab(_wstrObjName));
-		m_listWaitPlacement.emplace_back(pMultiPlaceInfo);
-		m_listPos.emplace_back(vPos);
-	}
-	if (L"Rocket_Explosion" == _wstrObjName)
-	{
-		MULTIPLACE* pMultiPlaceInfo = new MULTIPLACE(*CPrefab_Manager::Get_Instance()->Get_MultiPlacementPrefab(_wstrObjName));
-		m_listWaitPlacement.emplace_back(pMultiPlaceInfo);
-		m_listPos.emplace_back(vPos);
-	}
 	if (L"EffectExplosion_smoke" == _wstrObjName)
 	{
 		const ANIMATION* pObjInfo = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(_wstrObjName);
 		pObject = CEffect::Create(pObjInfo, vPos);
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pObject);
+		pObject = nullptr;
+	}
+	if (L"Jet_BulletSplash" == _wstrObjName)
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CJet_BulletSplash::Create(pObjInfo, vPos);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 		pObject = nullptr;
 	}
 	//if (L"Jet_Rush" == _wstrObjName)
@@ -262,20 +310,13 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 	//	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
 	//	pObject = nullptr;
 	//}
-	//if (L"Jet_BulletSplash" == _wstrObjName)
-	//{
-	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
-	//	pObject = CJet_BulletSplash::Create(pObjInfo, vPos);
-	//	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
-	//	pObject = nullptr;
-	//}
-	//if (L"Jet_Snuper" == _wstrObjName)
-	//{
-	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
-	//	pObject = CJet_Snuper::Create(pObjInfo, vPos);
-	//	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
-	//	pObject = nullptr;
-	//}
+	if (L"Jet_Sniper" == _wstrObjName)
+	{
+		const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
+		pObject = CJet_Sniper::Create(pObjInfo, vPos);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), pObject);
+		pObject = nullptr;
+	}
 	//if (L"Jet_Homming" == _wstrObjName)
 	//{
 	//	const OBJECTINFO* pObjInfo = CPrefab_Manager::Get_Instance()->Get_ObjectPrefab(_wstrObjName);
@@ -286,44 +327,27 @@ void CSpawn_Manager::Spawn(const wstring _wstrObjName, _vec3 vPos)
 
 }
 
-
-
 void CSpawn_Manager::Update_MultiSpawn()
 {
-	if (m_listWaitPlacement.empty())
+	if (m_listWaitObject.empty())
 		return;
+
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	m_fWaitSpeed += fTime;
-
-
 	if (m_fWaitSpeed > 0.1f)
 	{
 		m_fWaitSpeed = 0.f;
-		auto& iter = m_listWaitPlacement.begin();
-		auto& iter_pos = m_listPos.begin();
-
-		for (; iter != m_listWaitPlacement.end();)
+		CGameObject* pPlayer = CGameObject_Manager::Get_Instance()->Get_Player();
+		_vec3 vNormalvel = pPlayer->Get_Velocity();
+		D3DXVec3Normalize(&vNormalvel, &vNormalvel);
+		m_listWaitObject.front()->Set_Pos(pPlayer->Get_ObjInfo().vPos+ vNormalvel*100.f);
+		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::PLAYER_BULLET), m_listWaitObject.front());
+		m_listWaitObject.pop_front();
+		if (m_listWaitObject.empty())
 		{
-			CGameObject* pEffect = nullptr;
-			const PLACEMENT* pPlacementInfo = CPrefab_Manager::Get_Instance()->Get_PlacementPrefab((*iter)->listPlace.front()->wstrName);
-			pEffect = CEffect::Create(pPlacementInfo, (*iter_pos));
-			CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), pEffect);
-
-			Safe_Delete((*iter)->listPlace.front());
-			(*iter)->listPlace.pop_front();
-
-			if ((*iter)->listPlace.empty())
-			{
-				Safe_Delete((*iter));
-				iter = m_listWaitPlacement.erase(iter);
-				iter_pos = m_listPos.erase(iter_pos);
-			}
-			else
-			{
-				iter++;
-				iter_pos++;
-			}
+			m_listWaitObject.clear();
 		}
 	}
+
 }
 

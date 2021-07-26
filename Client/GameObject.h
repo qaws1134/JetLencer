@@ -55,9 +55,10 @@ public:
 	const TEXINFO*		Get_Texture() const { return m_pTexInfo; }
 	bool				Get_Dead() { return m_bDead; }
 	const OBJECTINFO*	Get_Prefab() { return m_pObjectInfo; }
-
+	bool				Get_DeadEffect() { return m_bDeadEffect; }
 
 	bool				Get_TrueMod(){ return m_bTrueMod; }
+	bool				Get_AllTrueMod() { return m_bAllTrueMod; }
 	void				RandomEffect(EFFECT::TYPE _eEffType, int iNum,int iDis);
 
 

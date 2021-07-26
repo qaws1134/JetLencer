@@ -13,13 +13,15 @@ CEffect::CEffect()
 	, m_fReduceDelay(0.f)
 	, m_bFrameEndNoDead(false)
 	, m_bRed(false)
+	, m_bStart(false)
+	, m_bEnd(false)
 {
 }
 
 
 CEffect::~CEffect()
 {
-
+	Release_GameObject();
 }
 
 CGameObject * CEffect::Create(const ANIMATION * _tAnimationInfo, D3DXVECTOR3 _vPos)
@@ -181,6 +183,9 @@ void CEffect::State_Change()
 	case EFFECT::JET_PTFIRE:
 		Size_Reduce();
 		break;
+	case EFFECT::JET_PTFIRE_RED:
+		Frame_Change();
+		break;
 	case EFFECT::CHAGE_BEAM:
 		if (m_bFrameStart)
 		{
@@ -262,22 +267,17 @@ void CEffect::State_Change()
 	case EFFECT::PLAYER_HIT_VFX:
 		if (m_bFrameStart)
 		{
-			m_tInfo.vSize = { 1.3f,1.3f,0.f };
+			m_tInfo.vSize = { 3.f,3.f,0.f };
 
 			m_tInfo.vPos = m_pTarget->Get_ObjInfo().vPos;
 
 			Frame_Change();
 
-			if (!m_bRed)
-				m_tColor = { 120,0,255,0 };
-			else
-				m_tColor = { 120,255,0,0 };
 		}
 		else
 		{
 			m_tInfo.vSize = { 0.f,0.f,0.f };
-			m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1.f;
-			//m_tFrame.fStartFrame = 0.f;
+			m_tFrame.fStartFrame = 0.f;
 		}
 		break;
 	case EFFECT::MARKER_ROCKET_OVERLAY:
@@ -291,7 +291,71 @@ void CEffect::State_Change()
 			m_tInfo.vSize = { 0.f,0.f,0.f };
 			m_tFrame.fStartFrame = 0.f;
 		}
+		break;
+	case EFFECT::SNIPER_ARROW:
+		if (m_bFrameStart)
+		{
+			if (!m_bStart)
+			{
+				m_tInfo.vSize = { 0.f,0.75f,0.f };
+				m_bStart = true;
+			}
+			m_fReduceTime += fTime;
+			if (m_fReduceTime > 1.f)
+			{
+				if(m_tInfo.vSize.x < 1.f)
+					m_tInfo.vSize += _vec3{ 0.01f,0.f,0.f };
+				else if (m_tInfo.vSize.x >= 1.f)
+				{
+					m_tInfo.vSize -= _vec3{ 0.f,0.0075f,0.f };
+					if (m_tInfo.vSize.y <= 0.f)
+					{
+						m_bFrameStart = false;
+						m_bEnd = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			m_tInfo.vSize = { 0.f,0.f,0.f };
+			m_bStart = false;
+		}
+		break;
+	case EFFECT::AFTERBURN_EFF:
+		Frame_Change();
+		m_tInfo.vPos.x -= fTime*float(rand()%200+800);
+		break;
+	case EFFECT::BOSS_DEAD:
+		if (m_bFrameStart)
+		{
+			if (m_bEnd)
+			{
+				m_fReduce += 0.02f;
+			}
+			if (!m_bStart)
+			{
+				m_tInfo.vSize += _vec3{ m_fReduce,m_fReduce,0.f };
+				if (m_tInfo.vSize.x > 10.f)
+					m_bStart = true;
+			}
+			else
+			{
+				m_tInfo.vSize -= _vec3{ m_fReduce,m_fReduce,0.f };
+				if (m_tInfo.vSize.x <= 0.f)
+				{
+					if (m_bEnd)
+					{
+						CGameObject_Manager::Get_Instance()->Set_GameEnd();
+					}
 
+					m_bFrameStart = false;
+					m_bEnd = true;
+					m_fReduce = 0.f;
+				}
+			}
+		}
+		break;
 	default:
 		Frame_Change();
 		break;
@@ -359,6 +423,14 @@ void CEffect::InitEffect()
 		m_fAngle = (float)(rand() % 360);
 		m_fReduce = 0.f;
 		break;
+	case EFFECT::ROCKET_BOOM_PTFIRE_RED :
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
+		Set_Frame(m_pAnimation);
+		m_tInfo.vSize = { m_fSize + float(rand() % 10)*0.05f ,m_fSize + float(rand() % 10)*0.05f,0.f };
+		m_tFrame.fFrameSpeed = 30.f;
+		m_fAngle = (float)(rand() % 360);
+		m_fReduce = 0.f;
+		break;
 	case EFFECT::JET_PTFIRE:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
 		Set_Frame(m_pAnimation);
@@ -366,6 +438,15 @@ void CEffect::InitEffect()
 		m_fSize = float((rand() % 6) + 4) * 0.05f;
 		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
 		m_fReduce = float((rand() % 10) + 6) * 0.001f;
+		break;
+	case EFFECT::JET_PTFIRE_RED:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectPtfire");
+		Set_Frame(m_pAnimation);
+
+		m_fSize = float((rand() % 6) + 4) * 0.1f;
+		m_tInfo.vSize = { m_fSize ,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = float(rand()%20+10);
+		//m_fReduce = float((rand() % 10) + 6) * 0.001f;
 		break;
 	case EFFECT::CHAGE_BEAM:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"PlayerBeam_Charge");
@@ -434,6 +515,13 @@ void CEffect::InitEffect()
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
 		m_tFrame.fFrameSpeed = 30.f;
 		break;
+	case EFFECT::BOOM_EXPLOSION:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectBoom_explosion");
+		Set_Frame(m_pAnimation);
+		m_fSize = 1.f;
+		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 30.f;
+		break;
 	case EFFECT::EXPLOSION1:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectExplosion1");
 		Set_Frame(m_pAnimation);
@@ -455,6 +543,27 @@ void CEffect::InitEffect()
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
 		m_tFrame.fFrameSpeed = 30.f;
 		break;
+	case EFFECT::MEGA_EXPLOSION1:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectMegaexplosion1");
+		Set_Frame(m_pAnimation);
+		m_fSize = 1.f;
+		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 30.f;
+		break;
+	case EFFECT::MEGA_EXPLOSION2:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectMegaexplosion2");
+		Set_Frame(m_pAnimation);
+		m_fSize = 1.f;
+		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 30.f;
+		break;
+	case EFFECT::MEGA_EXPLOSION3:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectMegaexplosion3");
+		Set_Frame(m_pAnimation);
+		m_fSize = 1.f;
+		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
+		m_tFrame.fFrameSpeed = 30.f;
+		break;
 	case EFFECT::FIRE_BOSS:
 		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectFire_boss");
 		Set_Frame(m_pAnimation);
@@ -468,8 +577,8 @@ void CEffect::InitEffect()
 		Set_Frame(m_pAnimation);
 		m_fSize = 1.3f;
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
-		m_tFrame.fFrameSpeed = -15.f;
-		m_tFrame.fStartFrame = m_tFrame.fMaxFrame - 1.f;
+		m_tFrame.fFrameSpeed = 30.f;
+		m_tFrame.fStartFrame = 0.f;
 		m_bColor = true;
 		m_bFrameEndNoDead = true;
 		break;
@@ -480,6 +589,31 @@ void CEffect::InitEffect()
 		m_tInfo.vSize = { m_fSize,m_fSize,0.f };
 		m_tFrame.fFrameSpeed = 10.f;
 		m_bLoop = true;
+		break;
+	case EFFECT:: SNIPER_ARROW:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EnemySniperArrow");
+		Set_Frame(m_pAnimation);
+		Set_Texture();
+		m_bCenter = true;
+		m_fCenterX = 0.f;
+		m_fCenterY = float(m_pTexInfo->tImageInfo.Height>>1);
+		m_tColor = { 150,255,255,255 };
+		break;
+	case EFFECT::AFTERBURN_EFF:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"Playerbrn_start_eff");
+		Set_Frame(m_pAnimation);
+		m_tInfo.vSize = { float((rand()%5+10)*0.1f),float((rand() % 5 + 10)*0.1f),0.f };
+		Set_Texture();
+		m_tFrame.fFrameSpeed =float(rand()%15 + 5);
+		//m_bLoop = true;
+		break;
+	case EFFECT::BOSS_DEAD:
+		m_pAnimation = CPrefab_Manager::Get_Instance()->Get_AnimationPrefab(L"EffectBoss_Dead");
+		Set_Frame(m_pAnimation);
+		m_tInfo.vSize = { 0.f,0.f,0.f };
+		m_fReduce = 0.08f;
+		m_bColor = true;
+		Set_Texture();
 		break;
 	default:
 		m_fSize = 1.f;

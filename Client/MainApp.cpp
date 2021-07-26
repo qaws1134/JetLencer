@@ -4,6 +4,7 @@
 #include "Scene_Manager.h"
 #include "Prefab_Manager.h"
 #include "Spawn_Manager.h"
+#include "SoundMgr.h"
 CMainApp::CMainApp()
 {
 }
@@ -19,6 +20,9 @@ HRESULT CMainApp::Ready_MainApp()
 	// 	E_FAIL; 
 	// 	S_OK; 
 	CTime_Manager::Get_Instance()->Ready_Time_Manager();
+
+	if (FAILED(CSoundMgr::Get_Instance()->Initialize()))
+		goto ERR;
 
 	if (FAILED(CGraphic_Device::Get_Instance()->Ready_Graphic_Device()))
 		goto ERR;
@@ -36,9 +40,9 @@ ERR:
 
 void CMainApp::Update_MainApp()
 {
-	CKey_Manager::Get_Instance()->Key_Update();
 	CTime_Manager::Get_Instance()->Update_Time_Manager();
 	CScene_Manager::Get_Instance()->Update_Scene_Manager();
+	CKey_Manager::Get_Instance()->Key_Update();
 }
 
 void CMainApp::Render_MainApp()
@@ -58,6 +62,7 @@ void CMainApp::Release_MainApp()
 	CPrefab_Manager::Destroy_Instance();
 	CTexture_Manager::Destroy_Instance();
 	CSpawn_Manager::Destroy_Instance();
+	CSoundMgr::Destroy_Instance();
 }
 
 CMainApp * CMainApp::Create()

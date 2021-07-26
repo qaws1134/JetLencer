@@ -121,7 +121,7 @@ void CViewText::WriteMatrix()
 
 
 	TCHAR sztext[200] = L"";
-	swprintf_s(sztext, m_wstrText.c_str());
+	swprintf_s(sztext, m_wstrText.c_str(),m_iPoint);
 	switch (m_eTextSize)
 	{
 	case TEXT::SMALL:

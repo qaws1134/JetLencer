@@ -19,6 +19,8 @@ public :
 	bool Get_Danger_End() { return m_bStart; }
 
 
+
+	float m_fTime;
 	CGameObject* m_pDanger_Idle;
 	CGameObject* m_pDanger_Crit;
 	CGameObject* m_pDanger_Start;

@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "Arrow_Offscreen.h"
 #include "GameObject_Manager.h"
+#include "SoundMgr.h"
 CSerpentHead::CSerpentHead()
 {
 }
@@ -39,6 +40,7 @@ void CSerpentHead::Ai_State()
 
 	Select_Armor();
 	Move();
+
 	Ui_DistanseState(CGameObject_Manager::Get_Instance()->Get_Player());
 	Ui_DirState(CGameObject_Manager::Get_Instance()->Get_Player());
 
@@ -82,4 +84,3 @@ void CSerpentHead::Select_Armor()
 	}
 	
 }
-

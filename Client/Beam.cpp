@@ -7,6 +7,8 @@
 #include "SerpentObject.h"
 #include "Serpent.h"
 #include "Effect.h"
+#include "Gui.h"
+#include "SoundMgr.h"
 CBeam::CBeam() :m_bBoss(false), bColSet(false), m_fColSize(0.f)
 {
 }
@@ -61,6 +63,8 @@ HRESULT CBeam::Ready_GameObject()
 	m_tFrame.fStartFrame = 0;
 	m_eRenderId = RENDERID::BULLET;
 	m_bCenter = true;
+	m_pFlash = CGui::Create(UI::FLASH);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pFlash);
 	InitState();
 	return S_OK;
 }
@@ -161,9 +165,12 @@ void CBeam::Boss_State()
 			if (fTime != 0)
 			{
 				m_tInfo.vSize += _vec3{ 0.f,0.01f,0.f };
-				if (m_tInfo.vSize.y > 0.8f)
+				if (m_tInfo.vSize.y > 1.0f)
 				{
 					CGameObject_Manager::Get_Instance()->Set_AllTrueMode(true);
+				}
+				if (m_tInfo.vSize.y > 0.8f)
+				{
 					float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 					m_fColSize += fTime*50.f;
 					for (auto&iter : m_vecCollider)
@@ -199,12 +206,15 @@ void CBeam::Boss_State()
 				m_vecDeadEffect[i]->Set_Pos(m_vecDeadEffect[i - 1]->Get_ObjInfo().vPos + m_tInfo.vDir*1000.f);
 		}
 
-		if (m_tInfo.vSize.y < 0.4f)
-			CGameObject_Manager::Get_Instance()->Set_AllTrueMode(false);
-		if (m_tInfo.vSize.y <= 0)
+		if (!CGameObject_Manager::Get_Instance()->Get_GameEnd())
 		{
-			static_cast<CSerpentObject*>(static_cast<CSerpent*>(m_pTarget)->Get_SerpentObj().front())->Set_Attack_End(true);	
-			m_bDeadEffect = true;
+			if (m_tInfo.vSize.y < 0.4f)
+				CGameObject_Manager::Get_Instance()->Set_AllTrueMode(false);
+			if (m_tInfo.vSize.y <= 0)
+			{
+				static_cast<CSerpentObject*>(static_cast<CSerpent*>(m_pTarget)->Get_SerpentObj().front())->Set_Attack_End(true);
+				m_bDeadEffect = true;
+			}
 		}
 	}
 }
@@ -216,6 +226,7 @@ void CBeam::InitState()
 
 	if (m_bBoss)
 	{
+
 		m_tFrame.fStartFrame = 0;
 		m_tCombatInfo.iAtk = 1;
 		m_tFrame.fFrameSpeed = 10.f;
@@ -262,9 +273,13 @@ void CBeam::InitState()
 			for (int i = 0; i < 20; i++)
 				m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, m_tInfo.vDir*(float)(i + 1)*40.f, 20.f, COLLIDER::PLAYER_BULLET_BEAM));
 			m_tInfo.vSize = { 1.f,1.8f,0.f };
-			CScroll_Manager::Shake(16.f, 0.5f);
+			CScroll_Manager::Shake(20.f, 0.5f);
+			static_cast<CGui*>(m_pFlash)->Set_Action(true);
 			break;
 		}
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_BEAM);
+		CSoundMgr::Get_Instance()->PlaySound(L"Player_Laser.mp3", CSoundMgr::PLAYER_BEAM);
+
 
 	}
 }

@@ -8,6 +8,8 @@
 #include "ColSphere.h"
 #include "Effect.h"
 #include "Gui.h"
+#include "SoundMgr.h"
+
 CSerpent::CSerpent()
 	: m_bStart(false)
 	, m_iMaxHp(0)
@@ -27,6 +29,8 @@ CSerpent::CSerpent()
 	,m_fHp_RedTime(0.f)
 	,m_fHp_RedSpeed(0.f)
 	, m_iPreHp(0)
+	, m_bWaterIn(false)
+	, m_pDeadCircle(nullptr)
 {
 	m_vecSerpent.reserve(64);
 }
@@ -57,13 +61,13 @@ HRESULT CSerpent::Ready_GameObject()
 	m_vecCollider.reserve(1);
 	m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 25.f, COLLIDER::EFFECT));
 
-	m_fAccel = 3000.f;
+	m_fAccel = 8000.f;
 	m_fMaxSpeed = 500.f;
 	m_fRegistPower = 2000.f;
-	m_fGravity = 200.f;
+	m_fGravity = 300.f;
 	m_vVelocity = { 1.f,1.f,0.f };
 	m_vGravity = { 0.2f,1.f,0.f };
-	m_fAngleSpeed = 50.f;
+	m_fAngleSpeed = 80.f;
 	m_iMaxBody = 50;
 	m_iHpOffset = 500;
 	m_fHp_RedSpeed = 2.f;
@@ -82,9 +86,9 @@ HRESULT CSerpent::Ready_GameObject()
 	m_pBoss_Hp_Plate = CGui::Create(UI::BOSS_HP_PLATE);
 
 
-	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp_Plate);
-	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp_Red);
-	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::ENEMY), m_pBoss_Hp);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pBoss_Hp_Plate);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pBoss_Hp_Red);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pBoss_Hp);
 
 	Set_Texture();
 
@@ -117,28 +121,49 @@ HRESULT CSerpent::Ready_GameObject()
 	Init_Hp();
 	Init_Pos();
 	Init_Target();
+	m_pDeadCircle = CEffect::Create(EFFECT::BOSS_DEAD);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pDeadCircle);
 	return S_OK;
 }
 
 int CSerpent::Update_GameObject()
 {
-	if (m_bDead)
-		return OBJ_NOEVENT;
 	if (m_bDeadEffect)
+	{
+		CSoundMgr::Get_Instance()->PlaySound(L"Boss_Die2.wav", CSoundMgr::SERPENT_DEAD);
 		DeadEffect();
+	}
+		
+	if (m_bDead)
+	{
+		m_vecSerpent.swap(vector<CGameObject*>());
+		m_vecSerpent.clear();
 
+		
+		m_pDeadCircle->Set_Pos(m_tInfo.vPos);
+		static_cast<CEffect*>(m_pDeadCircle)->Set_FrameStart(true);
+		if (static_cast<CEffect*>(m_pDeadCircle)->Get_End())
+		{
+			m_pDeadCircle->Set_Color(MATCOLOR{ 255,0,0,0 });
+			static_cast<CEffect*>(m_pDeadCircle)->Set_FrameStart(true);
+		}
+
+		return OBJ_NOEVENT;
+	}
 	//패턴 선택
 	Hp_Stage();
 	Select_Page();
 	State_Change();
 	Ai_State();
-
 	//패턴에 따른 이동 
 	return OBJ_NOEVENT;
 }
 
 void CSerpent::Late_Update_GameObject()
 {
+
+	if (m_bDeadEffect)
+		DeadEffect();
 }
 
 //패턴 초기화
@@ -148,9 +173,30 @@ void CSerpent::State_Change()
 	{
 	case SERPENT::PAGE1:
 		if (m_tInfo.vPos.y < m_pTarget->Get_ObjInfo().vPos.y + 100.f)
+		{
+			if (m_tInfo.vPos.y >= GroundY)
+			{
+				if (m_bWaterIn)
+				{
+					CSoundMgr::Get_Instance()->PlaySound(L"Boss_WaterIn.mp3", CSoundMgr::SERPENT_IN_WARTER);
+					m_bWaterIn = false;
+				}
+			}
+
 			m_bGravity = true;
+		}
 		if (m_tInfo.vPos.y > GroundY + 1500)
+		{
+			if (m_tInfo.vPos.y <= GroundY)
+			{
+				if (!m_bWaterIn)
+				{
+					CSoundMgr::Get_Instance()->PlaySound(L"Boss_WaterOut.mp3", CSoundMgr::SERPENT_OUT_WARTER);
+					m_bWaterIn = true;
+				}
+			}
 			m_bGravity = false;
+		}
 		break;
 	case SERPENT::PAGE2:
 		m_bGravity = false;
@@ -165,13 +211,11 @@ void CSerpent::State_Change()
 					m_RandfX *= -1;
 				if (rand() % 2 == 0)
 					m_RandfY *= -1;
-				//if (m_tInfo.vPos.y + m_RandfY < GroundY - 50.f)
-				//	m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
 
 				m_vEnd_Dir = _vec3{ m_tInfo.vPos.x + m_RandfX,m_tInfo.vPos.y + m_RandfY,0.f };
-				m_fAngleSpeed = 270.f;
-				m_fAccel = 5000.f;
-				m_fMaxSpeed = 700.f;
+				m_fAngleSpeed = 200.f;
+				m_fAccel = 8000.f;
+				m_fMaxSpeed = 800.f;
 				m_fAttackSpeed = 0.1f;
 				m_fAttackTime = 0.f;
 				m_fPatternTime = 0.f;
@@ -180,8 +224,8 @@ void CSerpent::State_Change()
 				m_bPattern_Start = true;
 				break;
 			case SERPENT::RAGER:
-				//m_eSelected_Pattern = SERPENT::RAGER;
-
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::SERPENT_LASER);
+				CSoundMgr::Get_Instance()->PlaySound(L"Boss_Laser.mp3", CSoundMgr::SERPENT_LASER);
 				m_fAngleSpeed = 30.f;
 				m_fAccel = 3000.f;
 				m_fMaxSpeed = 200.f;
@@ -203,7 +247,6 @@ void CSerpent::State_Change()
 				}
 				break;
 			case SERPENT::END:
-				//m_eSelected_Pattern = SERPENT::END;
 				m_fPatternTime = 0.f;
 				m_fPatternEnd = 7.f;
 				m_fAngleSpeed = 50.f;
@@ -241,28 +284,29 @@ void CSerpent::DeadEffect()
 {
 	for (auto& iter : m_vecSerpent)
 	{
-
 		iter->Set_Target(nullptr);
-		static_cast<CSerpentObject*>(iter)->Set_DeadEffSpeed((float(rand() % 20) + 20)*0.1f);
+		static_cast<CSerpentObject*>(iter)->Set_DeadEffSpeed((float(rand() % 30) + 20)*0.1f);
 		static_cast<CSerpentObject*>(iter)->Set_DeadStart(true);
 		iter->Set_DeadEffect(true);
-		m_bDead = true;
+		//m_bDead = true;
 	}
 	m_pBoss_Hp->Set_Dead(true);
 	m_pBoss_Hp_Red->Set_Dead(true);
 	m_pBoss_Hp_Plate->Set_Dead(true);
-
-
+	m_bDead = true;
 
 }
 void CSerpent::Hp_Stage()
 {
+
 	int iInitHp = -m_iHpOffset;
 
 	for (auto& iter : m_vecSerpent)
 	{
 		if (!static_cast<CSerpentObject*>(iter)->Get_Crash())
+		{
 			iInitHp += iter->Get_ColVec(0)->Get_CombatInfo().iHp;
+		}
 	}
 	m_tCombatInfo.iHp = iInitHp;
 	if (m_tCombatInfo.iHp <= 0)
@@ -293,7 +337,7 @@ void CSerpent::Select_Page()
 		if (!m_bPage_Start)
 		{
 			m_bPage_Start = true;
-			m_eSelected_Pattern = SERPENT::CIRCLE_BULLET;
+			m_eSelected_Pattern = SERPENT::END;
 		}
 		m_eSerpentPagePattern = SERPENT::PAGE2;
 	}
@@ -346,6 +390,7 @@ void CSerpent::Ai_State()
 			}
 		break;
 		case SERPENT::RAGER:
+
 			(m_pChargeBeam)->Set_Pos(m_tInfo.vPos+m_tInfo.vDir*3.f);
 			if (static_cast<CSerpentObject*>(m_vecSerpent.front())->Get_Attack_End())
 			{

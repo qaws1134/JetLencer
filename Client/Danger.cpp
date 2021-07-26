@@ -2,7 +2,7 @@
 #include "Danger.h"
 #include "Gui.h"
 #include "Prefab_Manager.h"
-
+#include "SoundMgr.h"
 
 CDanger::CDanger() : m_bStart(false),m_eDangerState(DANGER::END)
 {
@@ -71,6 +71,8 @@ int CDanger::Update_GameObject()
 	if (m_bDead)
 		return OBJ_DEAD;
 
+
+
 	if (m_eDangerState != DANGER::END)
 	{
 		//데인져 스타트가 끝나면 m_b스타트를 true로 반환
@@ -80,10 +82,13 @@ int CDanger::Update_GameObject()
 			{
 				m_eDangerState = DANGER::DANGER_IDLE;
 
-				if (m_tFrame.fFrameSpeed < 150.f)
+				if (m_tFrame.fFrameSpeed < 100.f)
 				{
 					m_eDangerState = DANGER::DANGER_CRIT;
+					CSoundMgr::Get_Instance()->PlaySound(L"Danger_Crit.wav", CSoundMgr::DANGER_CRIT);
 				}
+				else
+					CSoundMgr::Get_Instance()->StopSound(CSoundMgr::DANGER_CRIT);
 			}
 		}
 
@@ -115,17 +120,14 @@ void CDanger::State_Change()
 		static_cast<CGui*>(m_pDanger_Idle)->Set_Render(true);
 		static_cast<CGui*>(m_pDanger_Idle)->Set_Action(true);
 		static_cast<CGui*>(m_pDanger_Idle)->Set_FrameSpeed(((m_tFrame.fFrameSpeed*0.01f) -12.f)*-1.f);
-		
 
 		break;
 	case DANGER::DANGER_CRIT:
 		static_cast<CGui*>(m_pDanger_Crit)->Set_Render(true);
 		static_cast<CGui*>(m_pDanger_Crit)->Set_Action(true);
-
 		//아이들상태 false
 		static_cast<CGui*>(m_pDanger_Idle)->Set_Render(false);
 		static_cast<CGui*>(m_pDanger_Idle)->Set_Action(false);
-
 		//스타트 랜더 false
 		static_cast<CGui*>(m_pDanger_Start)->Set_Render(false);
 		break;
@@ -150,6 +152,7 @@ void CDanger::State_Change()
 		static_cast<CGui*>(m_pDanger_Idle)->Set_Render(false);
 		static_cast<CGui*>(m_pDanger_Start)->Set_Start(false);
 		static_cast<CGui*>(m_pDanger_Start)->Set_Render(false);
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::DANGER_CRIT);
 		break;
 	}
 	m_ePreDangerState = m_eDangerState;

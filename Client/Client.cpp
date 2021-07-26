@@ -2,8 +2,8 @@
 //
 
 #include "stdafx.h"
-//#include <vld.h>
-//#include <vld_def.h>
+#include <vld.h>
+#include <vld_def.h>
 #include <crtdbg.h>
 #include <cstdlib>
 #include "Client.h"

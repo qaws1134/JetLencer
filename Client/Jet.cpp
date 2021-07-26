@@ -28,7 +28,8 @@ CJet::~CJet()
 
 void CJet::Late_Update_GameObject()
 {
-
+	if (m_vecCollider.empty())
+		m_bDead = true;
 	FAILED_CHECK_RETURN(Set_Texture(), );
 }
 

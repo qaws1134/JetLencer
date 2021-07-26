@@ -3,6 +3,7 @@
 #include "Gui.h"
 #include "ViewText.h"
 #include "Scene_Manager.h"
+#include "SoundMgr.h"
 CLoadOut::CLoadOut():m_bChangeIndex(true), m_iTextLineInc(0), m_bDead(false)
 {
 	m_vecLoadOutFrame.reserve(16);
@@ -16,6 +17,7 @@ CLoadOut::CLoadOut():m_bChangeIndex(true), m_iTextLineInc(0), m_bDead(false)
 
 CLoadOut::~CLoadOut()
 {
+	Release_Scene();
 }
 
 CScene * CLoadOut::Create()
@@ -31,6 +33,7 @@ CScene * CLoadOut::Create()
 
 HRESULT CLoadOut::Ready_Scene()
 {
+	CSoundMgr::Get_Instance()->PlayBGM(L"LoadOut.mp3");
 	m_iMaxWeaponFrame = 9;
 	m_iPointIndex = 0;
 	m_pBackGround = CGui::Create(UI::LO_BACKGROUND);
@@ -157,7 +160,7 @@ HRESULT CLoadOut::Ready_Scene()
 	pObject = CViewText::Create(L"::때거지 유도 미사일::");
 	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
-	pObject = CViewText::Create(L"::울트라 빔!!::");
+	pObject = CViewText::Create(L"::PBG (Power BeamLaser is Good)::");
 	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::자동 총알 발사기::");
@@ -179,7 +182,7 @@ HRESULT CLoadOut::Ready_Scene()
 	pObject = CViewText::Create(L"OBJ 매니져 겟타겟 몬스터ID 넘겨주면\n몬스터 추적해서 로켓날라갑니다.\n바로 그 로켓!!\n\n\n\n\n#TMI ",TEXT::SMALL);
 	pObject->Set_Pos(_vec3{ float(WINCX) - 500.f,120.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
-	pObject = CViewText::Create(L"적들아... 유도탄 쏠 수도 있었는데 한번만 봐준다\n대신 쫌 더 강한 매콤 펀치 직선 로켓!!", TEXT::SMALL);
+	pObject = CViewText::Create(L"적들아... 유도탄 쏠 수도 있었는데 한번만 봐준다\n\n대신 쫌 더 강한 매콤 펀치가 간다", TEXT::SMALL);
 	pObject->Set_Pos(_vec3{ float(WINCX) - 500.f,120.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"통돌이 폭탄을 3개 날립니다.\n왜 통을 날리냐고 의아 하시겠지만 \n이 게임은 실제로 통을 날립니다....\n샷건으로 3.발.이.나\n이 통.... 좀 강할지도?...\n\n\n\n#통돌이 #좀 쌤 #지구는 중력이 있다 \n#점점 떨어져", TEXT::SMALL);
@@ -189,14 +192,14 @@ HRESULT CLoadOut::Ready_Scene()
 	pObject = CViewText::Create(L"유도 미사일을 한번에 여러발 뽑는다구?...\n\n\n#적들아 #굳이 찾아가진 않을게....", TEXT::SMALL);
 	pObject->Set_Pos(_vec3{ float(WINCX) - 500.f,120.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
-	pObject = CViewText::Create(L"네 그 빔입니다\n그 레이저 맞아요.\n\n\n\n\n\n\n\n#멋짐 보장 #비쥬얼담당 ", TEXT::SMALL);
+	pObject = CViewText::Create(L"PBG의 빛을 발사한다\n.\n\n\n\n\n\n\n\n#멋짐 보장 #like PBG #비쥬얼담당 ", TEXT::SMALL);
 	pObject->Set_Pos(_vec3{ float(WINCX) - 500.f,120.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"이 드론은 무료로 주변 적에게 총을 쏩니다\n", TEXT::SMALL);
 	pObject->Set_Pos(_vec3{ float(WINCX) - 500.f,120.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 
-	pObject = CViewText::Create(L"바닥에 떨어지고 싶어도 떨어질 수 없습니다.\n자동으로 다시 위로 올려주는 최첨단 기술\n\n다음 속도값+위치가 바닥이면 \n위로 자동으로 움직여줍니다\n바닥에 부딪히면 아프니까요...\n\n\n#바닥지킴이 #바닥뽀뽀 멈춰!", TEXT::SMALL);
+	pObject = CViewText::Create(L"바닥에 떨어지고 싶어도 떨어질 수 없습니다.\n자동으로 다시 위로 올려주는 최첨단 기술\n\n다음 속도값+위치가 바닥이면 \n위로 자동으로 움직여줍니다\n바닥에 부딪히면 아프니까요...\n\n\n#바닥 뽀뽀 금지 #바닥하고도 #연애 금지", TEXT::SMALL);
 	pObject->Set_Pos(_vec3{ float(WINCX) - 500.f,120.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"부스터 시간을 늘려줍니다", TEXT::SMALL);
@@ -281,7 +284,7 @@ void CLoadOut::Render_Scene()
 
 void CLoadOut::Release_Scene()
 {
-
+	CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 
 }
 
@@ -293,6 +296,8 @@ void CLoadOut::Key_Check()
 		{
 			m_iPointIndex -= 3;
 			m_bChangeIndex = true;
+			CSoundMgr::Get_Instance()->StopSound( CSoundMgr::UI_MOVE);
+			CSoundMgr::Get_Instance()->PlaySound(L"UI_Move.mp3", CSoundMgr::UI_MOVE);
 		}
 	}
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_S))
@@ -301,6 +306,8 @@ void CLoadOut::Key_Check()
 		{
 			m_iPointIndex += 3;			
 			m_bChangeIndex = true;
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_MOVE);
+			CSoundMgr::Get_Instance()->PlaySound(L"UI_Move.mp3", CSoundMgr::UI_MOVE);
 		}
 	}
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_A))
@@ -309,6 +316,8 @@ void CLoadOut::Key_Check()
 		{
 			m_iPointIndex--;
 			m_bChangeIndex = true;
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_MOVE);
+			CSoundMgr::Get_Instance()->PlaySound(L"UI_Move.mp3", CSoundMgr::UI_MOVE);
 		}
 	}
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_D))
@@ -317,36 +326,16 @@ void CLoadOut::Key_Check()
 		{
 			m_iPointIndex++;
 			m_bChangeIndex = true;
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_MOVE);
+			CSoundMgr::Get_Instance()->PlaySound(L"UI_Move.mp3", CSoundMgr::UI_MOVE);
 		}
 	}
 	//착용
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_SPACE))
 	{
 		Select_LoadOut(m_iPointIndex);
-		//if ((m_iPointIndex / 3 < 1) || (m_iPointIndex / 3) < 2)
-		//{
-		//	for (int i = 0; i < 3; i++)
-		//	{
-		//		static_cast<CGui*>(m_vecLoadOutBackplate[(m_iPointIndex / 3)*3 + i])->Set_Start(false);
-		//	}
-		//	static_cast<CGui*>(m_vecUiFrame[(m_iPointIndex / 3)*2+1])->Select_Frame(1.f);
-		//	static_cast<CGui*>(m_vecLoadOutBackplate[m_iPointIndex])->Set_Start(true);
-		//}
-		//else
-		//{
-		//	if (static_cast<CGui*>(m_vecLoadOutBackplate[m_iPointIndex])->Get_Start())
-		//	{
-		//		static_cast<CGui*>(m_vecLoadOutBackplate[m_iPointIndex])->Set_Start(false);
-		//		m_iTextLineInc--;
-		//	}
-		//	else
-		//	{
-		//		static_cast<CGui*>(m_vecLoadOutBackplate[m_iPointIndex])->Set_Start(true);
-		//		m_iTextLineInc++;
-		//	}
-		//	static_cast<CGui*>(m_vecUiFrame[(m_iPointIndex / 3) * 2 + 1])->Select_Frame(float(m_iTextLineInc));
-		//}
-		//m_bChangeIndex = true;
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_SELECT);
+		CSoundMgr::Get_Instance()->PlaySound(L"UI_Select.mp3", CSoundMgr::UI_SELECT);
 	}
 
 
@@ -360,7 +349,8 @@ void CLoadOut::Key_Check()
 				CGameObject_Manager::Get_Instance()->Set_LoadOutData(LOADOUT::INDEX(i));
 			}
 		}
-
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_SELECT);
+		CSoundMgr::Get_Instance()->PlaySound(L"UI_Select.mp3", CSoundMgr::UI_SELECT);
 		CGameObject_Manager::Get_Instance()->DeleteID_GameObject_Manager(OBJID::UI);
 		CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_MENU);
 		m_bDead = true;

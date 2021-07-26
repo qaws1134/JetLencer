@@ -184,6 +184,11 @@
     <ClInclude Include="SerpentHead.h" />
     <ClInclude Include="SerpentObject.h" />
     <ClInclude Include="SerpentTail.h" />
+    <ClInclude Include="SoundMgr.h" />
+    <ClInclude Include="Stage2.h" />
+    <ClInclude Include="Stage3.h" />
+    <ClInclude Include="StageBoss.h" />
+    <ClInclude Include="StartUi.h" />
     <ClInclude Include="Ui.h" />
     <ClInclude Include="Gundrone.h" />
     <ClInclude Include="Jet.h" />
@@ -250,6 +255,11 @@
     <ClCompile Include="SerpentHead.cpp" />
     <ClCompile Include="SerpentObject.cpp" />
     <ClCompile Include="SerpentTail.cpp" />
+    <ClCompile Include="SoundMgr.cpp" />
+    <ClCompile Include="Stage2.cpp" />
+    <ClCompile Include="Stage3.cpp" />
+    <ClCompile Include="StageBoss.cpp" />
+    <ClCompile Include="StartUi.cpp" />
     <ClCompile Include="Ui.cpp" />
     <ClCompile Include="Gundrone.cpp" />
     <ClCompile Include="Jet.cpp" />

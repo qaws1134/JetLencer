@@ -4,7 +4,7 @@
 #include "Gui.h"
 #include "Scene_Manager.h"
 #include "GameObject_Manager.h"
-
+#include "SoundMgr.h"
 CMyMenu::CMyMenu()
 {
 	m_vecMenuIndex.reserve(8);
@@ -15,7 +15,7 @@ CMyMenu::CMyMenu()
 
 CMyMenu::~CMyMenu()
 {
-
+	Release_Scene();
 }
 
 CScene * CMyMenu::Create()
@@ -31,12 +31,11 @@ CScene * CMyMenu::Create()
 
 HRESULT CMyMenu::Ready_Scene()
 {
+
+	CSoundMgr::Get_Instance()->PlayBGM(L"MainMenu.mp3");
+
 	CGameObject* pObject = nullptr;
 
-	//m_pOject1 = CViewText::Create(_vec3{ 100.f,100.f,0.f }, L"scrollX %f");
-	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject1);
-	//m_pOject2 = CViewText::Create(_vec3{ 100.f,200.f,0.f }, L"scrollY %f");
-	//CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pOject2);
 	m_iMaxCloude = 1000;
 	m_iActionIdx = m_iMaxCloude -1;
 	m_bAction = false;
@@ -115,8 +114,8 @@ void CMyMenu::Update_Scene()
 	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
 	m_vecUi[3]->Set_Pos(m_vecUi[3]->Get_ObjInfo().vPos+vTargetDir*5.f);
 	
-	Key_Check();
 	SpawnCloude();
+	Key_Check();
 	CGameObject_Manager::Get_Instance()->Update_GameObject_Manager();
 
 
@@ -129,11 +128,14 @@ void CMyMenu::Render_Scene()
 
 void CMyMenu::Release_Scene()
 {
-
+	CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 }
 
 void CMyMenu::SpawnCloude()
 {
+
+	if (m_vecCloude.empty())
+		return;
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	m_fActionTime += fTime;
 	if (m_fActionTime > m_fActionSpeed)
@@ -171,22 +173,35 @@ void CMyMenu::Key_Check()
 		m_iButtonIdx--;
 		if (m_iButtonIdx < 0)
 			m_iButtonIdx = 0;
+		else 
+		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_MOVE);
+			CSoundMgr::Get_Instance()->PlaySound(L"UI_Move.mp3", CSoundMgr::UI_MOVE);
+		}
+
 	}
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_S))
 	{
 		m_iButtonIdx++;
 		if (m_iButtonIdx >2)
 			m_iButtonIdx = 2;
+		else
+		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_MOVE);
+			CSoundMgr::Get_Instance()->PlaySound(L"UI_Move.mp3", CSoundMgr::UI_MOVE);
+		}
 	}
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_SPACE))
 	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI_SELECT);
+		CSoundMgr::Get_Instance()->PlaySound(L"UI_Select.mp3", CSoundMgr::UI_SELECT);
 		//¾ÀÀüÈ¯
 		switch (m_iButtonIdx)
 		{
 		case 0:
 			//CGameObject_Manager::Get_Instance()->DeleteID_GameObject_Manager(OBJID::UI);
 			CGameObject_Manager::Get_Instance()->DeleteID_GameObject_Manager(OBJID::UI);
-			CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_STAGE);
+			CScene_Manager::Get_Instance()->Change_Scene_Manager(CScene_Manager::SCENE_STAGE_SEL);
 			m_bDead = true;
 			break;
 		case 1:

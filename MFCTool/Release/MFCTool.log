@@ -142,9 +142,9 @@ ObjectTool.cpp(913): warning C4244: '인수': 'UINT'에서 'FLOAT'(으)로 변�
   Texture_Manager.cpp
   UiTool.cpp
   코드를 생성하고 있습니다.
-  4 of 1873 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  0 of 1896 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+    102 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   MFCTool.vcxproj -> C:\Users\qaws1\Desktop\JetLancer Project\Release\MFCTool.exe
   MFCTool.vcxproj -> C:\Users\qaws1\Desktop\JetLancer Project\Release\MFCTool.pdb (Full PDB)

@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Effect.h"
 #include "Arrow_Offscreen_Rocket.h"
+#include "SoundMgr.h"
 
 CRocket::CRocket() 
 	: m_fTargetSpeed(0.f)
@@ -16,6 +17,9 @@ CRocket::CRocket()
 	, m_pMarkerOveray(nullptr)
 	, m_bTargetOn(false)
 	, m_eUiState(ARROW::END)
+	, m_bMulti(false)
+	, m_bSound(false)
+	, m_fWaitTime(0.f)
 {
 }
 
@@ -33,6 +37,25 @@ CGameObject * CRocket::Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos, floa
 	pInstance->Set_Pos(_vPos);
 	pInstance->Set_Angle(_fAngle);
 	pInstance->Set_Speed(_vSpeed);
+	static_cast<CBullet*>(pInstance)->Set_Type((BULLET::TYPE)_tObjectInfo->eBulletType);
+
+	if (FAILED(pInstance->Ready_GameObject()))
+	{
+		delete pInstance;
+		pInstance = nullptr;
+		return pInstance;
+	}
+	return pInstance;
+}
+
+CGameObject * CRocket::Create(const OBJECTINFO * _tObjectInfo, _vec3 _vPos, float _fAngle, _vec3 _vSpeed, bool _bMulti)
+{
+	CGameObject* pInstance = new CRocket;
+	pInstance->Set_Prefab(_tObjectInfo);
+	pInstance->Set_Pos(_vPos);
+	pInstance->Set_Angle(_fAngle);
+	pInstance->Set_Speed(_vSpeed);
+	static_cast<CRocket*>(pInstance)->Set_Multi();
 	static_cast<CBullet*>(pInstance)->Set_Type((BULLET::TYPE)_tObjectInfo->eBulletType);
 
 	if (FAILED(pInstance->Ready_GameObject()))
@@ -66,9 +89,19 @@ HRESULT CRocket::Ready_GameObject()
 
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::PLAYER_BULLET)
 	{
+		if (m_bMulti)
+		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_MULTIHOMMING);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_MultiHomming.mp3", CSoundMgr::PLAYER_MULTIHOMMING);
+		}
+		else
+		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_ROCKET);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_Rocket.mp3", CSoundMgr::PLAYER_ROCKET);
+		}
 		m_fMaxSpeed = 900.f;
 		m_tCombatInfo.iAtk = 5;
-		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 15.f, COLLIDER::PLAYER_BULLET));
+		m_vecCollider.emplace_back(CColSphere::Create(this, m_tCombatInfo, 35.f, COLLIDER::PLAYER_BULLET));
 		m_tInfo.vSize = { 1.3f,1.3f,0.f };
 	}
 	else if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
@@ -81,7 +114,6 @@ HRESULT CRocket::Ready_GameObject()
 		m_pTarget = CGameObject_Manager::Get_Instance()->Get_Player();
 
 		//m_pArrow_Offscreen = CArrow_Offscreen::Create();
-
 		m_pMarkerOveray = CEffect::Create(EFFECT::MARKER_ROCKET_OVERLAY);
 		CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::EFFECT, m_pMarkerOveray);
 
@@ -111,7 +143,9 @@ void CRocket::State_Change()
 			}
 		}
 		else
+		{
 			m_vTarget_Dir = { cosf(D3DXToRadian(m_fAngle)) ,-sinf(D3DXToRadian(m_fAngle)) ,0.f };
+		}
 	}
 	
 	if(m_pObjectInfo->eBulletType == BULLET::NORMAL)
@@ -124,7 +158,10 @@ void CRocket::Move()
 	{
 		if (m_pObjectInfo->eBulletType == BULLET::GUIDE)
 		{
-			m_pTarget = CGameObject_Manager::Get_Instance()->Get_Target(this, OBJID::ENEMY);
+			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+			m_fWaitTime += fTime;
+			if(m_fWaitTime> 0.1f)
+				m_pTarget = CGameObject_Manager::Get_Instance()->Get_Target(this, OBJID::ENEMY);
 		}
 	}
 
@@ -180,6 +217,8 @@ void CRocket::DeadEffect()
 		}
 		else
 		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT_BOOM1);
+			CSoundMgr::Get_Instance()->PlaySound(L"Explosion1.mp3", CSoundMgr::EFFECT_BOOM1);
 			CSpawn_Manager::Spawn(EFFECT::OBJECT_IMPACT, m_tInfo.vPos, false);
 			RandomEffect(EFFECT::EXPLOSION1, 3, 60);
 			RandomEffect(EFFECT::EXPLOSION2, 3, 60);
@@ -191,6 +230,7 @@ void CRocket::DeadEffect()
 
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
+
 		//마커오버레이 삭제
 		static_cast<CEffect*>(m_pMarkerOveray)->Set_FrameStart(false);
 		m_pMarkerOveray->Set_Dead(true);
@@ -212,6 +252,11 @@ void CRocket::DeadEffect()
 			CSpawn_Manager::Spawn(L"EffectExplosion_smoke", m_tInfo.vPos);
 			for (int i = 0; i <  rand()%5+2; i++)
 			{
+				if (m_bSound)
+				{
+					CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT_BOOM2);
+					CSoundMgr::Get_Instance()->PlaySound(L"Explosion2.mp3", CSoundMgr::EFFECT_BOOM2);
+				}
 				float fAngle = (float)(rand() % 360);
 				_vec3 Dir = { cosf(D3DXToRadian(fAngle)) ,-sinf(D3DXToRadian(fAngle)) ,0.f };
 				float fRad = 80.f;
@@ -238,8 +283,9 @@ void CRocket::Late_Update_GameObject()
 			{
 				static_cast<CPlayer*>(m_pTarget)->Add_IsRocket(-1);
 			}
+			m_pArrow_Offscreen->Set_Dead(true);
 		}
-		m_bDeadEffect = true;
+		m_bDead = true;
 	}
 
 	if (m_tInfo.vPos.y > Map_Height + 70)
@@ -321,6 +367,7 @@ void CRocket::Ui_DirState(CGameObject * _pUiTarget)
 		m_pArrow_Offscreen->Set_Pos(_vec3(m_tInfo.vPos.x + vScroll.x, 20.f, 0.f));
 	}
 }
+
 void CRocket::Ui_DistanseState(CGameObject* _pUiTarget)
 {
 	switch (m_eUiState)
@@ -333,3 +380,6 @@ void CRocket::Ui_DistanseState(CGameObject* _pUiTarget)
 		break;
 	}
 }
+
+
+

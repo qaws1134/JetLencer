@@ -15,11 +15,12 @@
 #include "DmgGrid.h"
 #include "Danger.h"
 #include "WorngWay.h"
-
+#include "Gui.h"
+#include "SoundMgr.h"
 
 #define SubWeaponDelay 1.f
-#define ChargeWeaponDelayLV1 4.5f
-#define ChargeWeaponDelayLV2 6.9f
+#define ChargeWeaponDelayLV1 3.5f
+#define ChargeWeaponDelayLV2 5.9f
 
 CPlayer::CPlayer()
 	: m_fRocketSpeed(0.f)
@@ -55,6 +56,8 @@ CPlayer::CPlayer()
 	, m_bGroundAuto(false)
 	, m_fAfterBurnModule(0.f)
 	, m_fChargeTimeModule(0.f)
+	, m_fBeepTime(0.f)
+	, m_bPlay(false)
 {
 	
 }
@@ -103,7 +106,7 @@ HRESULT CPlayer::Ready_GameObject()
 			wstrChargeWeapon = L"Beam";
 			break;
 		case LOADOUT::GUNDRONE :
-			wstrChargeWeapon = L"GunDrone";
+			wstrChargeWeapon = L"GundroneSpawn";
 			break;
 		case LOADOUT::AUTO_GUIDE :
 			m_bGroundAuto = true;
@@ -112,7 +115,7 @@ HRESULT CPlayer::Ready_GameObject()
 			m_fAfterBurnModule = 2.f;
 			break;
 		case LOADOUT::CHARGE_UP:
-			m_fChargeTimeModule = -1.f;
+			m_fChargeTimeModule = -4.f;
 			break;
 		}
 	}
@@ -131,7 +134,7 @@ HRESULT CPlayer::Ready_GameObject()
 
 	//체력,공격력
 	m_tCombatInfo.iHp = 6;
-
+	m_tCombatInfo.iAtk = 5;
 	//프레임
 	//플레이어 오브젝트 생성 후 삭제 ㄱ
 	m_tFrame.wstrObjKey = L"Player";
@@ -183,10 +186,6 @@ HRESULT CPlayer::Ready_GameObject()
 
 	m_fSpectrumTime = 1.f;
 
-	//무기상태
-	//wstrSubWeapon = L"Rocket_alt";		// Rocket,bottle , HommingRocket,
-	//wstrChargeWeapon = L"Beam";		// Beam, GunDrone, MultiHomming,boom, 
-	//Rocket_alt
 
 	//빔 차지 이펙트
 	if (wstrChargeWeapon == L"Beam")
@@ -196,12 +195,12 @@ HRESULT CPlayer::Ready_GameObject()
 	}
 
 	m_pBurner = CBurner::Create();
-	m_eBurnerState = BURNER::IDLE;	//START로 바꿔주자
+	m_eBurnerState = BURNER::START;	//START로 바꿔주자
 	m_iMax_ptFireNum = 10;
 
 	m_fAfterBurnTime = 0.f;
 	m_fAfterBurnlimit = 4.f+ m_fAfterBurnModule;
-	m_fReduceAccelRate = 0.08f;
+	m_fReduceAccelRate = 0.08f - m_fAfterBurnModule*0.025f;
 
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::EFFECT), m_pBurner);
 
@@ -240,37 +239,54 @@ HRESULT CPlayer::Ready_GameObject()
 
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pWornWayLeft);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pWornWayRight);
+	
+	m_pFlash = CGui::Create(UI::FLASH);
+	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager((OBJID::UI), m_pFlash);
+
+	
+	
 	return S_OK;
 }
 
 int CPlayer::Update_GameObject()
 {
-	if (CKey_Manager::Get_Instance()->Key_Down(KEY_Q))
-	{
-		DeadEffect();
-	}
 	if (m_bDead)
 	{
 		DeadEffect();
 		return OBJ_DEAD;
 	}
 
-
 	m_pTarget = CGameObject_Manager::Get_Instance()->Get_Mouse();
 
 	if (!m_pTexInfo)
 		return OBJ_NOEVENT;
-	
-	PositionRock_Check();
-	TargetAngle_Check();	//마우스와 각도 체크
-	TimeCheck();			//공격속도,부스트 시간 체크
-	Key_State();			//키 입력을통한 상태값 변경
+
+	if (m_eDangerState != DANGER::END&& m_eDangerState != DANGER::DANGER_END)
+	{
+		float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
+		m_fBeepTime += fTime;
+		if (m_fBeepTime > m_fDangerLength*0.001f)
+		{
+			m_fBeepTime = 0.f;
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::DANGER);
+			CSoundMgr::Get_Instance()->PlaySound(L"Danger.mp3", CSoundMgr::DANGER);
+		}
+	}
+	if (m_bPlay)
+	{
+		PositionRock_Check();
+		TargetAngle_Check();	//마우스와 각도 체크
+		TimeCheck();			//공격속도,부스트 시간 체크
+		Key_State();			//키 입력을통한 상태값 변경
+	}
 
 	State_Change();			//ROLL 상태 체크
+	m_pBurner->Set_Pos(m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)*0.8f));
+	m_pBurner->Set_Angle(m_fAngle);
 	static_cast<CHp*>(m_pGuiHp)->End_Super(SuperTime());
 	Roll();					//상태 체크 후 ROLL 수행
 	Keybord_OffSet();		//키보드를 통한 스크롤값 조정
-
+	
 	return OBJ_NOEVENT;
 }
 
@@ -282,12 +298,23 @@ void CPlayer::Release_GameObject()
 
 void CPlayer::State_Change()
 {
-
-	if (CKey_Manager::Get_Instance()->Key_Down(KEY_NUM4))
+	if (!m_bStart)
 	{
-		m_eState = PLAYER::HIT;
+		m_eState = PLAYER::IDLE;
+		m_eBurnerState = BURNER::START;
+		static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::START);
 	}
-
+	else
+	{
+		if (!m_bPlay)
+		{
+			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::START_OFF);
+			if (static_cast<CBurner*>(m_pBurner)->Get_StateEnd())
+			{
+				m_bPlay = true;
+			}
+		}
+	}
 
 	if (m_eState != m_ePreState)
 	{
@@ -298,28 +325,40 @@ void CPlayer::State_Change()
 			static_cast<CHp*>(m_pGuiHp)->Set_State(m_eState);
 			break;
 		case PLAYER::ROLL:
+			if (!m_bRoll) 
+			{
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_ROLL);
+				CSoundMgr::Get_Instance()->PlaySound(L"Player_Roll.mp3", CSoundMgr::PLAYER_ROLL);
+			}
 			m_tFrame.fStartFrame = 0.f;
 			m_fSuperSpeed = 1.f;
 			m_fSuperTime = 0.f;
 			m_bRoll = true;
 			break;
 		case PLAYER::STOP:
-			CTime_Manager::Get_Instance()->Set_Stop(1.f);
+			CTime_Manager::Get_Instance()->Set_Stop(0.5f);
 			break;
 		case PLAYER::EVEDE:
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_EVADE);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_Evade.mp3", CSoundMgr::PLAYER_EVADE);
 			m_fSpectrumTime = 0.f;
 			m_bSpectrum = true;
 			break;
 		case PLAYER::SUPER_EVEDE:
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_EVADE);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_Evade.mp3", CSoundMgr::PLAYER_EVADE);
 			CScroll_Manager::Shake(5.f, 0.5f);
 			static_cast<CDmgGrid*>(m_pGuiDamageGrid)->Set_Green(true);
 			static_cast<CEffect*>(m_pEffectHitVfx)->Set_Red(false);
 			static_cast<CEffect*>(m_pEffectHitVfx)->Set_FrameStart(true);
+			static_cast<CGui*>(m_pFlash)->Set_Action(true);
 			m_fSuperSpeed = 1.f;
 			m_fSuperTime = 0.f;
 			m_bSuperEvade = false;
 			break;
 		case PLAYER::HIT:
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_HIT);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_Hit.mp3", CSoundMgr::PLAYER_HIT);
 			CScroll_Manager::Shake(5.f, 0.5f);
 			m_fSuperTime = 0.f;	
 			m_fSuperSpeed = 1.5f;
@@ -328,6 +367,7 @@ void CPlayer::State_Change()
 			static_cast<CHp*>(m_pGuiHp)->Set_Hp(m_tCombatInfo.iHp);
 			static_cast<CEffect*>(m_pEffectHitVfx)->Set_Red(true);
 			static_cast<CEffect*>(m_pEffectHitVfx)->Set_FrameStart(true);
+			static_cast<CGui*>(m_pFlash)->Set_Action(true);
 
 			if (m_tCombatInfo.iHp <= 0)
 			{
@@ -357,15 +397,21 @@ void CPlayer::State_Change()
 		case PLAYER::AFTER_BURNUR:
 			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::AFTER_BURNUR);
 			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::AFTER_BURNUR);
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_AFTERBURN_BEGIN);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_AfterBurn_Start.mp3", CSoundMgr::PLAYER_AFTERBURN_BEGIN);
 			break;
 		case PLAYER::OVERHEAT:
 			static_cast<CFlip*>(m_pGuiLFlip)->Set_PlayerState(PLAYER::OVERHEAT);
 			static_cast<CFlip*>(m_pGuiRFlip)->Set_PlayerState(PLAYER::OVERHEAT);
 			static_cast<CRocket_Ui*>(m_pGuiRocket)->Set_Red(true);
 			static_cast<CHp*>(m_pGuiHp)->Set_Red(true);
+			static_cast<CGui*>(m_pFlash)->Set_Action(true);
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_OverHeat.mp3", CSoundMgr::PLAYER_OVERHEAT);
 			break;
 		}
 		m_ePreAfterBurnState = m_eAfterBurnState;
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_AFTERBURN);
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_MOVE);
 	}
 
 
@@ -409,10 +455,10 @@ void CPlayer::State_Change()
 			if (m_iRocketNum == 0)
 			{
 				static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::DANGER_END);
-				if (static_cast<CDanger*>(m_pGuiDanger)->Get_Danger_End())
-				{
-					m_eDangerState = DANGER::END;
-				}
+				//if (static_cast<CDanger*>(m_pGuiDanger)->Get_Danger_End())
+				//{
+				//	m_eDangerState = DANGER::END;
+				//}
 				break;
 			}
 		case DANGER::END:
@@ -424,13 +470,13 @@ void CPlayer::State_Change()
 		}
 		m_ePreDangerState = m_eDangerState;
 	//}
-	if (m_ePreDangerState != DANGER::DANGER_END)
-	{
-		if (m_iRocketNum == 0)
-		{
-			static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::END);
-		}
-	}
+	//if (m_ePreDangerState != DANGER::DANGER_END)
+	//{
+	//	if (m_iRocketNum == 0)
+	//	{
+	//		static_cast<CDanger*>(m_pGuiDanger)->Set_DangerState(DANGER::END);
+	//	}
+	//}
 
 	static_cast<CDanger*>(m_pGuiDanger)->Set_FrameSpeed(m_fDangerLength);
 }
@@ -523,7 +569,7 @@ void CPlayer::PositionRock_Check()
 			m_bAuto = true;
 		}
 	}
-	if (Map_Height < m_tInfo.vPos.y)
+	if (Map_Height+100.f < m_tInfo.vPos.y && !m_bGroundAuto)
 	{
 		m_eState = PLAYER::HIT;
 	}
@@ -538,6 +584,7 @@ void CPlayer::PositionRock_Check()
 
 	if (m_bAuto)
 	{
+		CSoundMgr::Get_Instance()->PlaySound(L"Player_Move.mp3", CSoundMgr::PLAYER_MOVE);
 		m_fMaxSpeed = 600.f;
 		Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
 
@@ -546,8 +593,8 @@ void CPlayer::PositionRock_Check()
 		m_eBurnerState = BURNER::ACCEL;
 		static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::ACCEL);
 		m_fAfterBurnTime -= fTime;
-		m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
-		m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
+		m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*(m_fReduceAccelRate),m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
+		m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*(m_fReduceAccelRate),m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
 
 		m_bAccel = true;
 	}
@@ -570,14 +617,13 @@ void CPlayer::Key_State()
 	}
 	if(m_bSpectrum)
 		Spectrum();
-
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 	if (!m_bAuto)
 	{
 		if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_SPACE)&& !m_bOverHeat)
 		{
 			//쉐이크 효과
-
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_AfterBurn.mp3", CSoundMgr::PLAYER_AFTERBURN);
 			m_fMaxSpeed = 800.f;
 
 			Accel(m_tInfo.vDir, m_fAccel + m_fBoostAccel, m_fMaxSpeed, false);
@@ -607,6 +653,7 @@ void CPlayer::Key_State()
 		}
 		else if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_W))
 		{
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_Move.mp3", CSoundMgr::PLAYER_MOVE);
 			m_fMaxSpeed = 600.f;
 			Accel(m_tInfo.vDir, m_fAccel, m_fMaxSpeed, false);
 			m_eAfterBurnState = PLAYER::ACCEL;
@@ -641,8 +688,6 @@ void CPlayer::Key_State()
 		m_eState = PLAYER::ROLL;
 
 	SpawnPtFire();
-	m_pBurner->Set_Pos(m_tInfo.vPos - m_tInfo.vDir*((float)(m_pTexInfo->tImageInfo.Width)*0.8f));
-	m_pBurner->Set_Angle(m_fAngle);
 
 	if (CKey_Manager::Get_Instance()->Key_Pressing(KEY_LBUTTON) && AttackTime())
 	{
@@ -731,7 +776,7 @@ void CPlayer::TimeCheck()
 		if(m_fChargeCoolTime > m_fChargeSpeed)
 			m_eWeaponState = PLAYER::SPECIAL_RELOAD_END;
 	}
-	if (m_fAfterBurnTime >= m_fAfterBurnlimit)
+	if (m_fAfterBurnTime >= m_fAfterBurnlimit+ m_fAfterBurnModule)
 	{
   		m_bOverHeat = true;
 		m_eAfterBurnState = PLAYER::OVERHEAT;
@@ -744,6 +789,7 @@ void CPlayer::TimeCheck()
 		static_cast<CRocket_Ui*>(m_pGuiRocket)->Set_Red(false);
 		static_cast<CHp*>(m_pGuiHp)->Set_Red(false);
 		m_bOverHeat = false;
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_OVERHEAT);
 		m_fAfterBurnTime = 0.f;
 	}
 	
@@ -805,6 +851,7 @@ void CPlayer::SubWeapon_Select()
 			static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(false);
 			static_cast<CEffect*>(m_pChargeBeam)->Set_Size(0.f);
 		}
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_BEAM_CHARGE);
 		m_eWeaponState = PLAYER::SPECIAL_RELOAD_START;
 		
 		break;
@@ -825,9 +872,10 @@ void CPlayer::SubWeapon_Charge()
 				static_cast<CEffect*>(m_pChargeBeam)->Set_FrameStart(true);
 				m_pChargeBeam->Set_Pos(m_tInfo.vPos + m_tInfo.vDir*1000.f*fTime);
 			}
+			CSoundMgr::Get_Instance()->PlaySound(L"Player_Laser_Charge.mp3", CSoundMgr::PLAYER_BEAM_CHARGE);
 			m_eWeaponState = PLAYER::SPECIAL_CHARGE;
 		}
-		if (m_fChargeTime < 6.f)
+		if (m_fChargeTime < ChargeWeaponDelayLV2+0.1f +m_fChargeTimeModule)
 			m_fChargeTime += fTime;
 	}
 }

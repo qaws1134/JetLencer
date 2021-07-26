@@ -18,10 +18,13 @@ public:
 public:
 	void	Set_Text(wstring _wstrText) { m_wstrText = _wstrText; }
 	void	Set_Point(float  _fPoint) { m_fPoint = _fPoint; }
+	void	Set_iPoint(int  _iPoint) { m_iPoint = _iPoint; }
 	void	Set_TextSize(TEXT::SIZE _eTextSize) { m_eTextSize = _eTextSize; }
 
 	wstring m_wstrText;
 	float m_fPoint;
+	int m_iPoint;
+
 	TEXT::SIZE m_eTextSize;
 
 

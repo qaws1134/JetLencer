@@ -36,6 +36,7 @@ void CTime_Manager::Update_Time_Manager()
 		
 		if (m_fStoplimit > m_fStopTime)
 		{
+			
 			if (PLAYER::ROLL == static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Get_State())
 			{
 				static_cast<CPlayer*>(CGameObject_Manager::Get_Instance()->Get_Player())->Set_SuperEvade(true);

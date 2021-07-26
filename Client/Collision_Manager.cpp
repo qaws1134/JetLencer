@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "Mouse.h"
 #include "Rocket.h"
+#include "SoundMgr.h"
+#include "Gundrone.h"
 CCollision_Manager::CCollision_Manager()
 {
 }
@@ -41,6 +43,38 @@ void CCollision_Manager::Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, l
 				if (!static_cast<CPlayer*>(pDst->Get_Target())->SuperTime())
 				{
 					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::STOP);
+
+					pSrc->Get_Target()->Set_Color(MATCOLOR{ 200,0,255,255 });
+					pSrc->Get_Target()->Set_ColorTime();
+					pSrc->Set_Dmg(-pDst->Get_CombatInfo().iAtk);
+					if (pSrc->Get_CombatInfo().iHp <= 0)
+					{
+						pSrc->Get_Target()->Set_DeadEffect(true);
+						pSrc->Set_Dead(true);
+					}
+				}
+				else
+				{
+					//잔상 온 
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::EVEDE);
+				}
+			}
+		}
+	}
+}
+
+
+void CCollision_Manager::Collision_Player_Enemy(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+{
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pDst, pSrc))
+			{
+				if (!static_cast<CPlayer*>(pDst->Get_Target())->SuperTime())
+				{
+					static_cast<CPlayer*>(pDst->Get_Target())->Set_State(PLAYER::STOP);
 					pSrc->Get_Target()->Set_DeadEffect(true);
 					pSrc->Set_Dead(true);
 				}
@@ -53,7 +87,6 @@ void CCollision_Manager::Collision_Player_Enemy_Bullet(list<CCollider*>& _Dst, l
 		}
 	}
 }
-
 void CCollision_Manager::Collision_Boss_Player_Bullet(list<CCollider*>& _Dst, list<CCollider*>& _Src)
 {
 	for (auto& pDst : _Dst)
@@ -217,11 +250,14 @@ void CCollision_Manager::Collision_Rocket_Search(list<CCollider*>& _Dst, list<CC
 					if (RectSize == WINCX)
 					{
 						static_cast<CRocket*>(pDst->Get_Target())->Set_UiState(ARROW::END);
+						static_cast<CRocket*>(pDst->Get_Target())->Set_Sound(true);
+
 						break;
 					}
 					else
 					{
 						static_cast<CRocket*>(pDst->Get_Target())->Set_UiState(ARROW::ROCKET_MARKER);
+						static_cast<CRocket*>(pDst->Get_Target())->Set_Sound(false);
 						break;
 					}
 				}
@@ -229,7 +265,79 @@ void CCollision_Manager::Collision_Rocket_Search(list<CCollider*>& _Dst, list<CC
 		}
 	}
 }
+// 로켓,플레이어 총알
+void CCollision_Manager::Collision_PlayerBullet_Rocket(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+{
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pDst, pSrc))
+			{
+				if (pDst->Get_Target()->Get_Prefab()->eBulletType == BULLET::GUIDE)
+				{
+					if (!pSrc->Get_Dead())
+					{
+						pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
+						if (pDst->Get_CombatInfo().iHp <= 0)
+						{
+							pDst->Get_Target()->Set_DeadEffect(true);
+							pDst->Set_Dead(true);
+						}
+						pSrc->Get_Target()->Set_DeadEffect(true);
+						pSrc->Set_Dead(true);
+					}
+				}
+			}
+		}
+	}
+}
+// 로켓,플레이어 총알
+void CCollision_Manager::Collision_PlayerBeam_Rocket(list<CCollider*>& _Dst, list<CCollider*>& _Src)
+{
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pDst, pSrc))
+			{
+				if (pDst->Get_Target()->Get_Prefab()->eBulletType == BULLET::GUIDE)
+				{
+					if (!pSrc->Get_Dead())
+					{
+						pDst->Set_Dmg(-pSrc->Get_CombatInfo().iAtk);
+						if (pDst->Get_CombatInfo().iHp <= 0)
+						{
+							pDst->Get_Target()->Set_DeadEffect(true);
+							pDst->Set_Dead(true);
+						}
+						pSrc->Set_Dead(true);
+					}
+				}
+			}
+		}
+	}
+}
+//적 , 드론 서치
+void CCollision_Manager::Collision_GunDrone_Enemy(list<CCollider*>& _Src, list<CCollider*>& _Dst)
+{
 
+	for (auto& pDst : _Dst)
+	{
+		for (auto& pSrc : _Src)
+		{
+			if (Check_Sphere(pSrc, pDst))
+			{
+				static_cast<CGundrone*>(pDst->Get_Target())->Set_Attack(true);
+				break;
+			}
+			else
+			{
+				static_cast<CGundrone*>(pDst->Get_Target())->Set_Attack(false);
+			}
+		}
+	}
+}
 
 
 //렉트랑 구 충돌
@@ -258,7 +366,7 @@ bool CCollision_Manager::Check_Rect_Sphere(CCollider* _Dst, CCollider* _Src)
 bool CCollision_Manager::Check_Sphere(CCollider * _Dst, CCollider * _Src)
 {
 	_vec3 vPos = _Dst->Get_ObjInfo().vPos - _Src->Get_ObjInfo().vPos;
-	float fDis = _Src->Get_ColSphereSize() + _Src->Get_ColSphereSize();
+	float fDis = _Dst->Get_ColSphereSize() + _Src->Get_ColSphereSize();
 	float fDia = D3DXVec3Length(&vPos);
 	if (fDia <= fDis)
 	{
@@ -267,11 +375,10 @@ bool CCollision_Manager::Check_Sphere(CCollider * _Dst, CCollider * _Src)
 	return false;
 }
 
-
 bool CCollision_Manager::Check_Sphere(CCollider * _Dst, CCollider * _Src,float *_fDis)
 {
 	_vec3 vPos = _Dst->Get_ObjInfo().vPos - _Src->Get_ObjInfo().vPos;
-	float fDis = _Src->Get_ColSphereSize() + _Src->Get_ColSphereSize();
+	float fDis = _Dst->Get_ColSphereSize() + _Src->Get_ColSphereSize();
 	float fDia = D3DXVec3Length(&vPos);
 	if (fDia <= fDis)
 	{

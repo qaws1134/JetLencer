@@ -19,21 +19,24 @@ public:
 	virtual void Release_GameObject() override;
 	virtual void State_Change() override;
 
-
+	
 	void Set_EffectType(EFFECT::TYPE _eEffectType) { m_eEffectType = _eEffectType; }
 	void Frame_Change();
 	void Move();
-
+	void DeadEffect();
 	void InitParticle();
 
 	EFFECT::TYPE m_eEffectType;
 	float m_fTime;
 	float m_fSize;
 
-
 	float m_fSpawnTime;
 	float m_fSpawnSpeed;
 
+	float m_fDeadTime;
+	float m_fDeadSpeed;
+
+	float m_fMaxSpeedOffSet;
 	float m_fReduceSize;
 	float m_fMinSize;
 };
