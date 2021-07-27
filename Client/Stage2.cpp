@@ -59,7 +59,7 @@ HRESULT CStage2::Ready_Scene()
 		m_listEnemy[0].emplace_back(L"Jet_Normal");
 		m_listEnemy[1].emplace_back(L"Jet_Rocket");
 		m_listEnemy[1].emplace_back(L"Jet_Normal");
-		m_listEnemy[2].emplace_back(L"Jet_BulletSplash");
+		m_listEnemy[2].emplace_back(L"Jet_Rocket");
 		m_listEnemy[2].emplace_back(L"Jet_Normal");  
 	}
 
@@ -69,7 +69,7 @@ HRESULT CStage2::Ready_Scene()
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pWaveText);
 	m_fSpawnTime = -1.f;  
 	m_fSpawnSpeed = 1.f;
-
+	m_iWaveCount = 0;
 	m_fWaveTime = 0.f;
 	m_fWaveSpeed= 1.f;
 	m_fStartSpeed = 2.f;
@@ -144,7 +144,7 @@ void CStage2::Update_Scene()
 						m_iWaveCount++;
 						m_iSpawnCount = 0;
 
-						if (m_iWaveCount > 1)
+						if (m_iWaveCount > 2)
 						{
 							m_bEnd = true;
 						}

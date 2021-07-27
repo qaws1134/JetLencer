@@ -58,6 +58,7 @@ CPlayer::CPlayer()
 	, m_fChargeTimeModule(0.f)
 	, m_fBeepTime(0.f)
 	, m_bPlay(false)
+	, m_bGravitykey(false)
 {
 	
 }
@@ -612,7 +613,7 @@ void CPlayer::Key_State()
 	
 	if (CKey_Manager::Get_Instance()->Key_Down(KEY_L))
 	{
-		m_eState = PLAYER::EVEDE;
+		m_bGravitykey = !m_bGravitykey;
 
 	}
 	if(m_bSpectrum)
@@ -668,18 +669,21 @@ void CPlayer::Key_State()
 		}
 		else
 		{
-			m_fMaxSpeed = 500.f;
-			Accel(m_vGravity, m_fGravity, m_fMaxSpeed, true);
-			if(!m_bOverHeat)
-				m_eAfterBurnState = PLAYER::IDLE;
+			if (!m_bGravitykey)
+			{
+				m_fMaxSpeed = 500.f;
+				Accel(m_vGravity, m_fGravity, m_fMaxSpeed, true);
+				if (!m_bOverHeat)
+					m_eAfterBurnState = PLAYER::IDLE;
 
-			m_eBurnerState = BURNER::IDLE;
-			static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::IDLE);
+				m_eBurnerState = BURNER::IDLE;
+				static_cast<CBurner*>(m_pBurner)->Set_BurnerState(BURNER::IDLE);
 
-			m_fAfterBurnTime -= fTime;
-			m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
-			m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
-			m_bAccel = false;
+				m_fAfterBurnTime -= fTime;
+				m_pGuiLFlip->Set_Pos(_vec3{ m_pGuiLFlip->Get_ObjInfo().vPos.x - m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiLFlip->Get_ObjInfo().vPos.y,0.f });
+				m_pGuiRFlip->Set_Pos(_vec3{ m_pGuiRFlip->Get_ObjInfo().vPos.x + m_fAfterBurnTime*m_fReduceAccelRate,m_pGuiRFlip->Get_ObjInfo().vPos.y,0.f });
+				m_bAccel = false;
+			}
 		}
 	}
 

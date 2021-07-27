@@ -59,7 +59,7 @@ HRESULT CStage3::Ready_Scene()
 
 	m_pWaveText = CViewText::Create(L"남은 시간 : %d초 / 60초");
 	m_pWaveText->Set_Pos(_vec3{ WINCX - 220.f,100.f,0.f });
-	static_cast<CViewText*>(m_pWaveText)->Set_iPoint(1);
+	static_cast<CViewText*>(m_pWaveText)->Set_iPoint(0);
 	CGameObject_Manager::Get_Instance()->Add_GameObject_Manager(OBJID::UI, m_pWaveText);
 	m_fSpawnTime = -1.f;
 	m_fSpawnSpeed = 1.f;
@@ -129,7 +129,7 @@ void CStage3::Update_Scene()
 		float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 		m_fSecond += fTime;
 		static_cast<CViewText*>(m_pWaveText)->Set_iPoint(int(m_fSecond));
-		if (int(m_fSecond) >= 30)
+		if (int(m_fSecond) >= 60)
 		{
 			m_bEnd = true;
 		}

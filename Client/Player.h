@@ -141,4 +141,6 @@ private:
 	wstring wstrSubWeapon;
 	wstring wstrChargeWeapon;
 
+	bool m_bGravitykey;
+
 };

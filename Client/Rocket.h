@@ -30,8 +30,8 @@ public :
 	void	Ui_DirState(CGameObject* _pUiTarget);
 
 	ARROW::UI m_eUiState;
-	CGameObject* m_pArrow_Offscreen;
 private:
+	CGameObject* m_pArrow_Offscreen;
 	CGameObject* m_pMarkerOveray;
 	float m_fTargetTime;
 	float m_fTargetSpeed;

@@ -15,11 +15,12 @@ CRocket::CRocket()
 	: m_fTargetSpeed(0.f)
 	, m_fTargetTime(0.f)
 	, m_pMarkerOveray(nullptr)
+	, m_pArrow_Offscreen(nullptr)
 	, m_bTargetOn(false)
-	, m_eUiState(ARROW::END)
 	, m_bMulti(false)
 	, m_bSound(false)
 	, m_fWaitTime(0.f)
+	, m_eUiState(ARROW::END)
 {
 }
 
@@ -160,15 +161,20 @@ void CRocket::Move()
 		{
 			float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
 			m_fWaitTime += fTime;
-			if(m_fWaitTime> 0.1f)
-				m_pTarget = CGameObject_Manager::Get_Instance()->Get_Target(this, OBJID::ENEMY);
+			if (m_fWaitTime > 0.1f)
+			{
+					m_pTarget = CGameObject_Manager::Get_Instance()->Get_Target(this, OBJID::ENEMY);
+			}
 		}
 	}
 
 	if ((OBJID::ID)m_pObjectInfo->eObjId == OBJID::ENEMY_BULLET)
 	{
-		Ui_DirState(m_pTarget);
-		Ui_DistanseState(m_pTarget);
+		if (m_pArrow_Offscreen)
+		{
+			Ui_DirState(m_pTarget);
+			Ui_DistanseState(m_pTarget);
+		}
 	}
 
 	State_Change();
@@ -281,9 +287,13 @@ void CRocket::Late_Update_GameObject()
 			static_cast<CEffect*>(m_pMarkerOveray)->Set_FrameStart(false);
 			if (!m_bTargetOn)
 			{
+				static_cast<CPlayer*>(m_pTarget)->Set_DangerState(DANGER::END);
 				static_cast<CPlayer*>(m_pTarget)->Add_IsRocket(-1);
 			}
+			m_pMarkerOveray->Set_Dead(true);
 			m_pArrow_Offscreen->Set_Dead(true);
+			
+			
 		}
 		m_bDead = true;
 	}
@@ -331,6 +341,8 @@ void CRocket::Accel(_vec3 vDir, float _fAccel, float _fMaxSpeed, bool bGravity)
 
 void CRocket::Ui_DirState(CGameObject * _pUiTarget)
 {
+	if (!_pUiTarget)
+		return;
 	_vec3 vScroll = CScroll_Manager::Get_Scroll();
 
 	//플레이어에서 몬스터 방향 
@@ -345,8 +357,9 @@ void CRocket::Ui_DirState(CGameObject * _pUiTarget)
 	if (vRevDir.y > 0)
 		fUiSetAngle = 360.f - fUiSetAngle;
 
-
-	if (fUiSetAngle > 330.f || fUiSetAngle < 30.f)
+	if (!m_pArrow_Offscreen)
+		return;
+	if (fUiSetAngle > 330.f || fUiSetAngle <= 30.f)
 	{
 		static_cast<CArrow_Offscreen_Rocket*>(m_pArrow_Offscreen)->Select_Frame(1.f);
 		m_pArrow_Offscreen->Set_Pos(_vec3(WINCX - 20.f, m_tInfo.vPos.y + vScroll.y, 0.f));
@@ -361,7 +374,7 @@ void CRocket::Ui_DirState(CGameObject * _pUiTarget)
 		static_cast<CArrow_Offscreen_Rocket*>(m_pArrow_Offscreen)->Select_Frame(0.f);
 		m_pArrow_Offscreen->Set_Pos(_vec3(20.f, m_tInfo.vPos.y + vScroll.y, 0.f));
 	}
-	else if (fUiSetAngle > 30.f)
+	else if (fUiSetAngle >= 30.f)
 	{
 		static_cast<CArrow_Offscreen_Rocket*>(m_pArrow_Offscreen)->Select_Frame(2.f);
 		m_pArrow_Offscreen->Set_Pos(_vec3(m_tInfo.vPos.x + vScroll.x, 20.f, 0.f));
@@ -370,6 +383,8 @@ void CRocket::Ui_DirState(CGameObject * _pUiTarget)
 
 void CRocket::Ui_DistanseState(CGameObject* _pUiTarget)
 {
+	if (!_pUiTarget)
+		return;
 	switch (m_eUiState)
 	{
 	case ARROW::ROCKET_MARKER:

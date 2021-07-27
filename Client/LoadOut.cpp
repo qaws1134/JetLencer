@@ -151,30 +151,30 @@ HRESULT CLoadOut::Ready_Scene()
 	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::안 유도 미사일::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 360.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::통돌이 샷건::");
 	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 
 	pObject = CViewText::Create(L"::때거지 유도 미사일::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 400.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::PBG (Power BeamLaser is Good)::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 480.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::자동 총알 발사기::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 380.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 
 	pObject = CViewText::Create(L"::지면 자동 가이드::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 380.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::부스터량 증가::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 360.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 	pObject = CViewText::Create(L"::차지 속도 감소::");
-	pObject->Set_Pos(_vec3{ float(WINCX) - 350.f,33.f,0.f });
+	pObject->Set_Pos(_vec3{ float(WINCX) - 370.f,33.f,0.f });
 	m_vecLoadOutInfo.emplace_back(pObject);
 
 

@@ -70,9 +70,9 @@ void CGundrone::State_Change()
 
 	//delete time 
 	float fTime = CTime_Manager::Get_Instance()->Get_DeltaTime();
-	/*m_fDeleteTime +=fTime;
+	m_fDeleteTime +=fTime;
 	if (m_fDeleteTime > 10.f)
-		m_bDeadEffect = true;*/
+		m_bDeadEffect = true;
 
 	if (!m_bMove)
 	{

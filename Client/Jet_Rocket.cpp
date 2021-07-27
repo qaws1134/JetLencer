@@ -34,7 +34,7 @@ HRESULT CJet_Rocket::Ready_GameObject()
 	m_tCombatInfo.iAtk = 1;
 	m_tCombatInfo.iHp = 5;
 
-	m_fAttackTime = 5.f;
+	m_fAttackTime = 7.f;
 	m_fAttackSpeed = float(rand()%4+5);
 
 	m_fAccel = 1800.f;
